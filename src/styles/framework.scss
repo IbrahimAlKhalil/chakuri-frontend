@@ -1,0 +1,100 @@
+@import "./var";
+
+// Flex-box related styles
+
+.flex {
+  display: flex;
+
+  &-md-and-up {
+    display: none;
+
+    @media screen and (min-width: $__md) {
+      display: flex;
+    }
+  }
+
+  &-wrap {
+    flex-wrap: wrap;
+
+    &-md {
+      flex-wrap: wrap;
+      @media screen and (min-width: $__md) {
+        flex-wrap: nowrap;
+      }
+
+    }
+  }
+
+  &.justify-center {
+    justify-content: center;
+  }
+
+  &.justify-between {
+    justify-content: space-between;
+  }
+
+  &.align-center {
+    align-items: center;
+  }
+
+
+  &.direction-column {
+    flex-direction: column;
+  }
+}
+
+
+// Width, height
+
+$i: 0;
+
+@while $i < 120 {
+  $i: $i+20;
+
+  .w-#{$i} {
+    width: 0% + $i;
+  }
+
+  .h-#{$i} {
+    height: 0% + $i;
+  }
+}
+
+
+// Display
+
+.d- {
+  &block {
+    display: block;
+  }
+
+  &none {
+    display: none;
+  }
+}
+
+
+// Margin
+
+.m {
+  &t-auto {
+    margin-top: auto;
+  }
+}
+
+
+// Padding
+
+.p-1 {
+  padding: 1rem;
+}
+
+// Text
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}

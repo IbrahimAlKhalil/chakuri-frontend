@@ -1,0 +1,15 @@
+$bg: #f4f4f4;
+$--font-size-base: 1em;
+
+// General colors
+$--color-primary: #3d7fff;
+$--color-secondary: #394249;
+$--color-text-regular: #434343;
+
+// Dropdown menu
+$--dropdown-menuItem-hover-color: #000;
+$--dropdown-menuItem-hover-fill: #f6f6f6;
+
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "../../node_modules/element-ui/packages/theme-chalk/src/common/var";

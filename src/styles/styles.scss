@@ -1,0 +1,24 @@
+@import "./var";
+@import "./framework";
+@import "./vue-transitions";
+@import "../../node_modules/element-ui/packages/theme-chalk/src/index";
+
+@font-face {
+  font-family: SolaimanLipi;
+  src: url("../assets/fonts/SolaimanLipi.ttf") format("truetype");
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: SolaimanLipi, sans-serif;
+  background: $bg;
+}
