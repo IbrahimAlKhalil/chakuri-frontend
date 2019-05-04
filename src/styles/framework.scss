@@ -37,6 +37,9 @@
     align-items: center;
   }
 
+  &.content-center {
+    align-content: center;
+  }
 
   &.direction-column {
     flex-direction: column;
@@ -80,6 +83,14 @@ $i: 0;
   &t-auto {
     margin-top: auto;
   }
+
+  &l-auto {
+    margin-left: auto;
+  }
+
+  &r-auto {
+    margin-right: auto;
+  }
 }
 
 
@@ -97,4 +108,11 @@ $i: 0;
 
 .text-right {
   text-align: right;
+}
+
+
+// Cursor
+
+.pointer {
+  cursor: pointer;
 }

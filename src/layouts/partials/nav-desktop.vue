@@ -9,13 +9,6 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
-    nav {
-        margin-left: auto;
-        margin-right: 30px;
-    }
-</style>
-
 <script>
     import menuItem from '../partials/menu-item'
     import avatar from '../partials/avatar'
@@ -28,3 +21,10 @@
         components: {menuItem, avatar}
     }
 </script>
+
+<style lang="scss" scoped>
+    nav {
+        margin-left: auto;
+        margin-right: 30px;
+    }
+</style>

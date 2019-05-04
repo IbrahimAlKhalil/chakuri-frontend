@@ -7,48 +7,16 @@ export default new Vuex.Store({
     state: {
         menu: [
             {
-                title: 'বাড়ি',
+                title: 'home',
                 link: '/'
             },
-
             {
-                title: 'Profile',
-                link: '/profile'
+                title: 'circular',
+                link: '/post-job'
             },
             {
-                title: 'Contact',
+                title: 'contact',
                 link: '/contact'
-            },
-            {
-                title: 'Services',
-                children: [
-                    {
-                        title: 'Home',
-                        link: '/'
-                    },
-                    {
-                        title: 'Item One',
-                        link: '/'
-                    },
-                    {
-                        title: 'Item Two',
-                        link: '/',
-                        children: [
-                            {
-                                title: 'Home',
-                                link: '/'
-                            },
-                            {
-                                title: 'Item One',
-                                link: '/'
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                title: 'About',
-                link: '/about'
             }
         ]
     },

@@ -1,5 +1,5 @@
 <template>
-    <el-header class="flex justify-between">
+    <el-header class="flex justify-between header">
         <nav-mobile/>
         <div class="logo">
             <router-link to="/">
@@ -10,15 +10,30 @@
     </el-header>
 </template>
 
-<style lang="scss">
-    .el-header {
-        background: #fff;
-        box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+<script>
+    export default {
+        data() {
+            return {
+                logo: require('../../assets/images/logo.png'),
+                name: 'Sahara Software And Technology'
+            }
+        },
+        components: {
+            navDesktop: () => import('./nav-desktop'),
+            navMobile: () => import('./nav-mobile'),
+        }
     }
-</style>
+</script>
 
 <style lang="scss" scoped>
     @import "../../styles/var";
+    .header {
+        background: #fff;
+        box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+        position: sticky;
+        top: 0;
+        z-index: 2;
+    }
 
     .logo {
         padding: 10px;
@@ -32,18 +47,3 @@
         }
     }
 </style>
-
-<script>
-    export default {
-        data() {
-            return {
-                logo: require('../../assets/images/logo.png'),
-                name: 'Sahara Software And Technology'
-            }
-        },
-        components: {
-            navDesktop: () => import('./nav-desktop'),
-            navMobile: () => import('./nav-mobile')
-        }
-    }
-</script>

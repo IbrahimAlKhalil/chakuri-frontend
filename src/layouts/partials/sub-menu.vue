@@ -1,22 +1,30 @@
 <template>
-  <el-submenu :index="index.toString()">
-    <template slot="title">
-      <img
-        v-if="item.icon"
-        :src="item.icon"
-        :alt="item.title"
-        class="icon"
-      >
-      <span>{{ item.title }}</span>
-    </template>
-    <menu-item
-      v-for="(subItem, key) in item.children"
-      :key="key"
-      :item="subItem"
-      :index="`${index}-${key}`"
-    />
-  </el-submenu>
+    <el-submenu :index="index.toString()">
+        <template slot="title">
+            <img v-if="item.icon" :src="item.icon" :alt="item.title" class="icon">
+            <span>{{ $t(`menu.${item.title}`) }}</span>
+        </template>
+        <menu-item v-for="(subItem, key) in item.children" :key="key" :item="subItem" :index="`${index}-${key}`"/>
+    </el-submenu>
 </template>
+
+<script>
+    import menuItem from './menu-item'
+
+    export default {
+        props: {
+            item: {
+                type: Object,
+                required: true
+            },
+            index: {
+                type: [Number, String],
+                required: true
+            }
+        },
+        components: {menuItem}
+    }
+</script>
 
 <style lang="scss">
     @import "../../styles/var";
@@ -75,21 +83,3 @@
         filter: grayscale(1);
     }
 </style>
-
-<script>
-import menuItem from './menu-item'
-
-export default {
-  props: {
-    item: {
-      type: Object,
-      required: true
-    },
-    index: {
-      type: [Number, String],
-      required: true
-    }
-  },
-  components: { menuItem }
-}
-</script>

@@ -1,0 +1,96 @@
+<template>
+    <el-menu class="special-jobs">
+        <template v-for="(job, index) in jobs">
+            <el-tooltip class="item" effect="dark" :content="job.name" placement="left" :key="index" :open-delay="500">
+                <el-menu-item :index="index.toString()" class="flex">
+                    <div>
+                        <img :src="job.logo" :alt="job.name">
+                    </div>
+                    <div class="wrapper">
+                        <div class="title">{{job.title}}</div>
+                        <div class="name">{{job.name}}</div>
+                    </div>
+                </el-menu-item>
+            </el-tooltip>
+        </template>
+
+    </el-menu>
+</template>
+
+<script>
+    export default {
+        data() {
+            return {
+                jobs: [
+                    {
+                        name: 'জামিয়া আরাবিয়া ইমদাদুল উলূম ফরিদাবাদ মাদ্রাসা',
+                        title: 'হাফেজ সাহেব',
+                        logo: require('../../../assets/images/faridabad.jpg')
+                    },
+
+                    {
+                        name: 'আল্‌-জামিয়াতুল আহ্‌লিয়া দারুল উলূম মুঈনুল ইসলাম (হাটহাজারী মাদ্রাসা)',
+                        title: 'কারি সাহেব',
+                        logo: require('../../../assets/images/hathazari.png')
+                    },
+
+                    {
+                        name: 'জামিয়া রাহমানিয়া আরাবিয়া ঢাকা বাংলাদেশ',
+                        title: 'কিতাব খানার শিক্ষক',
+                        logo: require('../../../assets/images/rahmania.png')
+                    },
+
+                    {
+                        name: 'সাত গম্বুজ মসজিদ',
+                        title: 'ইমাম সাহেব',
+                        logo: require('../../../assets/images/masjid.png')
+                    },
+                    {
+                        name: 'আল্‌-জামিয়াতুল আহ্‌লিয়া দারুল উলূম মুঈনুল ইসলাম (হাটহাজারী মাদ্রাসা)',
+                        title: 'হাফেজ সাহেব',
+                        logo: require('../../../assets/images/hathazari.png')
+                    }
+                ]
+            }
+        }
+    }
+</script>
+
+<style lang="scss" scoped>
+    @import "../../../styles/var";
+
+    .special-jobs {
+        border-radius: $--border-radius-base;
+        box-shadow: $--box-shadow-base;
+        border: 0;
+        background: #fffad2;
+
+        li {
+            border-bottom: 1px solid $--border-color-light;
+            font-size: .9rem;
+            overflow: hidden;
+            height: auto;
+            line-height: inherit;
+            padding: 8px !important;
+        }
+
+        img {
+            width: 50px;
+            border-radius: $--border-radius-circle;
+            box-shadow: $--box-shadow-base;
+            background: #fff;
+        }
+    }
+
+    .name {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: .8rem;
+    }
+
+    .wrapper {
+        overflow: hidden;
+        margin-left: 10px;
+        display: grid;
+    }
+</style>

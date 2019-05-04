@@ -1,58 +1,46 @@
 <template>
-  <div class="flex align-center wrapper">
-    <el-popover
-      v-if="auth.user"
-      placement="top-start"
-      trigger="click"
-      popper-class="user-popper"
-    >
-      <div
-        class="avatar"
-        slot="reference"
-      >
-        <img
-          :src="icons.user"
-          alt="User"
-        >
-      </div>
-      <ul>
-        <li class="el-dropdown-menu__item">
-          <i class="el-icon-setting" /> Profile
-        </li>
-        <li
-          class="el-dropdown-menu__item"
-          @click="signOut"
-        >
-          <i class="fas fa-sign-out-alt" /> Sign Out
-        </li>
-      </ul>
-    </el-popover>
+    <div class="flex align-center wrapper">
+        <el-popover v-if="auth.user" placement="top-start" trigger="click" popper-class="popover">
+            <div class="avatar" slot="reference">
+                <img :src="icons.user" alt="User">
+            </div>
+            <ul>
+                <li class="el-dropdown-menu__item">
+                    <i class="el-icon-setting"></i> {{ $t('avatar.profile') }}
+                </li>
+                <li class="el-dropdown-menu__item" @click="signOut">
+                    <i class="fas fa-sign-out-alt"></i> {{ $t('avatar.signOut') }}
+                </li>
+            </ul>
+        </el-popover>
 
-    <template v-else>
-      <el-button
-        type="primary"
-        icon="fas fa-sign-in-alt"
-        class="btn"
-      >
-        Login
-      </el-button>
-      <el-button
-        icon="fas fa-user-plus"
-        class="btn"
-      >
-        Sign Up
-      </el-button>
-    </template>
-  </div>
+        <template v-else>
+            <el-button type="primary" icon="fas fa-sign-in-alt" class="btn"> {{ $t('avatar.login') }}</el-button>
+            <el-button icon="fas fa-user-plus" class="btn"> {{ $t('avatar.signUp') }}</el-button>
+        </template>
+    </div>
 </template>
 
-<style lang="scss">
-    @import "../../styles/var";
+<script>
+    export default {
+        data() {
+            const auth = this.$root.$auth;
 
-    .user-popper {
-        padding: 0;
+            return {
+                icons: {
+                    user: require('../../assets/images/user.svg')
+                },
+                auth: auth
+            }
+        },
+
+        methods: {
+            signOut() {
+                this.$root.$auth.signOut()
+            }
+        }
     }
-</style>
+</script>
 
 <style lang="scss" scoped>
     @import "../../styles/var";
@@ -78,37 +66,7 @@
         }
     }
 
-    .el-popover {
-        padding: 0;
-
-        ul {
-            margin: 0;
-            padding: 8px 0;
-        }
-    }
-
     .btn i {
         margin-right: 10px;
     }
 </style>
-
-<script>
-export default {
-  data () {
-    const auth = this.$root.$auth
-
-    return {
-      icons: {
-        user: require('../../assets/images/user.svg')
-      },
-      auth: auth
-    }
-  },
-
-  methods: {
-    signOut () {
-      this.$root.$auth.signOut()
-    }
-  }
-}
-</script>

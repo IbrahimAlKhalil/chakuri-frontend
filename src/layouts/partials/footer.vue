@@ -55,6 +55,7 @@
 
     .title {
         color: #fff;
+        text-shadow: 0 0 1px #000;
     }
 
     .menu {
@@ -64,9 +65,9 @@
         a {
             display: inline-block;
             text-decoration: none;
-            font-weight: bold;
             margin-top: 5px;
-            color: #fff;
+            color: #b2b2b2;
+            text-shadow: 0 0 1px #000;
         }
     }
 

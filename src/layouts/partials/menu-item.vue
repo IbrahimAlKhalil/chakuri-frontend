@@ -1,28 +1,35 @@
 <template>
-  <el-menu-item
-    v-if="!item.children"
-    :index="index.toString()"
-  >
-    <router-link :to="item.link">
-      <img
-        v-if="item.icon"
-        :src="item.icon"
-        :alt="item.title"
-        class="icon"
-      >
-      <span>{{ item.title }}</span>
-    </router-link>
-  </el-menu-item>
+    <el-menu-item v-if="!item.children" :index="index.toString()">
+        <router-link :to="item.link" class="link">
+            <img v-if="item.icon" :src="item.icon" :alt="item.title" class="icon">
+            <span>{{ $t(`menu.${item.title}`) }}</span>
+        </router-link>
+    </el-menu-item>
 
-  <sub-menu
-    v-else
-    :item="item"
-    :index="index"
-  />
+    <sub-menu v-else :item="item" :index="index"/>
 </template>
 
+<script>
+    export default {
+        props: {
+            item: {
+                type: Object,
+                required: true
+            },
+            index: {
+                type: [Number, String],
+                required: true
+            }
+        },
+        components: {
+            subMenu: () => import('./sub-menu')
+        }
+    }
+</script>
+
+
 <style lang="scss" scoped>
-    @import "../../styles/var.scss";
+    @import "../../styles/var";
 
     .el-submenu.is-opened {
         background-color: $--dropdown-menuItem-hover-fill !important;
@@ -37,22 +44,8 @@
         margin-right: 10px;
         filter: grayscale(1);
     }
-</style>
 
-<script>
-export default {
-  props: {
-    item: {
-      type: Object,
-      required: true
-    },
-    index: {
-      type: [Number, String],
-      required: true
+    .link {
+        text-decoration: none;
     }
-  },
-  components: {
-    subMenu: () => import('./sub-menu')
-  }
-}
-</script>
+</style>

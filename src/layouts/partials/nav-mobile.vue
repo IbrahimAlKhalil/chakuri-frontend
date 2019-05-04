@@ -18,12 +18,8 @@
 
                                 <div class="flex flex-wrap justify-center">
                                     <el-button-group class="btn-group">
-                                        <el-button icon="el-icon-setting">
-                                            Profile
-                                        </el-button>
-                                        <el-button icon="fas fa-sign-out-alt">
-                                            Logout
-                                        </el-button>
+                                        <el-button icon="el-icon-setting">Profile</el-button>
+                                        <el-button icon="fas fa-sign-out-alt">Logout</el-button>
                                     </el-button-group>
                                 </div>
                             </div>
@@ -82,7 +78,11 @@
     .scroll {
         width: 70%;
         height: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 0;
+        }
     }
 
     .header {
