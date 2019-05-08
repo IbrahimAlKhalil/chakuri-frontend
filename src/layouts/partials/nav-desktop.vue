@@ -10,16 +10,17 @@
 </template>
 
 <script>
-    import menuItem from '../partials/menu-item'
-    import avatar from '../partials/avatar'
-    import {mapState} from 'vuex'
+    import {elMenu} from '@/el';
+    import menuItem from '@layouts/partials/menu-item';
+    import avatar from '@layouts/partials/avatar';
+    import {mapState} from 'vuex';
 
     export default {
         computed: mapState({
             menu: 'menu'
         }),
-        components: {menuItem, avatar}
-    }
+        components: {menuItem, avatar, elMenu}
+    };
 </script>
 
 <style lang="scss" scoped>

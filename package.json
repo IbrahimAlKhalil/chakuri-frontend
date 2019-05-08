@@ -2,6 +2,10 @@
   "name": "chakuri",
   "version": "0.1.0",
   "private": true,
+  "sideEffects": [
+    "*.scss",
+    "*.vue"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,16 +13,15 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.1",
-    "axios": "^0.18.0",
     "element-ui": "^2.6.1",
     "register-service-worker": "^1.6.2",
-    "viddleware": "^1.0.0",
     "vue": "^2.6.6",
     "vue-i18n": "^8.11.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@kazupon/vue-i18n-loader": "^0.3.0",
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-pwa": "^3.5.0",
@@ -29,6 +32,7 @@
     "babel-jest": "^23.6.0",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.21",
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }

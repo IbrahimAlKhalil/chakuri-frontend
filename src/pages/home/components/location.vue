@@ -1,40 +1,60 @@
 <template>
-    <el-menu class="divisions">
-        <el-menu-item v-for="(division, index) in divisions" :index="index.toString()">{{division}}<i
-                class="el-icon-arrow-right"></i></el-menu-item>
-    </el-menu>
+    <sidebar-card title="আপনার এলাকা">
+        <el-menu class="divisions">
+            <li v-for="(division, index) in divisions.items" class="el-menu-item" :index="index.toString()"
+                @click="showDialog(division)">
+                {{division.name}}<i class="el-icon-arrow-right"></i></li>
+        </el-menu>
+
+        <location-selector :show.sync="show" :division="division" v-model="value" @change="logger"/>
+    </sidebar-card>
 </template>
 
 <script>
+    import sidebarCard from "./sidebar-card";
+    import locationSelector from '@components/location-selector';
+    import {elMenu} from '@/el';
+
     export default {
         data() {
             return {
-                divisions: ['ঢাকা', 'সিলেট', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ']
+                show: false,
+                value: null,
+                division: null,
+                divisions: this.$store.state.divisions
             }
-        }
+        },
+
+        methods: {
+            showDialog(division) {
+                this.show = true;
+                this.division = division;
+            },
+
+            logger(e) {
+                console.log(e);
+            }
+        },
+
+        components: {sidebarCard, locationSelector, elMenu}
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     @import "../../../styles/var";
 
-    $division-line-height: 45px;
+    $line-height: 45px;
 
     .divisions {
-        border-radius: $--border-radius-base;
-        box-shadow: $--box-shadow-base;
-        border: 0;
 
         li {
-            border-bottom: 1px solid $--border-color-light;
-            font-size: .9rem;
-            height: $division-line-height;
-            line-height: $division-line-height;
+            height: $line-height !important;
+            line-height: $line-height !important;
         }
 
         i[class*="el-icon"] {
             float: right;
-            line-height: $division-line-height;
+            line-height: $line-height;
         }
     }
 </style>

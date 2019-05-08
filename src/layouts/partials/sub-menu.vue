@@ -9,7 +9,8 @@
 </template>
 
 <script>
-    import menuItem from './menu-item'
+    import menuItem from './menu-item';
+    import {elSubmenu} from '@/el';
 
     export default {
         props: {
@@ -22,7 +23,7 @@
                 required: true
             }
         },
-        components: {menuItem}
+        components: {menuItem, elSubmenu}
     }
 </script>
 

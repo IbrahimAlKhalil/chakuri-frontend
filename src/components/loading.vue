@@ -1,14 +1,18 @@
 <template>
-  <el-container v-loading="loading" />
+    <el-container v-loading="loading"/>
 </template>
 
 <script>
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      required: true
-    }
-  }
-}
+    import {elContainer} from '@/el';
+
+    export default {
+        props: {
+            loading: {
+                type: Boolean,
+                required: true
+            }
+        },
+
+        components: {elContainer}
+    };
 </script>

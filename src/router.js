@@ -1,6 +1,5 @@
-import VueRouter from 'vue-router'
-
-import viddleware from 'viddleware'
+import VueRouter from 'vue-router';
+import viddleware from '@modules/viddleware';
 
 const router = new VueRouter({
     mode: 'history',

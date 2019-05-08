@@ -10,6 +10,8 @@
 </template>
 
 <script>
+    import {elMenuItem} from '@/el';
+
     export default {
         props: {
             item: {
@@ -22,9 +24,10 @@
             }
         },
         components: {
-            subMenu: () => import('./sub-menu')
+            subMenu: () => import('./sub-menu'),
+            elMenuItem
         }
-    }
+    };
 </script>
 
 

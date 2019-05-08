@@ -22,13 +22,15 @@
 </template>
 
 <script>
+    import {elPopover, elButton} from '@/el';
+
     export default {
         data() {
             const auth = this.$root.$auth;
 
             return {
                 icons: {
-                    user: require('../../assets/images/user.svg')
+                    user: require('@assets/images/user.svg')
                 },
                 auth: auth
             }
@@ -38,7 +40,9 @@
             signOut() {
                 this.$root.$auth.signOut()
             }
-        }
+        },
+
+        components: {elButton, elPopover}
     }
 </script>
 

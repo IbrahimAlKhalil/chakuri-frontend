@@ -10,9 +10,9 @@
 </template>
 
 <script>
-    import partialHeader from './partials/header'
-    import partialFooter from './partials/footer'
-    import smallHeader from './partials/small-header'
+    import partialHeader from "./partials/header";
+    import partialFooter from "./partials/footer";
+    import smallHeader from "./partials/small-header";
 
     export default {
         components: {partialHeader, partialFooter, smallHeader}

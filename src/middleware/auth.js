@@ -1,4 +1,4 @@
-import { authenticator } from '../modules/authenticator'
+import { authenticator } from '@modules/authenticator';
 
 /*
 * This middleware will check whether user is authenticated
@@ -7,19 +7,19 @@ import { authenticator } from '../modules/authenticator'
 */
 
 // TODO: Change redirectUrl if it needs to be
-const redirectUrl = '/'
+const redirectUrl = '/';
 
 export default async function (route, from, next) {
-  // User should be authenticated
-  const user = await authenticator.initialize()
+    // User should be authenticated
+    const user = await authenticator.initialize()
 
-  if (!user) {
-    // User is not authenticated
-    // Redirect to the specified page
+    if (!user) {
+        // User is not authenticated
+        // Redirect to the specified page
 
-    return next(redirectUrl)
-  }
+        return next(redirectUrl)
+    }
 
-  // User is authenticated
-  next()
+    // User is authenticated
+    next()
 }

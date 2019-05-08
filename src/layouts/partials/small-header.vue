@@ -28,7 +28,8 @@
 </template>
 
 <script>
-    import {changeLanguage} from '../../i18n';
+    import {changeLanguage} from '@/i18n';
+    import {elPopover} from '@/el';
 
     export default {
         data() {
@@ -56,7 +57,9 @@
                 this.langPopoverVisible = false;
                 changeLanguage(lang.code);
             }
-        }
+        },
+
+        components: {elPopover}
     }
 </script>
 

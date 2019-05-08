@@ -1,26 +1,26 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
-import Vuex from 'vuex'
-import VueRouter from 'vue-router'
-import ElementUi from 'element-ui'
-import Authenticator from './modules/authenticator'
+import Vuex from 'vuex';
+import VueRouter from 'vue-router';
+import Authenticator from './modules/authenticator';
 
-import App from './app'
-import './modules/registerServiceWorker'
-import '@fortawesome/fontawesome-free/js/all'
+// Directives
+import Loading from 'element-ui/packages/loading/src/directive';
+
+import App from './app';
+import './modules/registerServiceWorker';
 
 // Styles
-import './styles/styles.scss'
+import './styles/styles.scss';
 
-import store from './store'
-import router from './router'
-import {i18n} from './i18n'
-
+import store from './store';
+import router from './router';
+import {i18n} from './i18n';
 
 Vue.use(VueRouter);
-Vue.use(ElementUi);
 Vue.use(Authenticator);
 Vue.use(Vuex);
+Vue.use(Loading);
 
 new Vue({
     store,

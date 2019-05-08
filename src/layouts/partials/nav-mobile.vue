@@ -36,6 +36,34 @@
     </div>
 </template>
 
+<script>
+    import {elCard, elMenu, elButton, elButtonGroup} from '@/el';
+    import menuItem from './menu-item';
+    import {mapState} from 'vuex';
+
+    export default {
+        data() {
+            return {
+                icons: {
+                    user: require('@/assets/images/user.svg')
+                },
+                show: false
+            }
+        },
+
+        computed: mapState({
+            menu: 'menu'
+        }),
+
+        methods: {
+            toggleNav(what) {
+                this.show = what
+            }
+        },
+        components: {menuItem, elButtonGroup, elButton, elMenu, elCard}
+    }
+</script>
+
 <style lang="scss" scoped>
     @import "../../styles/var";
 
@@ -79,10 +107,6 @@
         width: 70%;
         height: 100%;
         overflow-y: auto;
-
-        &::-webkit-scrollbar {
-            width: 0;
-        }
     }
 
     .header {
@@ -99,30 +123,3 @@
         min-height: 100vh;
     }
 </style>
-
-<script>
-    import menuItem from './menu-item'
-    import {mapState} from 'vuex'
-
-    export default {
-        data() {
-            return {
-                icons: {
-                    user: require('../../assets/images/user.svg')
-                },
-                show: false
-            }
-        },
-
-        computed: mapState({
-            menu: 'menu'
-        }),
-
-        methods: {
-            toggleNav(what) {
-                this.show = what
-            }
-        },
-        components: {menuItem}
-    }
-</script>

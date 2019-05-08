@@ -1,7 +1,6 @@
-import Vue from 'vue'
-import axios from 'axios'
-import VueI18n from 'vue-i18n'
-import messages from './locales/bn'
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
+import messages from '@locales/bn';
 
 Vue.use(VueI18n);
 
@@ -15,9 +14,8 @@ const loadedLanguages = ['bn']; // our default language that is pre-loaded
 
 function setI18nLanguage(lang) {
     i18n.locale = lang;
-    axios.defaults.headers.common['Accept-Language'] = lang;
     document.documentElement.setAttribute('lang', lang);
-    return lang
+    return lang;
 }
 
 export function changeLanguage(lang) {
@@ -31,5 +29,5 @@ export function changeLanguage(lang) {
         }
         return Promise.resolve(setI18nLanguage(lang));
     }
-    return Promise.resolve(lang)
+    return Promise.resolve(lang);
 }

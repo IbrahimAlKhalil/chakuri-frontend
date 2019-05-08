@@ -1,5 +1,5 @@
 <script>
-import loading from './components/loading'
+import loading from '@components/loading';
 
 export default {
   data () {

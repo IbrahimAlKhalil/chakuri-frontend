@@ -39,6 +39,10 @@
     </footer>
 </template>
 
+<script>
+    export default {}
+</script>
+
 <style lang="scss" scoped>
     @import "../../styles/var";
 
@@ -77,7 +81,3 @@
         text-align: center;
     }
 </style>
-
-<script>
-    export default {}
-</script>

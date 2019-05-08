@@ -18,10 +18,10 @@
 </template>
 
 <script>
-    import layout from '../../layouts/master'
-    import search from './components/search'
-    import location from './components/location'
-    import specialJobs from './components/special-jobs'
+    import layout from '@layouts/master';
+    import search from './components/search';
+    import location from './components/location';
+    import specialJobs from './components/special-jobs';
 
     export default {
         data() {
@@ -45,7 +45,7 @@
         grid-template-columns: none;
 
         @media all and (min-width: $--md) {
-            grid-template-columns: 1fr 4fr 1.3fr;
+            grid-template-columns: 1fr 4fr 1.5fr;
         }
     }
 

@@ -1,13 +1,13 @@
 <template>
     <div class="wrapper">
-        <div class="background h-100 rellax"></div>
+        <div class="background h-100"></div>
         <div class="search-wrapper w-100 h-100 flex justify-center content-center flex-wrap">
             <el-card class="search w-100">
                 <span class="title" slot="header"><i class="fa fa-book-reader"></i>&nbsp;&nbsp; অনুসন্ধান করুন</span>
 
                 <div class="input-wrapper">
                     <el-input prefix-icon="fa fa-search" placeholder="এখানে লিখুন" v-model="search"/>
-                    <el-select placeholder="প্রতিষ্ঠান এর ধরন নির্ধারণ করুন" value="" v-model="selectedOrganizations"
+                    <el-select placeholder="প্রতিষ্ঠান এর ধরন নির্ধারণ করুন" v-model="selectedOrganizations"
                                multiple>
                         <el-option v-for="(organization, index) in organizations" :value="organization"
                                    :label="organization"
@@ -25,15 +25,18 @@
 </template>
 
 <script>
+    import {elCard, elInput, elSelect, elOption, elButton} from '@/el';
+
     export default {
         data() {
             return {
                 organizations: ['মসজিদ', 'মাদ্রাসা', 'টিউশনি'],
                 selectedOrganizations: [],
                 search: ''
-            }
-        }
-    }
+            };
+        },
+        components: {elCard, elInput, elSelect, elOption, elButton}
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -54,14 +57,14 @@
         position: absolute;
         top: 0;
         left: 0;
-        background: rgba(225, 225, 225, .7);
+        background: rgba(225, 225, 225, .1);
     }
 
     .search {
         margin: 0 10px;
 
         @media all and (min-width: $--md) {
-            width: 70%;
+            width: 75%;
         }
     }
 
