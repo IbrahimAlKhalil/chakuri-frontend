@@ -15,17 +15,32 @@
                     </el-select>
                     <el-button type="primary" icon="el-icon-search">অনুসন্ধান</el-button>
                 </div>
-
-                <div class="stat">
-                    এই মুহুর্তে মোট ৬৫৪ টি বিজ্ঞপ্তি আছে।
-                </div>
             </el-card>
+
+            <div class="stat w-100">
+                <div class="item">
+                    <i class="fas fa-building"></i>
+
+                    <div class="count">
+                        <div>প্রতিষ্ঠান</div>
+                        <div>৪৫৬৮ টি</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <i class="fas fa-graduation-cap"></i>
+
+                    <div class="count">
+                        <div>চাকুরি</div>
+                        <div>৮৫৬৮ টি</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import {elCard, elInput, elSelect, elOption, elButton} from '@/el';
+    import {elButton, elCard, elInput, elOption, elSelect} from '@/el';
 
     export default {
         data() {
@@ -84,6 +99,36 @@
     }
 
     .stat {
-        padding: 20px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(100px, 150px));
+        grid-gap: 1rem;
+        justify-content: center;
+        margin-top: 25px;
     }
+
+    .item {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        color: #fff;
+        background: rgba(0, 0, 0, .4);
+        padding: 10px;
+        box-shadow: $--box-shadow-base;
+        border-radius: $--border-radius-base;
+
+        i {
+            font-size: 2.5rem;
+            text-align: center;
+        }
+    }
+
+    .count {
+        font-size: 1rem;
+        text-shadow: 0 0;
+        font-weight: bold;
+        @media all and (min-width: $--md) {
+            text-shadow: none;
+        }
+    }
+
+
 </style>

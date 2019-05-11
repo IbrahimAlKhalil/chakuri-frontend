@@ -116,3 +116,15 @@ $i: 0;
 .pointer {
   cursor: pointer;
 }
+
+// Menu
+
+.nav-arrow-right {
+  &::before {
+    content: '\203A';
+    margin-right: 10px;
+    font-size: 1.5rem;
+    float: right;
+    color: $--icon-color-base;
+  }
+}

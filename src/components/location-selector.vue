@@ -12,11 +12,11 @@
 
         <el-divider></el-divider>
 
-        <el-menu v-loading="loading" class="menu">
-            <li v-for="(place, index) in current.items" class="el-menu-item"
+        <el-menu v-loading="loading">
+            <li v-for="(place, index) in current.items" class="el-menu-item nav-arrow-right"
                 :index="index.toString()"
-                @click="select(place)">
-                {{place.name}}<i class="el-icon-arrow-right"></i></li>
+                @click="select(place)">{{place.name}}
+            </li>
         </el-menu>
     </el-dialog>
 </template>
@@ -330,13 +330,6 @@
             &:hover {
                 text-shadow: 0 0;
             }
-        }
-    }
-
-    .menu {
-        i[class*="el-icon"] {
-            float: right;
-            line-height: 55px;
         }
     }
 </style>

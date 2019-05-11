@@ -1,9 +1,10 @@
 <template>
     <sidebar-card title="আপনার এলাকা">
         <el-menu class="divisions">
-            <li v-for="(division, index) in divisions.items" class="el-menu-item" :index="index.toString()"
-                @click="showDialog(division)">
-                {{division.name}}<i class="el-icon-arrow-right"></i></li>
+            <li v-for="(division, index) in divisions.items" class="el-menu-item nav-arrow-right"
+                :index="index.toString()"
+                @click="showDialog(division)">{{division.name}}
+            </li>
         </el-menu>
 
         <location-selector :show.sync="show" :division="division" v-model="value" @change="logger"/>
@@ -11,7 +12,7 @@
 </template>
 
 <script>
-    import sidebarCard from "./sidebar-card";
+    import sidebarCard from './sidebar-card';
     import locationSelector from '@components/location-selector';
     import {elMenu} from '@/el';
 
@@ -22,7 +23,7 @@
                 value: null,
                 division: null,
                 divisions: this.$store.state.divisions
-            }
+            };
         },
 
         methods: {
@@ -37,7 +38,7 @@
         },
 
         components: {sidebarCard, locationSelector, elMenu}
-    }
+    };
 </script>
 
 <style lang="scss">
@@ -50,11 +51,10 @@
         li {
             height: $line-height !important;
             line-height: $line-height !important;
-        }
 
-        i[class*="el-icon"] {
-            float: right;
-            line-height: $line-height;
+            &:before {
+                line-height: $line-height;
+            }
         }
     }
 </style>
