@@ -37,7 +37,7 @@
     .top-categories {
         display: grid;
         grid-template-columns: repeat(3, minmax(60px, 1fr));
-        grid-gap: 10px;
+        gap: 10px;
     }
 
     .category {
@@ -50,7 +50,7 @@
         color: $--color-secondary;
 
         &:hover {
-            background: $--color-primary;
+            background: $--color-secondary;
             color: #fff;
         }
 

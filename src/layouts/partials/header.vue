@@ -36,6 +36,7 @@
         position: sticky;
         top: 0;
         z-index: 2;
+        padding: 0 10px;
     }
 
     .logo {

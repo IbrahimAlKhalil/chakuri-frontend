@@ -90,7 +90,7 @@
 
     .input-wrapper {
         display: grid;
-        grid-gap: 10px;
+        gap: 10px;
         grid-template-columns: none;
 
         @media all and (min-width: $--md) {
@@ -101,7 +101,7 @@
     .stat {
         display: grid;
         grid-template-columns: repeat(2, minmax(100px, 150px));
-        grid-gap: 1rem;
+        gap: 1rem;
         justify-content: center;
         margin-top: 25px;
     }

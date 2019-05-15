@@ -1,5 +1,7 @@
 <template>
-    <el-dialog :title="current.title" :visible="show" @close="$emit('update:show', false)" class="location-dialog"
+    <el-dialog :title="current.title" :visible="show" @close="$emit('update:show', false)"
+               :append-to-body="true"
+               class="location-dialog"
                top="10px"
                center>
         <el-breadcrumb separator="/">
@@ -330,6 +332,10 @@
             &:hover {
                 text-shadow: 0 0;
             }
+        }
+
+        .el-menu {
+            border-right: 0;
         }
     }
 </style>

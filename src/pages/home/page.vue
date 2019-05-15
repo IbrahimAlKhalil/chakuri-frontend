@@ -2,7 +2,7 @@
     <layout>
         <search/>
         <div class="container">
-            <aside>
+            <aside class="sidebar-1">
                 <location/>
             </aside>
 
@@ -11,13 +11,11 @@
                 <sub-categories/>
             </section>
 
-            <aside>
+            <aside class="sidebar-2">
                 <special-jobs/>
             </aside>
-        </div>
 
-        <div class="jobs">
-            Hello
+            <jobs/>
         </div>
     </layout>
 </template>
@@ -30,14 +28,15 @@
     import topCategories from './components/top-categories';
     import subCategories from './components/sub-categories';
     import {elCard} from '@/el';
+    import jobs from './components/jobs';
 
     export default {
         data() {
             return {
-                divisions: ['ঢাকা', 'সিলেট', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ']
+                divisions: ['ঢাকা', 'সিলেট', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ'],
             };
         },
-        components: {layout, search, location, specialJobs, elCard, topCategories, subCategories}
+        components: {layout, search, location, specialJobs, elCard, topCategories, subCategories, jobs}
     };
 </script>
 
@@ -48,24 +47,35 @@
 
     .container {
         display: grid;
-        grid-gap: 10px;
+        gap: 10px;
         grid-template-columns: none;
         margin: 10px;
+        align-items: flex-start;
 
         @media all and (min-width: $--md) {
-            grid-template-columns: 1fr 4fr 1.5fr;
+            grid-template-columns: min-content auto min-content;
+            grid-template-areas: "sidebar-1 content sidebar-2" "sidebar-1 jobs sidebar-2";
         }
     }
 
     aside {
         min-width: 250px;
+        @media all and (min-width: $--md) {
+            position: sticky;
+            top: 70px;
+        }
+    }
+
+    .sidebar-1 {
+        grid-area: sidebar-1;
+    }
+
+    .sidebar-2 {
+        grid-area: sidebar-2;
+        min-width: 350px;
     }
 
     .contents {
-        order: -1;
-
-        @media all and (min-width: $--md) {
-            order: 0;
-        }
+        grid-area: content;
     }
 </style>

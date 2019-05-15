@@ -1,10 +1,8 @@
 <template>
-    <footer class="mt-auto flex flex-wrap">
-        <div class="flex flex-wrap-md container w-100">
-            <div class="w-100">
-                <h3 class="title">
-                    Menu 1 Title
-                </h3>
+    <footer class="mt-auto">
+        <div class="container">
+            <div>
+                <h3 class="title">আমাদের সম্পর্কে</h3>
                 <ul class="menu">
                     <li v-for="i in 6" :key="i">
                         <router-link to="/">
@@ -14,10 +12,8 @@
                 </ul>
             </div>
 
-            <div class="w-100">
-                <h3 class="title">
-                    Menu 2 Title
-                </h3>
+            <div>
+                <h3 class="title">ব্যবহারকারীদের প্রশ্ন</h3>
                 <ul class="menu">
                     <li v-for="i in 6" :key="i">
                         <router-link to="/">
@@ -27,10 +23,24 @@
                 </ul>
             </div>
 
-            <div class="w-100">
-                <h3 class="title">
-                    Follow Us
-                </h3>
+            <div>
+                <h3 class="title text-center">টুলস ও মিডিয়া</h3>
+                <div class="social-icons ml-auto mr-auto">
+                    <a href="https://www.facebook.com">
+                        <i class="fab fa-facebook-square"></i>
+                    </a>
+
+                    <a href="https://www.twitter.com">
+                        <i class="fab fa-twitter-square"></i>
+                    </a>
+
+                    <a href="https://www.linkedin.com">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.youtube.com">
+                        <i class="fab fa-youtube-square"></i>
+                    </a>
+                </div>
             </div>
         </div>
         <div class="small-footer w-100 mt-auto p-1">
@@ -40,7 +50,7 @@
 </template>
 
 <script>
-    export default {}
+    export default {};
 </script>
 
 <style lang="scss" scoped>
@@ -52,8 +62,13 @@
     }
 
     .container {
-        @media screen and (min-width: $__md) {
-            padding: 10px 300px 0;
+        display: grid;
+        padding-top: 50px;
+        justify-items: center;
+
+        @media all and (min-width: $--md) {
+            grid-template-columns: 3fr 3fr 4fr;
+
         }
     }
 
@@ -72,6 +87,33 @@
             margin-top: 5px;
             color: #b2b2b2;
             text-shadow: 0 0 1px #000;
+        }
+    }
+
+    .social-icons {
+        display: grid;
+        grid-auto-flow: column;
+        width: 210px;
+
+        a {
+            font-size: 2.8rem;
+            text-align: center;
+
+            &[href*="facebook.com"] {
+                color: #3C5A99;
+            }
+
+            &[href*="twitter.com"] {
+                color: #1DA1F2;
+            }
+
+            &[href*="linkedin.com"] {
+                color: #0077B5;
+            }
+
+            &[href*="youtube.com"] {
+                color: #FF0000;
+            }
         }
     }
 
