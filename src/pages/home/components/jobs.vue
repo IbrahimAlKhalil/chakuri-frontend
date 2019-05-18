@@ -98,10 +98,9 @@
 
     .wrapper {
         display: grid;
-        grid-template-columns: repeat(2, minmax(200px, 1fr));
+        grid-template-columns: repeat(1, minmax(300px, 1fr));
         gap: 15px;
         grid-area: jobs;
-        grid-column-start: 2;
         margin-top: 15px;
     }
 
@@ -152,5 +151,12 @@
     .info {
         align-self: flex-end;
         width: 100%;
+    }
+
+    @media all and (min-width: $--md) {
+        .wrapper {
+            grid-column-start: 2;
+            grid-template-columns: repeat(2, minmax(300px, 1fr));
+        }
     }
 </style>

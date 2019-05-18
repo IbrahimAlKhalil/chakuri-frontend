@@ -48,22 +48,14 @@
     .container {
         display: grid;
         gap: 10px;
-        grid-template-columns: none;
+        grid-template-columns: 1fr;
+        grid-template-areas: "content" "sidebar-1" "sidebar-2" "jobs";
         margin: 10px;
         align-items: flex-start;
-
-        @media all and (min-width: $--md) {
-            grid-template-columns: min-content auto min-content;
-            grid-template-areas: "sidebar-1 content sidebar-2" "sidebar-1 jobs sidebar-2";
-        }
     }
 
     aside {
         min-width: 250px;
-        @media all and (min-width: $--md) {
-            position: sticky;
-            top: 70px;
-        }
     }
 
     .sidebar-1 {
@@ -77,5 +69,17 @@
 
     .contents {
         grid-area: content;
+    }
+
+    @media all and (min-width: $--md) {
+        .container {
+            grid-template-columns: min-content auto min-content;
+            grid-template-areas: "sidebar-1 content sidebar-2" "sidebar-1 jobs sidebar-2";
+        }
+
+        aside {
+            position: sticky;
+            top: 70px;
+        }
     }
 </style>

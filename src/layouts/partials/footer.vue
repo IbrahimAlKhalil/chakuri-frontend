@@ -41,9 +41,11 @@
                         <i class="fab fa-youtube-square"></i>
                     </a>
                 </div>
+
+
             </div>
         </div>
-        <div class="small-footer w-100 mt-auto p-1">
+        <div class="small-footer mt-auto p-1">
             <small>&copy; Copyright SaharaIT&trade; all rights reserved</small>
         </div>
     </footer>
@@ -68,7 +70,6 @@
 
         @media all and (min-width: $--md) {
             grid-template-columns: 3fr 3fr 4fr;
-
         }
     }
 
