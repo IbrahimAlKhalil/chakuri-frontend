@@ -17,10 +17,25 @@
                                 </div>
 
                                 <div class="flex flex-wrap justify-center">
-                                    <el-button-group class="btn-group">
-                                        <el-button icon="el-icon-setting">Profile</el-button>
-                                        <el-button icon="fas fa-sign-out-alt">Logout</el-button>
+                                    <el-button-group class="btn-group" v-if="!auth.user">
+                                        <router-link to="/sign-in"
+                                                     class="el-button el-button--small el-button--primary btn">
+                                            <i class="fas fa-sign-in-alt"></i>&nbsp; {{ $t('avatar.login') }}
+                                        </router-link>
+
+                                        <el-button class="btn" icon="fas fa-user-plus" size="small">
+                                            {{ $t('avatar.signUp') }}
+                                        </el-button>
                                     </el-button-group>
+
+                                    <ul v-else>
+                                        <li class="el-dropdown-menu__item">
+                                            <i class="el-icon-setting"></i> {{ $t('avatar.profile') }}
+                                        </li>
+                                        <li class="el-dropdown-menu__item" @click="signOut">
+                                            <i class="fas fa-sign-out-alt"></i> {{ $t('avatar.signOut') }}
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                             <div>
@@ -48,20 +63,25 @@
                     user: require('@/assets/images/user.svg')
                 },
                 show: false
-            }
+            };
         },
 
         computed: mapState({
-            menu: 'menu'
+            menu: 'menu',
+            auth: 'auth'
         }),
 
         methods: {
             toggleNav(what) {
-                this.show = what
+                this.show = what;
+            },
+
+            signOut() {
+                this.$store.dispatch('signOut');
             }
         },
         components: {menuItem, elButtonGroup, elButton, elMenu, elCard}
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -119,7 +139,17 @@
         width: auto;
     }
 
+    .btn {
+        text-decoration: none;
+    }
+
     .box-card {
         min-height: 100vh;
+    }
+
+    ul {
+        padding: 0;
+        margin: 0;
+        width: 100%;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-md-and-up justify-between nav-desktop">
         <nav>
-            <el-menu default-active="0" mode="horizontal">
+            <el-menu default-active="0" mode="horizontal" :router="true">
                 <menu-item v-for="(item, index) in menu" :key="index" :index="index" :item="item"/>
             </el-menu>
         </nav>
@@ -11,8 +11,8 @@
 
 <script>
     import {elMenu} from '@/el';
-    import menuItem from '@layouts/partials/menu-item';
-    import avatar from '@layouts/partials/avatar';
+    import menuItem from './menu-item';
+    import avatar from './avatar';
     import {mapState} from 'vuex';
 
     export default {

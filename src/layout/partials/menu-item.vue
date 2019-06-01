@@ -50,5 +50,10 @@
 
     .link {
         text-decoration: none;
+        color: $--color-secondary;
+    }
+
+    .router-link-exact-active {
+        color: $--color-primary;
     }
 </style>

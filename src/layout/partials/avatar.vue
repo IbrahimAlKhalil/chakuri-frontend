@@ -15,35 +15,43 @@
         </el-popover>
 
         <template v-else>
-            <el-button type="primary" icon="fas fa-sign-in-alt" class="btn"> {{ $t('avatar.login') }}</el-button>
-            <el-button icon="fas fa-user-plus" class="btn"> {{ $t('avatar.signUp') }}</el-button>
+            <router-link to="/sign-in" class="el-button el-button--primary btn">
+                <i class="fas fa-sign-in-alt"></i>&nbsp; {{ $t('avatar.login') }}
+            </router-link>
+
+            <el-button class="btn" icon="fas fa-user-plus" @click="open = true">
+                {{ $t('avatar.signUp') }}
+            </el-button>
         </template>
     </div>
 </template>
 
 <script>
-    import {elPopover, elButton} from '@/el';
+    import {elPopover, elButton, elDialog} from '@/el';
+    import {mapState} from 'vuex';
 
     export default {
         data() {
-            const auth = this.$root.$auth;
-
             return {
                 icons: {
                     user: require('@assets/images/user.svg')
                 },
-                auth: auth
-            }
+                open: false
+            };
         },
+
+        computed: mapState({
+            auth: 'auth'
+        }),
 
         methods: {
             signOut() {
-                this.$root.$auth.signOut()
+                this.$store.dispatch('signOut');
             }
         },
 
-        components: {elButton, elPopover}
-    }
+        components: {elButton, elPopover, elDialog}
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -70,7 +78,11 @@
         }
     }
 
-    .btn i {
-        margin-right: 10px;
+    .btn {
+        text-decoration: none;
+
+        i {
+            margin-right: 10px;
+        }
     }
 </style>

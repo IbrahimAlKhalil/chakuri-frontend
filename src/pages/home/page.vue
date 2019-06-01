@@ -1,5 +1,5 @@
 <template>
-    <layout>
+    <section>
         <search/>
         <div class="container">
             <aside class="sidebar-1">
@@ -17,11 +17,10 @@
 
             <jobs/>
         </div>
-    </layout>
+    </section>
 </template>
 
 <script>
-    import layout from '@layouts/master';
     import search from './components/search';
     import location from './components/location';
     import specialJobs from './components/special-jobs';
@@ -36,7 +35,7 @@
                 divisions: ['ঢাকা', 'সিলেট', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ'],
             };
         },
-        components: {layout, search, location, specialJobs, elCard, topCategories, subCategories, jobs}
+        components: {search, location, specialJobs, elCard, topCategories, subCategories, jobs}
     };
 </script>
 

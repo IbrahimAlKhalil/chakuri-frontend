@@ -15,3 +15,5 @@ export elInput from 'element-ui/packages/input/src/input';
 export elSelect from 'element-ui/lib/select';
 export elOption from 'element-ui/packages/select/src/option';
 export elTooltip from 'element-ui/lib/tooltip';
+export elTabs from 'element-ui/packages/tabs/src/tabs';
+export elTabPane from 'element-ui/packages/tabs/src/tab-pane';

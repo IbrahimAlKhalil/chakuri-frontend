@@ -2,13 +2,12 @@ import Vue from 'vue';
 
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import Authenticator from './modules/authenticator';
 
 // Directives
 import Loading from 'element-ui/packages/loading/src/directive';
 
-import App from './app';
-import './modules/registerServiceWorker';
+import App from '@/layout/app';
+import '@modules/registerServiceWorker';
 
 // Styles
 import './styles/styles.scss';
@@ -18,9 +17,10 @@ import router from './router';
 import {i18n} from './i18n';
 
 Vue.use(VueRouter);
-Vue.use(Authenticator);
 Vue.use(Vuex);
 Vue.use(Loading);
+
+console.log(App);
 
 new Vue({
     store,

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import auth from './modules/authenticator';
 
 Vue.use(Vuex);
 
@@ -71,5 +72,5 @@ export default new Vuex.Store({
             Vue.set(payload.parent, 'children', payload.children);
         }
     },
-    actions: {}
-})
+    modules: {auth}
+});

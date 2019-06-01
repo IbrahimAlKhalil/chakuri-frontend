@@ -2,58 +2,63 @@ const eventHandlers = {
     authStateChange: []
 };
 
-export const authenticator = {
-    user: null,
-
-    // You can check whether user is authenticated with this method
-    async initialize() {
-        return new Promise(resolve => {
-            // Don't get user instance twice from server
-            if (this.user !== null) {
-                // Auth is already checked
-                return resolve(this.user)
-            }
-
-            // TODO: Get user instance from server
-            setTimeout(() => {
-                // this.user = {
-                //     name: 'Ibrahim Al Khalil'
-                // };
-
-                resolve(this.user)
-            }, 200)
-        })
+export default {
+    state: {
+        user: null /*{
+            name: 'Ibrahim Al Khalil'
+        }*/
     },
 
-    onAuthStateChange(handler) {
-        eventHandlers.authStateChange.push(handler)
+    mutations: {
+        updateUser(state, payload) {
+            state.user = payload;
+        }
     },
 
-    removeAuthStateObserver(event, handler) {
-        const handlers = eventHandlers[event];
-        handlers.splice(handler, 1)
-    },
+    actions: {
+        async initialize({state}) {
+            return new Promise(resolve => {
+                // Don't get user instance twice from server
+                if (state.user !== null) {
+                    // Auth is already checked
+                    return resolve(state.user);
+                }
 
-    // Call this method form sign in
-    // This function will return a promise which resolves user instance if fulfilled
-    // TODO: Implement signIn method
-    async signIn(id, password) {
-        return this.user
-    },
+                // TODO: Get user instance from server
+                setTimeout(() => {
+                    // this.user = {
+                    //     name: 'Ibrahim Al Khalil'
+                    // };
 
-    // Call this method for  sign out
-    // TODO: Implement signOut method
-    signOut() {
-        this.user = false;
+                    resolve(state.user);
+                }, 200);
+            });
+        },
 
-        eventHandlers.authStateChange.forEach(handler => {
-            handler(false)
-        })
+        onAuthStateChange(context, handler) {
+            eventHandlers.authStateChange.push(handler);
+        },
+
+        removeAuthStateObserver(context, {event, handler}) {
+            const handlers = eventHandlers[event];
+            handlers.splice(handler, 1);
+        },
+
+        // Call this method form sign in
+        // This function will return a promise which resolves user instance if fulfilled
+        // TODO: Implement signIn method
+        async signIn({state}, {id, password}) {
+            return state.user;
+        },
+
+        // Call this method for  sign out
+        // TODO: Implement signOut method
+        signOut({commit}) {
+            commit('updateUser', false);
+
+            eventHandlers.authStateChange.forEach(handler => {
+                handler();
+            });
+        }
     }
 };
-
-export default {
-    install(Vue) {
-        Vue.prototype.$auth = authenticator
-    }
-}

@@ -95,6 +95,7 @@
         display: grid;
         grid-auto-flow: column;
         width: 210px;
+        margin-top: 45px;
 
         a {
             font-size: 2.8rem;

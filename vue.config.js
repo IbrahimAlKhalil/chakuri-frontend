@@ -23,7 +23,6 @@ module.exports = {
                 '@': resolve(__dirname, 'src'),
                 '@assets': resolve(__dirname, 'src/assets'),
                 '@components': resolve(__dirname, 'src/components'),
-                '@layouts': resolve(__dirname, 'src/layouts'),
                 '@locales': resolve(__dirname, 'src/locales'),
                 '@middleware': resolve(__dirname, 'src/middleware'),
                 '@modules': resolve(__dirname, 'src/modules'),

@@ -1,16 +1,78 @@
-export default function (e) {
-    e.beforeEach(function (o, r, n) {
-        if (!o.meta.hasOwnProperty('middleware')) return n();
-        var e = o.meta.middleare, i = 'function' == typeof e ? [e, n] : e.concat([n]), f = function (e) {
-            if (i.length) {
-                if (void 0 !== e) return n(e);
-                var t = i[0];
-                if (i.shift(), t === n) return n();
-                t(o, r, f);
+export default function (router) {
+    router.beforeEach((route, from, next) => {
+
+        // Make sure that the middleware array does exist
+        if (!route.meta.hasOwnProperty('middleware')) {
+            //No middleware, call next
+            return next();
+        }
+
+        const givenMiddleware = route.meta.middleware;
+
+        // Middleware can be a NavigationGuard or an array of NavigationGuard
+        // Middleware stack
+        // Keep the "next" in the stack which should be called after all the middleware is called
+        const stack = typeof givenMiddleware === 'function' ? [givenMiddleware, next] : [...(givenMiddleware), next];
+
+        // This function will be used to make the chain
+        const chain = (to) => {
+            // Break the chain when there is no middleware to be called
+            if (!stack.length) {
+                return;
             }
+
+            // Break the chain when next is called with parameter
+            if (to !== undefined) {
+                return next(to);
+            }
+
+            // Keep a reference to current middleware in the stack before removing it
+            const middleware = stack[0];
+
+            // Remove current middleware from the stack
+            stack.shift();
+
+            // Make sure that current middleware in the stack is not the next
+            // If so, then call it without parameter
+            if (middleware === next) {
+                return next();
+            }
+
+            // Finally call the middleware
+
+            middleware(route, from, chain);
         };
-        f();
+
+        // Make the chain
+        chain();
     });
 
-    return e;
-};
+    return router;
+}
+
+export function group(middleware, routes) {
+    let givenMiddleware = typeof middleware === 'function' ? [middleware] : middleware;
+
+    // Iterate over all the routes and add middleware
+    routes.forEach(route => {
+
+        if (!route.hasOwnProperty('meta')) {
+            route.meta = {};
+        }
+
+        // Check whether route has personal middleware
+        if (route.meta.hasOwnProperty('middleware')) {
+            const personalMiddleware = route.meta.middleware;
+
+            if (typeof personalMiddleware === 'function') {
+                givenMiddleware.push(personalMiddleware);
+            } else if (Array.isArray(personalMiddleware)) {
+                givenMiddleware = [...givenMiddleware, ...personalMiddleware];
+            }
+        }
+
+        route.meta.middleware = givenMiddleware;
+    });
+
+    return routes;
+}
