@@ -1,6 +1,8 @@
 import VueRouter from 'vue-router';
-import viddleware, {group} from '@modules/viddleware';
+import viddleware, { group } from '@modules/viddleware';
 import guest from '@middleware/guest';
+import auth from '@middleware/auth';
+import lazy from '@modules/lazy';
 
 const router = new VueRouter({
     mode: 'history',
@@ -8,17 +10,27 @@ const router = new VueRouter({
         ...group(guest, [
             {
                 path: '/sign-in',
-                component: () => import('./pages/sign-in/page')
+                component: () => lazy(import('./pages/sign-in/page'))
             },
             {
                 path: '/sign-up',
-                component: () => import('./pages/sign-up/page')
+                component: () => lazy(import('./pages/sign-up/page'))
             }
         ]),
 
         {
+            path: '/articles/:id',
+            component: () => lazy(import('./pages/article/page'))
+        },
+
+        {
+            path: '/search',
+            component: () => lazy(import('./pages/search/page'))
+        },
+
+        {
             path: '/',
-            component: () => import('./pages/home/page')
+            component: () => lazy(import('./pages/home/page'))
         }
     ]
 });

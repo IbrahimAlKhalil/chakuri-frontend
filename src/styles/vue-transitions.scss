@@ -1,28 +1,18 @@
-$duration: .2s;
+$duration: .3s;
 
 // Fade
 
 .fade-enter-active, .fade-leave-active {
   transition: opacity $duration;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
-// Slide
-
-.slide-enter-active, .slide-leave-active {
-  transition: transform $duration;
-}
-
-.slide-enter, .slide-leave-to {
-  transform: translateX(-100%);
-}
-
 // Jump
 
 .jump-enter-active, .jump-leave-active {
-  transition: opacity .2s, transform .2s;
+  transition: opacity $duration, transform $duration;
 }
 
 .jump-enter, .jump-leave-to {

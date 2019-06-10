@@ -1,5 +1,4 @@
 const {resolve} = require('path');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     pwa: {
@@ -32,7 +31,6 @@ module.exports = {
         },
         optimization: {
             usedExports: true
-        },
-        plugins: [new BundleAnalyzerPlugin]
+        }
     }
 };

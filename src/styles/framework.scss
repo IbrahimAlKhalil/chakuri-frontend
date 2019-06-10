@@ -4,63 +4,61 @@
 
 .flex {
   display: flex;
+}
 
-  &-md-and-up {
-    display: none;
+.flex-md-and-up {
+  display: none;
 
-    @media screen and (min-width: $__md) {
-      display: flex;
-    }
+  @media screen and (min-width: $__md) {
+    display: flex;
   }
+}
 
-  &-wrap {
+.flex-wrap {
+  flex-wrap: wrap;
+
+  .flex-md {
     flex-wrap: wrap;
-
-    &-md {
-      flex-wrap: wrap;
-      @media screen and (min-width: $__md) {
-        flex-wrap: nowrap;
-      }
-
+    @media screen and (min-width: $__md) {
+      flex-wrap: nowrap;
     }
-  }
 
-  &.justify-center {
-    justify-content: center;
   }
+}
 
-  &.justify-between {
-    justify-content: space-between;
-  }
+.justify-center {
+  justify-content: center;
+}
 
-  &.align-center {
-    align-items: center;
-  }
+.justify-between {
+  justify-content: space-between;
+}
 
-  &.content-center {
-    align-content: center;
-  }
+.justify-around {
+  justify-content: space-around;
+}
 
-  &.direction-column {
-    flex-direction: column;
-  }
+.align-center {
+  align-items: center;
+}
+
+.content-center {
+  align-content: center;
+}
+
+.direction-column {
+  flex-direction: column;
 }
 
 
 // Width, height
 
-$i: 0;
+.w-100 {
+  width: 100%;
+}
 
-@while $i < 120 {
-  $i: $i+20;
-
-  .w-#{$i} {
-    width: 0% + $i;
-  }
-
-  .h-#{$i} {
-    height: 0% + $i;
-  }
+.h-100 {
+  height: 100%;
 }
 
 
@@ -131,4 +129,10 @@ $i: 0;
     float: right;
     color: $--icon-color-base;
   }
+}
+
+// Shadow
+
+.dark-text {
+  text-shadow: 0 0 0;
 }

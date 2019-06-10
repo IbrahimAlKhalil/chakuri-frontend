@@ -16,24 +16,25 @@
                                     <img :src="icons.user" alt="User">
                                 </div>
 
-                                <div class="flex flex-wrap justify-center">
+                                <div class="flex flex-wrap justify-center mt-1">
                                     <el-button-group class="btn-group" v-if="!auth.user">
                                         <router-link to="/sign-in"
                                                      class="el-button el-button--small el-button--primary btn">
-                                            <i class="fas fa-sign-in-alt"></i>&nbsp; {{ $t('avatar.login') }}
+                                            <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
                                         </router-link>
 
-                                        <el-button class="btn" icon="fas fa-user-plus" size="small">
-                                            {{ $t('avatar.signUp') }}
-                                        </el-button>
+                                        <router-link to="/sign-up"
+                                                     class="el-button el-button--small btn">
+                                            <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
+                                        </router-link>
                                     </el-button-group>
 
                                     <ul v-else>
                                         <li class="el-dropdown-menu__item">
-                                            <i class="el-icon-setting"></i> {{ $t('avatar.profile') }}
+                                            <i class="el-icon-setting"></i> প্রোফাইল
                                         </li>
                                         <li class="el-dropdown-menu__item" @click="signOut">
-                                            <i class="fas fa-sign-out-alt"></i> {{ $t('avatar.signOut') }}
+                                            <i class="fas fa-sign-out-alt"></i> প্রস্থান
                                         </li>
                                     </ul>
                                 </div>
@@ -52,9 +53,9 @@
 </template>
 
 <script>
-    import {elCard, elMenu, elButton, elButtonGroup} from '@/el';
-    import menuItem from './menu-item';
-    import {mapState} from 'vuex';
+    import {elCard, elMenu, elButton, elButtonGroup} from '@/el'
+    import menuItem from './menu-item'
+    import {mapState} from 'vuex'
 
     export default {
         data() {
@@ -63,7 +64,7 @@
                     user: require('@/assets/images/user.svg')
                 },
                 show: false
-            };
+            }
         },
 
         computed: mapState({
@@ -73,15 +74,15 @@
 
         methods: {
             toggleNav(what) {
-                this.show = what;
+                this.show = what
             },
 
             signOut() {
-                this.$store.dispatch('signOut');
+                this.$store.dispatch('signOut')
             }
         },
         components: {menuItem, elButtonGroup, elButton, elMenu, elCard}
-    };
+    }
 </script>
 
 <style lang="scss" scoped>

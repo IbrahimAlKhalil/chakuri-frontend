@@ -1,9 +1,8 @@
 <template>
     <el-dialog :title="current.title" :visible="show" @close="$emit('update:show', false)"
-               :append-to-body="true"
                class="location-dialog"
                top="10px"
-               center>
+               center append-to-body>
         <el-breadcrumb separator="/">
             <el-breadcrumb-item v-for="(item, index) in selected" :key="index" @click="back(item)">
                 <span>

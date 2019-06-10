@@ -2,9 +2,9 @@
     <div class="wrapper flex align-center justify-between">
         <div class="spacer"></div>
 
-        <el-popover placement="top-center" trigger="click" popper-class="popover" v-model="langPopoverVisible">
+       <!--<el-popover placement="top-center" trigger="click" popper-class="popover" v-model="langPopoverVisible">
             <div slot="reference" class="pointer languages shadow">
-                {{lang}}<i class="el-icon-arrow-down el-icon--right"></i>
+                {{lang}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
             </div>
             <ul>
                 <li v-for="(lang, index) in languages" :key="index" class="el-dropdown-menu__item"
@@ -12,7 +12,7 @@
                     {{lang.name}}
                 </li>
             </ul>
-        </el-popover>
+        </el-popover>-->
 
         <div class="social-icons">
             <a href="https://www.facebook.com"><i class="fab fa-facebook-square"></i></a>
@@ -27,7 +27,7 @@
     </div>
 </template>
 
-<script>
+<!--<script>
     import {changeLanguage} from '@/i18n';
     import {elPopover} from '@/el';
 
@@ -61,7 +61,7 @@
 
         components: {elPopover}
     }
-</script>
+</script>-->
 
 <style lang="scss" scoped>
     @import "../../styles/var";
@@ -104,9 +104,9 @@
             margin-left: auto;
         }
 
-        .languages {
+        /*.languages {
             margin-right: 45px;
-        }
+        }*/
 
         .social-icons {
             margin-right: 45px;

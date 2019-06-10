@@ -6,17 +6,18 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        loading: false,
         menu: [
             {
-                title: 'home',
+                title: 'প্রথম পাতা',
                 link: '/'
             },
             {
-                title: 'circular',
+                title: 'চাকরির বিজ্ঞাপন দিন',
                 link: '/post-job'
             },
             {
-                title: 'contact',
+                title: 'যোগাযোগ',
                 link: '/contact'
             }
         ],
@@ -70,6 +71,10 @@ export default new Vuex.Store({
     mutations: {
         addChildrenToPlace(state, payload) {
             Vue.set(payload.parent, 'children', payload.children);
+        },
+
+        changeLoadingState(state, loading) {
+            state.loading = loading;
         }
     },
     modules: {auth}

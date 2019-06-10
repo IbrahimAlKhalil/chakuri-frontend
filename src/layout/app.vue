@@ -1,11 +1,10 @@
 <template>
-    <main v-loading="signedIn === null" id="app" class="flex direction-column w-100">
+    <main v-loading.lock.fullscreen="signedIn === null || $store.state.loading" id="app"
+          class="flex direction-column w-100">
         <template v-if="signedIn !== null">
             <small-header/>
             <partial-header/>
-            <transition name="fade">
-                <router-view/>
-            </transition>
+            <router-view/>
             <partial-footer/>
         </template>
     </main>

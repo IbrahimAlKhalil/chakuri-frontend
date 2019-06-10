@@ -2,7 +2,7 @@
     <el-menu-item v-if="!item.children" :index="index.toString()">
         <router-link :to="item.link" class="link">
             <img v-if="item.icon" :src="item.icon" :alt="item.title" class="icon">
-            <span>{{ $t(`menu.${item.title}`) }}</span>
+            <span>{{ item.title }}</span>
         </router-link>
     </el-menu-item>
 

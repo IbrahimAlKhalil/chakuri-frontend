@@ -2,7 +2,7 @@ export default {
     bn: {
         menu: {
             'home': 'প্রথম পাতা',
-            'circular': 'চাকরির বিজ্ঞাপন দিন',
+            'post-job': 'চাকরির বিজ্ঞাপন দিন',
             'contact': 'যোগাযোগ'
         },
         avatar: {
@@ -12,4 +12,4 @@ export default {
             signUp: 'একাউন্ট তৈরি করুন'
         }
     }
-};
+}
