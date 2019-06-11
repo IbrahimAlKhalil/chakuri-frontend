@@ -1,13 +1,13 @@
 <template>
     <div class="flex justify-center align-center menu-icon">
-        <el-button icon="el-icon-menu" @click="toggleNav(true)" circle/>
+        <el-button icon="el-icon-menu" @click="showNav" circle/>
 
         <transition name="fade">
             <div class="back-drop" v-if="show"></div>
         </transition>
 
         <transition name="slide">
-            <div class="wrapper" v-if="show" @click.self="toggleNav(false)">
+            <div class="wrapper" v-if="show" @click.self="hideNav">
                 <div class="scroll">
                     <nav>
                         <el-card class="box-card h-100">
@@ -23,8 +23,7 @@
                                             <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
                                         </router-link>
 
-                                        <router-link to="/sign-up"
-                                                     class="el-button el-button--small btn">
+                                        <router-link to="/sign-up" class="el-button el-button--small btn">
                                             <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
                                         </router-link>
                                     </el-button-group>
@@ -62,22 +61,27 @@
             return {
                 icons: {
                     user: require('@/assets/images/user.svg')
-                },
-                show: false
+                }
             }
         },
 
         computed: mapState({
             menu: 'menu',
-            auth: 'auth'
+            auth: 'auth',
+            show: 'showMenu'
         }),
 
         methods: {
-            toggleNav(what) {
-                this.show = what
+            showNav() {
+                this.$store.commit('toggleNavMenu', true)
+            },
+
+            hideNav() {
+                this.$store.commit('toggleNavMenu', false)
             },
 
             signOut() {
+                this.hideNav()
                 this.$store.dispatch('signOut')
             }
         },

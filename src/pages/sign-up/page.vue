@@ -10,69 +10,86 @@
                 আপনি কেন একাউন্ট তৈরী করতে চান&nbsp;&nbsp;<i class="far fa-question-circle"></i>
             </template>
         </div>
-
-        <el-form v-if="type" :model="models" :rules="rules" ref="form" action="#"
-                 @submit.native.prevent="submit" status-icon>
-            <el-form-item prop="name">
-                <label for="name" class="d-block">{{type==='employee'?'নাম':'প্রতিষ্ঠানের নাম'}}</label>
-                <el-input id="name" v-model="models.name">
-                    <i
-                            :class="`${type==='employee'?'el-icon-user-solid':'fas fa-building'} el-input__icon`"
-                            slot="prefix"
-                    ></i>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item prop="mobile">
-                <label for="mobile" class="d-block">মোবাইল অথবা টেলিফোন নম্বর</label>
-                <el-input id="mobile" type="number" v-model="models.mobile">
-                    <i class="fas fa-mobile-alt el-input__icon" slot="prefix"></i>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item prop="email">
-                <label for="email" class="d-block">ইমেইল (ঐচ্ছিক)</label>
-                <el-input id="email" type="email" v-model="models.email">
-                    <i class="fas fa-at el-input__icon" slot="prefix"></i>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item prop="password">
-                <label for="password" class="d-block">পাসওয়ার্ড</label>
-                <el-input id="password" type="password" v-model="models.password" autocomplete="new-password">
-                    <i class="el-icon-key el-input__icon" slot="prefix"></i>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item prop="rePassword">
-                <label for="rePassword" class="d-block">পাসওয়ার্ডটি আবার লিখুন</label>
-                <el-input id="rePassword" type="password" v-model="models.rePassword">
-                    <i class="el-icon-key el-input__icon" slot="prefix"></i>
-                </el-input>
-            </el-form-item>
-
-            <el-form-item prop="agreed" class="agreed">
-                <el-checkbox v-model="models.agreed">
-                    আমি ব্যবহারের
-                    <router-link to="/articles/terms-of-use" target="_blank" class="link">শর্তাবলী</router-link>&nbsp;এবং
-                    <router-link to="/articles/privacy-policy" target="_blank" class="link">গোপনীয়তা নীতির
-                    </router-link>&nbsp;সঙ্গে
-                    একমত
-                </el-checkbox>
-            </el-form-item>
-
-            <div class="text-center">
-                <el-button class="login-btn" icon="fas fa-paper-plane" type="primary"
-                           nativeType="submit">&nbsp;&nbsp;সাবমিট
-                </el-button>
-            </div>
-        </el-form>
-        <div v-else>
+        <div v-if="!type">
             <el-menu class="types">
                 <li class="el-menu-item nav-arrow-right" @click="type = 'employee'">চাকুরী অনুসন্ধানের জন্য।</li>
                 <li class="el-menu-item nav-arrow-right" @click="type = 'employer'">লোক নিয়োগ দেয়ার জন্য।</li>
             </el-menu>
         </div>
+        <template v-else>
+            <div class="flex social-login">
+                <el-button size="medium" class="facebook">
+                    <i class="fab fa-facebook-f"></i>&nbsp;&nbsp;&nbsp;ফেসবুক
+                </el-button>
+
+                <el-button size="medium" class="google">
+                    <i class="fab fa-google"></i>&nbsp;&nbsp;&nbsp;গুগল
+                </el-button>
+
+                <el-button size="medium" class="twitter">
+                    <i class="fab fa-twitter"></i>&nbsp;&nbsp;&nbsp;টুইটার
+                </el-button>
+            </div>
+
+            <el-divider/>
+
+            <el-form :model="models" :rules="rules" ref="form" action="#"
+                     @submit.native.prevent="submit" status-icon>
+                <el-form-item prop="name">
+                    <label for="name" class="d-block">{{type==='employee'?'নাম':'প্রতিষ্ঠানের নাম'}}</label>
+                    <el-input id="name" v-model="models.name">
+                        <i
+                                :class="`${type==='employee'?'el-icon-user-solid':'fas fa-building'} el-input__icon`"
+                                slot="prefix"
+                        ></i>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item prop="mobile">
+                    <label for="mobile" class="d-block">মোবাইল অথবা টেলিফোন নম্বর</label>
+                    <el-input id="mobile" type="number" v-model="models.mobile">
+                        <i class="fas fa-mobile-alt el-input__icon" slot="prefix"></i>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item prop="email">
+                    <label for="email" class="d-block">ইমেইল (ঐচ্ছিক)</label>
+                    <el-input id="email" type="email" v-model="models.email">
+                        <i class="fas fa-at el-input__icon" slot="prefix"></i>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item prop="password">
+                    <label for="password" class="d-block">পাসওয়ার্ড</label>
+                    <el-input id="password" type="password" v-model="models.password" autocomplete="new-password">
+                        <i class="el-icon-key el-input__icon" slot="prefix"></i>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item prop="rePassword">
+                    <label for="rePassword" class="d-block">পাসওয়ার্ডটি আবার লিখুন</label>
+                    <el-input id="rePassword" type="password" v-model="models.rePassword">
+                        <i class="el-icon-key el-input__icon" slot="prefix"></i>
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item prop="agreed" class="agreed">
+                    <el-checkbox v-model="models.agreed">
+                        আমি ব্যবহারের
+                        <router-link to="/articles/terms-of-use" target="_blank" class="link">শর্তাবলী</router-link>&nbsp;এবং
+                        <router-link to="/articles/privacy-policy" target="_blank" class="link">গোপনীয়তা নীতির
+                        </router-link>&nbsp;সঙ্গে
+                        একমত
+                    </el-checkbox>
+                </el-form-item>
+
+                <div class="text-center">
+                    <el-button class="login-btn" icon="fas fa-paper-plane" type="primary"
+                               nativeType="submit">&nbsp;&nbsp;সাবমিট
+                    </el-button>
+                </div>
+            </el-form>
+        </template>
     </el-card>
 </template>
 
@@ -173,6 +190,23 @@
 
     .title {
         font-size: 1.3rem;
+    }
+
+    .social-login button {
+        width: 100%;
+        color: #fff;
+    }
+
+    .facebook {
+        background: #39569c;
+    }
+
+    .google {
+        background: #db4a39;
+    }
+
+    .twitter {
+        background: #00acee;
     }
 
     .login-btn {

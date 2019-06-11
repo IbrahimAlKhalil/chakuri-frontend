@@ -1,8 +1,8 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import auth from './modules/authenticator';
+import Vue from 'vue'
+import Vuex from 'vuex'
+import auth from './modules/authenticator'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
@@ -21,6 +21,7 @@ export default new Vuex.Store({
                 link: '/contact'
             }
         ],
+        showMenu: false,
 
         divisions: {
             type: 'division',
@@ -70,12 +71,16 @@ export default new Vuex.Store({
     },
     mutations: {
         addChildrenToPlace(state, payload) {
-            Vue.set(payload.parent, 'children', payload.children);
+            Vue.set(payload.parent, 'children', payload.children)
         },
 
         changeLoadingState(state, loading) {
-            state.loading = loading;
+            state.loading = loading
+        },
+
+        toggleNavMenu(state, show) {
+            state.showMenu = show
         }
     },
     modules: {auth}
-});
+})

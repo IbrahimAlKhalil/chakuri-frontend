@@ -1,4 +1,4 @@
-export default function (router) {
+export default function (router, globalMiddleware = []) {
     router.beforeEach((route, from, next) => {
 
         // Make sure that the middleware array does exist
@@ -12,7 +12,7 @@ export default function (router) {
         // Middleware can be a NavigationGuard or an array of NavigationGuard
         // Middleware stack
         // Keep the "next" in the stack which should be called after all the middleware is called
-        const stack = typeof givenMiddleware === 'function' ? [givenMiddleware, next] : [...(givenMiddleware), next];
+        const stack = typeof givenMiddleware === 'function' ? [...globalMiddleware, givenMiddleware, next] : [...globalMiddleware, ...givenMiddleware, next];
 
         // This function will be used to make the chain
         const chain = (to) => {

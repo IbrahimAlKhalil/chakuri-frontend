@@ -1,8 +1,9 @@
-import VueRouter from 'vue-router';
-import viddleware, { group } from '@modules/viddleware';
-import guest from '@middleware/guest';
-import auth from '@middleware/auth';
-import lazy from '@modules/lazy';
+import VueRouter from 'vue-router'
+import viddleware, {group} from '@modules/viddleware'
+import guest from '@middleware/guest'
+import auth from '@middleware/auth'
+import hideMobileNav from '@middleware/hide-mobile-nav'
+import lazy from '@modules/lazy'
 
 const router = new VueRouter({
     mode: 'history',
@@ -33,6 +34,6 @@ const router = new VueRouter({
             component: () => lazy(import('./pages/home/page'))
         }
     ]
-});
+})
 
-export default viddleware(router);
+export default viddleware(router, [hideMobileNav])
