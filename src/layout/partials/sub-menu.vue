@@ -1,8 +1,7 @@
 <template>
     <el-submenu :index="index.toString()">
         <template slot="title">
-            <img v-if="item.icon" :src="item.icon" :alt="item.title" class="icon">
-            <span>{{ $t(`menu.${item.title}`) }}</span>
+            {{item.title}}
         </template>
         <menu-item v-for="(subItem, key) in item.children" :key="key" :item="subItem" :index="`${index}-${key}`"/>
     </el-submenu>

@@ -1,16 +1,10 @@
 <template>
-    <el-menu-item v-if="!item.children" :index="index.toString()">
-        <router-link :to="item.link" class="link">
-            <img v-if="item.icon" :src="item.icon" :alt="item.title" class="icon">
-            <span>{{ item.title }}</span>
-        </router-link>
-    </el-menu-item>
-
-    <sub-menu v-else :item="item" :index="index"/>
+    <router-link :to="item.link" class="el-menu-item" :index="index.toString()">
+        {{ item.title }}
+    </router-link>
 </template>
 
 <script>
-    import {elMenuItem} from '@/el';
 
     export default {
         props: {
@@ -22,38 +16,29 @@
                 type: [Number, String],
                 required: true
             }
-        },
-        components: {
-            subMenu: () => import('./sub-menu'),
-            elMenuItem
         }
-    };
+    }
 </script>
 
 
 <style lang="scss" scoped>
     @import "../../styles/var";
 
-    .el-submenu.is-opened {
-        background-color: $--dropdown-menuItem-hover-fill !important;
+    .el-menu-item {
+        text-decoration: none;
+        color: $--color-secondary;
 
-        .el-submenu__title {
+        &:hover {
             background-color: $--dropdown-menuItem-hover-fill !important;
         }
     }
 
-    .icon {
-        height: 20px;
-        margin-right: 10px;
-        filter: grayscale(1);
-    }
-
-    .link {
-        text-decoration: none;
-        color: $--color-secondary;
-    }
-
     .router-link-exact-active {
-        color: $--color-primary;
+        border-left: 2px solid $--color-primary;
+
+        @media all and (min-width: $--md) {
+            border-bottom: 2px solid $--color-primary;
+            border-left: 0;
+        }
     }
 </style>

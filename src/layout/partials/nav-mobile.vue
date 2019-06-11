@@ -6,7 +6,7 @@
             <div class="back-drop" v-if="show"></div>
         </transition>
 
-        <transition name="slide">
+        <transition name="jump">
             <div class="wrapper" v-if="show" @click.self="hideNav">
                 <div class="scroll">
                     <nav>
@@ -39,9 +39,9 @@
                                 </div>
                             </div>
                             <div>
-                                <el-menu default-active="0">
+                                <div class="el-menu">
                                     <menu-item v-for="(item, index) in menu" :key="index" :index="index" :item="item"/>
-                                </el-menu>
+                                </div>
                             </div>
                         </el-card>
                     </nav>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-    import {elCard, elMenu, elButton, elButtonGroup} from '@/el'
+    import {elCard, elButton, elButtonGroup} from '@/el'
     import menuItem from './menu-item'
     import {mapState} from 'vuex'
 
@@ -80,29 +80,25 @@
                 this.$store.commit('toggleNavMenu', false)
             },
 
-            signOut() {
+            async signOut() {
                 this.hideNav()
-                this.$store.dispatch('signOut')
+                await this.$store.dispatch('signOut')
             }
         },
-        components: {menuItem, elButtonGroup, elButton, elMenu, elCard}
+        components: {menuItem, elButtonGroup, elButton, elCard}
     }
 </script>
 
 <style lang="scss" scoped>
     @import "../../styles/var";
 
-    .menu {
-        padding: 0;
-        margin: 0;
-    }
-
     .el-menu {
+        display: grid;
         border-right: 0;
     }
 
     .menu-icon {
-        @media screen and (min-width: $__md) {
+        @media screen and (min-width: $--md) {
             display: none;
         }
 
@@ -150,6 +146,7 @@
 
     .box-card {
         min-height: 100vh;
+        border-radius: 0;
     }
 
     ul {

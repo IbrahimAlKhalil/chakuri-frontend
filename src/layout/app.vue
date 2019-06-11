@@ -4,7 +4,9 @@
         <template v-if="signedIn !== null">
             <small-header/>
             <partial-header/>
-            <router-view/>
+            <transition name="fade">
+                <router-view/>
+            </transition>
             <partial-footer/>
         </template>
     </main>

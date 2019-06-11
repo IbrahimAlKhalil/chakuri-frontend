@@ -14,7 +14,11 @@ export default new Vuex.Store({
             },
             {
                 title: 'চাকরির বিজ্ঞাপন দিন',
-                link: '/post-job'
+                link: '/post-job',
+                children: [{
+                    title: 'প্রথম পাতা',
+                    link: '/'
+                }]
             },
             {
                 title: 'যোগাযোগ',

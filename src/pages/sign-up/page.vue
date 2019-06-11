@@ -12,8 +12,8 @@
         </div>
         <div v-if="!type">
             <el-menu class="types">
-                <li class="el-menu-item nav-arrow-right" @click="type = 'employee'">চাকুরী অনুসন্ধানের জন্য।</li>
-                <li class="el-menu-item nav-arrow-right" @click="type = 'employer'">লোক নিয়োগ দেয়ার জন্য।</li>
+                <li class="el-menu-item nav-arrow-right" @click="navigate('employee')">চাকুরী অনুসন্ধানের জন্য।</li>
+                <li class="el-menu-item nav-arrow-right" @click="navigate('employer')">লোক নিয়োগ দেয়ার জন্য।</li>
             </el-menu>
         </div>
         <template v-else>
@@ -100,7 +100,6 @@
         data() {
             return {
                 form: null,
-                type: null,
                 models: {
                     name: '',
                     mobile: '',
@@ -145,10 +144,17 @@
                 }
 
                 callback(new Error('দুঃখিত, আপনাকে আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতির সাথে একমত হতে হবে।'))
+            },
+
+            navigate(type) {
+                this.$router.push({path: 'sign-up', query: {type}})
             }
         },
 
         computed: {
+            type() {
+                return this.$route.query.type
+            },
             rules() {
                 const please = 'অনুগ্রহ করে আপনার '
                 const min = {
