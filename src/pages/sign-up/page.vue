@@ -13,7 +13,7 @@
         <div v-if="!type">
             <el-menu class="types">
                 <li class="el-menu-item nav-arrow-right" @click="navigate('employee')">চাকুরী অনুসন্ধানের জন্য।</li>
-                <li class="el-menu-item nav-arrow-right" @click="navigate('employer')">লোক নিয়োগ দেয়ার জন্য।</li>
+                <li class="el-menu-item nav-arrow-right" @click="navigate('institution')">লোক নিয়োগ দেয়ার জন্য।</li>
             </el-menu>
         </div>
         <template v-else>
@@ -46,8 +46,8 @@
                 </el-form-item>
 
                 <el-form-item prop="mobile">
-                    <label for="mobile" class="d-block">মোবাইল অথবা টেলিফোন নম্বর</label>
-                    <el-input id="mobile" type="number" v-model="models.mobile">
+                    <label for="mobile" class="d-block">মোবাইল নম্বর</label>
+                    <el-input id="mobile" v-model="models.mobile">
                         <i class="fas fa-mobile-alt el-input__icon" slot="prefix"></i>
                     </el-input>
                 </el-form-item>
@@ -84,8 +84,9 @@
                 </el-form-item>
 
                 <div class="text-center">
-                    <el-button class="login-btn" icon="fas fa-paper-plane" type="primary"
-                               nativeType="submit">&nbsp;&nbsp;সাবমিট
+                    <el-button class="login-btn" :icon="!formLoading? 'el-icon-s-promotion' : 'el-icon-loading'"
+                               type="primary"
+                               nativeType="submit" :disabled="formLoading">&nbsp;&nbsp;সাবমিট
                     </el-button>
                 </div>
             </el-form>
@@ -94,17 +95,18 @@
 </template>
 
 <script>
-    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elMenu} from '@/el'
+    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elMenu} from '../../el'
+    import {saveToken} from '../../modules/tokenizer'
 
     export default {
         data() {
             return {
                 form: null,
+                formLoading: false,
                 models: {
                     name: '',
                     mobile: '',
                     email: '',
-                    username: '',
                     password: '',
                     rePassword: '',
                     agreed: false
@@ -115,9 +117,42 @@
         methods: {
             async submit() {
                 try {
-                    const valid = await this.$refs.form.validate()
+                    await this.$refs.form.validate()
+
+                    this.formLoading = true
+
+                    const response = await this.$fetch('register', {
+                        auth: false,
+                        method: 'POST',
+                        body: {
+                            name: this.models.name,
+                            mobile: this.models.mobile,
+                            email: this.models.email,
+                            password: this.models.password,
+                            user_type_id: this.type === 'employee' ? 1 : 2
+                        }
+                    }).response()
+
+                    this.formLoading = false
+                    if (response.status === 200) {
+                        // Registration successful
+
+                        // Notify
+                        this.$notify({
+                            message: 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি করা হয়েছে',
+                            type: 'success'
+                        })
+
+                        const jwt = response.json()
+
+                        saveToken(jwt.access_token)
+
+                        this.$store.dispatch('signIn')
+
+                        // Redirect to homepage
+                        this.$router.push({path: '/'})
+                    }
                 } catch (e) {
-                    console.log(e)
                 }
             },
 
@@ -130,20 +165,51 @@
                 }
             },
 
-            validateRePassword(rule, value, callback) {
+            rePassword(rule, value, callback) {
                 if (this.models.password === this.models.rePassword) {
                     callback()
                 }
 
-                callback(new Error('দুঃখিত, এই পাসওয়ার্ড এবং উপরের পাসওয়ার্ডটি এক নয়।'))
+                callback('দুঃখিত, এই পাসওয়ার্ড এবং উপরের পাসওয়ার্ডটি এক নয়।')
             },
 
-            validateAgreed(rule, value, callback) {
+            agreed(rule, value, callback) {
                 if (this.models.agreed) {
                     callback()
                 }
 
-                callback(new Error('দুঃখিত, আপনাকে আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতির সাথে একমত হতে হবে।'))
+                callback('দুঃখিত, আপনাকে আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতির সাথে একমত হতে হবে।')
+            },
+
+            async userExists(rule, value, callback) {
+                const response = await this.$fetch(`${rule.field}-exists`, {
+                    method: 'POST',
+                    body: {
+                        user_type_id: this.type === 'employee' ? 1 : 2,
+                        [rule.field]: this.models[rule.field]
+                    }
+                }).response()
+
+                if (!!response.json()) {
+                    return callback(`এই ${rule.field === 'mobile' ? 'নাম্বারটি' : 'ইমেইল ঠিকানাটি'} অন্য একটি একাউন্টে ব্যবহৃত হয়েছে`)
+                }
+
+                callback()
+            },
+
+            mobileLength(rule, value, callback) {
+                value = value.toString()
+
+                const length = value.length
+
+                if (/^\+880/.test(value) && length === 14) {
+                    return callback()
+                } else if (length === 11) {
+                    return callback()
+                }
+
+
+                callback('দুঃখিত, মোবাইল নম্বর ১১ ডিজিটের হতে হবে।')
             },
 
             navigate(type) {
@@ -161,28 +227,29 @@
                     min: 8,
                     message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে আটটি অক্ষরের দৈর্ঘ্যের হতে হবে।`
                 }
-                const rePassWordValidator = this.validateRePassword
-                const agreedValidator = this.validateAgreed
+                const {rePassword, agreed, mobileLength, userExists} = this
 
                 return {
-                    name: [this.requiredRule(`${please}${this.type === 'employer' ? 'প্রতিষ্ঠানের ' : ''}নাম লিখুন`)],
+                    name: [this.requiredRule(`${please}${this.type === 'institution' ? 'প্রতিষ্ঠানের ' : ''}নাম লিখুন`)],
 
-                    mobile: [this.requiredRule('মোবাইল অথবা টেলিফোন নম্বর লিখুন'), {
-                        min: 7,
-                        max: 11,
-                        message: 'দুঃখিত, মোবাইল অথবা টেলিফোন নম্বর ৭ - ১১ ডিজিটের হতে হবে।'
-                    }],
+                    mobile: [this.requiredRule('মোবাইল নম্বর লিখুন'),
+                        {validator: mobileLength},
+                        {validator: userExists, trigger: 'blur'}
+                    ],
 
-                    email: [this.requiredRule('ইমেইল ঠিকানাটি লিখুন'), {
+                    email: [{
                         type: 'email',
                         message: 'দুঃখিত, ইমেইল ঠিকানাটি সঠিক নয়।'
+                    }, {
+                        validator: userExists,
+                        trigger: 'blur'
                     }],
 
                     password: [this.requiredRule('পাসওয়ার্ড লিখুন'), min],
 
-                    rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassWordValidator}],
+                    rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassword}],
 
-                    agreed: [{validator: agreedValidator}]
+                    agreed: [{validator: agreed}]
                 }
             }
         },

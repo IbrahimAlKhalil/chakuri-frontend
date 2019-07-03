@@ -23,7 +23,7 @@
 </template>
 
 <script>
-    import {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider} from '@/el';
+    import {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider} from '@/el'
 
     export default {
         props: {
@@ -43,23 +43,23 @@
                 selected: [],
                 current: this.$store.state.divisions,
                 loading: false
-            };
+            }
         },
 
         methods: {
             select(place) {
                 // Current places
-                const current = this.current;
+                const current = this.current
 
                 // Selected items
-                const selected = this.selected;
+                const selected = this.selected
 
                 // Use hasOwnProperty to prevent unnecessary prototype lookup
-                const finished = current.hasOwnProperty('finished') && current.finished;
+                const finished = current.hasOwnProperty('finished') && current.finished
 
 
                 if (finished && selected.some(item => item.type === current.type)) {
-                    selected.pop();
+                    selected.pop()
                 }
 
                 // Add the item to selected
@@ -67,39 +67,39 @@
                     type: this.current.type,
                     parent: this.current,
                     place
-                });
+                })
 
                 if (finished) {
-                    const value = {};
+                    const value = {}
 
                     // Iterate over all the selected items and get the id
                     selected.forEach(item => {
-                        value[item.type] = item.place.id;
-                    });
+                        value[item.type] = item.place.id
+                    })
 
                     // Hide dialog
-                    this.$emit('update:show', false);
-                    this.$emit('input', value);
+                    this.$emit('update:show', false)
+                    this.$emit('input', value)
 
-                    return;
+                    return
                 }
 
                 // Fetch next places
-                this.fetch(place);
+                this.fetch(place)
             },
 
             fetch(place) {
 
                 // Check if places is already loaded otherwise load from database
                 if (place.hasOwnProperty('children') && place.type !== 'thana') {
-                    this.current = place.children;
-                    return;
+                    this.current = place.children
+                    return
                 }
 
                 // Load from database
 
                 // Show spinner
-                this.loading = true;
+                this.loading = true
 
                 /******** Comment out these lines before going to production *********/
                 const data = {
@@ -276,39 +276,39 @@
                             }
                         ]
                     },
-                };
+                }
 
                 setTimeout(() => {
                     this.$store.commit('addChildrenToPlace', {
                         parent: place,
                         children: data[this.current.type]
-                    });
+                    })
 
-                    this.current = data[this.current.type];
-                    this.loading = false;
-                }, 1000);
+                    this.current = data[this.current.type]
+                    this.loading = false
+                }, 1000)
             },
 
             back(item) {
-                const selected = this.selected;
-                const index = selected.indexOf(item);
+                const selected = this.selected
+                const index = selected.indexOf(item)
 
-                selected.splice(index, selected.length - index);
-                this.current = item.parent;
+                selected.splice(index, selected.length - index)
+                this.current = item.parent
             }
         },
 
         watch: {
             division(newValue) {
                 if (this.selected[0] && this.selected[0].place.id !== newValue.id) {
-                    this.back(this.selected[0]);
-                    this.select(newValue);
+                    this.back(this.selected[0])
+                    this.select(newValue)
                 }
             }
         },
 
         components: {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider}
-    };
+    }
 </script>
 
 <style lang="scss">

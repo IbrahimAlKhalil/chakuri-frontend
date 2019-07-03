@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import {elCard} from '@/el';
+    import {elCard} from '../../../el';
 
     export default {
         data() {

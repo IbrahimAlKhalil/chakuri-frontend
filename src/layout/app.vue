@@ -31,5 +31,5 @@
         },
 
         components: {partialHeader, partialFooter, smallHeader}
-    };
+    }
 </script>

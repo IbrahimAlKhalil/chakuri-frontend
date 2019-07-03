@@ -51,9 +51,10 @@
             <div class="text-center">
                 <el-button
                         class="login-btn"
-                        icon="fas fa-sign-in-alt"
+                        :icon="!formLoading? 'el-icon-s-promotion' : 'el-icon-loading'"
                         type="primary"
                         nativeType="submit"
+                        :disabled="formLoading"
                 >&nbsp;&nbsp;লগ-ইন
                 </el-button>
             </div>
@@ -62,25 +63,27 @@
 </template>
 
 <script>
-    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption} from '@/el'
+    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption} from '../../el'
+    import {retrieveToken, saveToken} from '../../modules/tokenizer'
 
     export default {
         data() {
             return {
+                formLoading: false,
                 models: {
                     username: '',
                     password: '',
-                    type: 'employee',
+                    type: 1,
                     rememberMe: false,
                 },
                 types: [
                     {
-                        value: 'employee',
+                        value: 1,
                         label: 'চাকুরী অনুসন্ধানকারী'
                     },
 
                     {
-                        value: 'employer',
+                        value: 2,
                         label: 'নিয়োগদাতা'
                     }
                 ],
@@ -112,10 +115,41 @@
         methods: {
             async submit() {
                 try {
-                    const valid = await this.$refs.form.validate()
-                    console.log(valid)
+                    await this.$refs.form.validate()
+
+                    this.formLoading = true
+
+
+                    const response = await this.$fetch('authenticate', {
+                        auth: false,
+                        method: 'POST',
+                        body: {
+                            username: this.models.username,
+                            password: this.models.password,
+                            user_type_id: this.models.type,
+                            grant_type: 'password',
+                            client_id: 1
+                        }
+                    }).response()
+
+                    this.formLoading = false
+                    if (response.status === 200) {
+                        // Redirect to homepage
+
+                        const jwt = response.json()
+
+                        saveToken(jwt.access_token, this.models.rememberMe)
+
+                        await this.$store.dispatch('signIn')
+
+                        return this.$router.push({path: '/'})
+                    }
+
+                    this.$notify({
+                        message: 'দুঃখিত আপনার দেয়া তথ্য সঠিক নয়',
+                        type: 'warning'
+                    })
                 } catch (e) {
-                    console.log(e)
                 }
             }
         },

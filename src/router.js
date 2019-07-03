@@ -19,6 +19,13 @@ const router = new VueRouter({
             }
         ]),
 
+        ...group(auth, [
+            {
+                path: '/dashboard',
+                component: () => lazy(import('./pages/dashboard/page'))
+            }
+        ]),
+
         {
             path: '/articles/:id',
             component: () => lazy(import('./pages/article/page'))
@@ -32,6 +39,11 @@ const router = new VueRouter({
         {
             path: '/',
             component: () => lazy(import('./pages/home/page'))
+        },
+
+        {
+            path: '/jobs/:id',
+            component: () => lazy(import('./pages/job/page'))
         }
     ]
 })

@@ -44,12 +44,12 @@
 </template>
 
 <script>
-    import {elButton, elCard, elInput, elOption, elSelect} from '@/el'
+    import {elButton, elCard, elInput, elOption, elSelect} from '../../../el'
 
     export default {
         data() {
             return {
-                organizations: ['মসজিদ', 'মাদ্রাসা', 'টিউশনি'],
+                organizations: ['মসজিদ', 'মাদ্রাসা'],
                 type: [],
                 keyword: ''
             }

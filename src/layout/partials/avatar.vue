@@ -5,15 +5,15 @@
             <div class="avatar" slot="reference">
                 <img :src="icons.user" alt="User">
             </div>
-            <ul>
-                <li class="el-dropdown-menu__item">
+            <div class="menu">
+                <router-link to="/dashboard" class="el-dropdown-menu__item">
                     <i class="el-icon-setting"></i> প্রোফাইল
-                </li>
-                <li class="el-dropdown-menu__item" @click="signOut">
+                </router-link>
+                <div class="el-dropdown-menu__item" @click="signOut">
                     <i class="fas fa-sign-out-alt"></i>
                     প্রস্থান
-                </li>
-            </ul>
+                </div>
+            </div>
         </el-popover>
 
         <template v-else>
@@ -28,14 +28,14 @@
 </template>
 
 <script>
-    import {elPopover, elButton, elDialog} from '@/el'
+    import {elPopover, elButton, elDialog} from '../../el'
     import {mapState} from 'vuex'
 
     export default {
         data() {
             return {
                 icons: {
-                    user: require('@assets/images/user.svg')
+                    user: require('../../assets/images/user.svg')
                 },
                 open: false
             }
@@ -96,5 +96,15 @@
             text-decoration: none;
             line-height: 50px;
         }
+    }
+
+    .menu {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .el-dropdown-menu__item {
+        display: block;
+        text-decoration: none;
     }
 </style>

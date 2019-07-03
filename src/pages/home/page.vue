@@ -26,7 +26,7 @@
     import specialJobs from './components/special-jobs';
     import topCategories from './components/top-categories';
     import subCategories from './components/sub-categories';
-    import {elCard} from '@/el';
+    import {elCard} from '../../el';
     import jobs from './components/jobs';
 
     export default {
@@ -79,6 +79,8 @@
         aside {
             position: sticky;
             top: 70px;
+            /*bottom: 10px;*/
+            /*align-self: end;*/
         }
     }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <router-link v-for="(job, index) in jobs" :key="index" to="/" class="job">
+        <router-link v-for="(job, index) in jobs" :key="index" to="/jobs/5" class="job">
             <div class="flex">
                 <div>
                     <img :src="job.logo" :alt="job.name">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import {elCard} from '@/el';
+    import {elCard} from '../../../el';
 
     export default {
         data() {

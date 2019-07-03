@@ -17,25 +17,29 @@
                                 </div>
 
                                 <div class="flex flex-wrap justify-center mt-1">
-                                    <el-button-group class="btn-group" v-if="!auth.user">
-                                        <router-link to="/sign-in"
-                                                     class="el-button el-button--small el-button--primary btn">
-                                            <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
-                                        </router-link>
+                                    <auth>
+                                        <ul>
+                                            <li class="el-dropdown-menu__item">
+                                                <i class="el-icon-setting"></i> প্রোফাইল
+                                            </li>
+                                            <li class="el-dropdown-menu__item" @click="signOut">
+                                                <i class="fas fa-sign-out-alt"></i> প্রস্থান
+                                            </li>
+                                        </ul>
 
-                                        <router-link to="/sign-up" class="el-button el-button--small btn">
-                                            <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
-                                        </router-link>
-                                    </el-button-group>
+                                        <el-button-group slot="else" class="btn-group">
+                                            <router-link to="/sign-in"
+                                                         class="el-button el-button--small el-button--primary btn">
+                                                <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
+                                            </router-link>
 
-                                    <ul v-else>
-                                        <li class="el-dropdown-menu__item">
-                                            <i class="el-icon-setting"></i> প্রোফাইল
-                                        </li>
-                                        <li class="el-dropdown-menu__item" @click="signOut">
-                                            <i class="fas fa-sign-out-alt"></i> প্রস্থান
-                                        </li>
-                                    </ul>
+                                            <router-link to="/sign-up" class="el-button el-button--small btn">
+                                                <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
+                                            </router-link>
+                                        </el-button-group>
+                                    </auth>
+
+
                                 </div>
                             </div>
                             <div>
@@ -52,7 +56,7 @@
 </template>
 
 <script>
-    import {elCard, elButton, elButtonGroup} from '@/el'
+    import {elCard, elButton, elButtonGroup} from '../../el'
     import menuItem from './menu-item'
     import {mapState} from 'vuex'
 
@@ -60,14 +64,13 @@
         data() {
             return {
                 icons: {
-                    user: require('@/assets/images/user.svg')
+                    user: require('../../assets/images/user.svg')
                 }
             }
         },
 
         computed: mapState({
             menu: 'menu',
-            auth: 'auth',
             show: 'showMenu'
         }),
 

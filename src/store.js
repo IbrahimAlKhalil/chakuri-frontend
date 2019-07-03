@@ -25,6 +25,30 @@ export default new Vuex.Store({
                 link: '/contact'
             }
         ],
+        dashboardMenu: [
+            {
+                title: 'ড্যাশবোর্ড',
+                link: '/dashboard',
+                icon: 'el-icon-s-marketing'
+            },
+            {
+                title: 'প্রোফাইল এডিট করুন',
+                link: '/edit-profile',
+                icon: 'el-icon-edit'
+            },
+            {
+                title: 'প্রথম পাতা',
+                link: '/'
+            },
+            {
+                title: 'প্রথম পাতা',
+                link: '/'
+            },
+            {
+                title: 'প্রথম পাতা',
+                link: '/'
+            }
+        ],
         showMenu: false,
 
         divisions: {
@@ -84,6 +108,10 @@ export default new Vuex.Store({
 
         toggleNavMenu(state, show) {
             state.showMenu = show
+        },
+
+        changeLayout(state, layout) {
+            state.layout = layout
         }
     },
     modules: {auth}

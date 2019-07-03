@@ -9,7 +9,7 @@
 
 <script>
     import menuItem from './menu-item';
-    import {elSubmenu} from '@/el';
+    import {elSubmenu} from '../../el';
 
     export default {
         props: {

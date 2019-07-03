@@ -5,7 +5,7 @@ module.exports = {
         name: 'Chakuri',
         themeColor: 'teal',
         msTileColor: 'teal'
-    },
+    }/*,
     chainWebpack: config => {
         config.module
             .rule('i18n')
@@ -14,7 +14,7 @@ module.exports = {
             .use('i18n')
             .loader('@kazupon/vue-i18n-loader')
             .end();
-    },
+    }*/,
 
     configureWebpack: {
         resolve: {

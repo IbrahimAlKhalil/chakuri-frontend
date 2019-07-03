@@ -11,12 +11,12 @@
 </template>
 
 <script>
-    import {elHeader} from '@/el';
+    import {elHeader} from '../../el';
 
     export default {
         data() {
             return {
-                logo: require('@assets/images/logo.png'),
+                logo: require('../../assets/images/logo.png'),
                 name: 'Sahara Software And Technology'
             }
         },

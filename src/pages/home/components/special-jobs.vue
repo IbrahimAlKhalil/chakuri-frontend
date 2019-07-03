@@ -21,7 +21,7 @@
 
 <script>
     import sidebarCard from './sidebar-card';
-    import {elTooltip, elMenu} from '@/el';
+    import {elTooltip, elMenu} from '../../../el';
 
     export default {
         data() {

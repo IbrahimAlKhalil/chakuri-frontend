@@ -1,12 +1,12 @@
 <template>
     <el-card :body-style="{padding: 0}" class="sidebar-card">
-        <div slot="header" class="text-center">{{title}}</div>
+        <div v-if="title" slot="header" class="text-center">{{title}}</div>
         <slot></slot>
     </el-card>
 </template>
 
 <script>
-    import {elCard} from '@/el';
+    import {elCard} from '../../../el';
 
     export default {
         props: {

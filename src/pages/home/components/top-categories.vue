@@ -15,17 +15,17 @@
             </el-card>
         </router-link>
 
-        <router-link to="/" class="category">
+        <!--<router-link to="/" class="category">
             <el-card class="card">
                 <div><i class="fas fa-chalkboard-teacher"></i></div>
                 <div class="name">টিউশনি</div>
             </el-card>
-        </router-link>
+        </router-link>-->
     </div>
 </template>
 
 <script>
-    import {elCard} from '@/el';
+    import {elCard} from '../../../el';
     export default {
         components: {elCard}
     };
@@ -36,7 +36,7 @@
 
     .top-categories {
         display: grid;
-        grid-template-columns: repeat(3, minmax(60px, 1fr));
+        grid-template-columns: repeat(2/*3*/, minmax(60px, 1fr));
         gap: 10px;
     }
 
