@@ -72,6 +72,10 @@ export function group(middleware, routes) {
         }
 
         route.meta.middleware = givenMiddleware
+
+        if (route.children) {
+            route.children = group(middleware, route.children)
+        }
     })
 
     return routes
