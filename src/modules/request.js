@@ -1,11 +1,14 @@
 import {retrieveToken, saveToken} from '@/modules/tokenizer'
 
 export class Fetcher {
-    constructor(endPoint, options = {
-        method: 'GET',
-        headers: {},
-        body: null
-    }) {
+    constructor(endPoint, defaultOptions) {
+
+        const options = {
+            method: 'GET',
+            headers: {},
+            body: null,
+            ...defaultOptions
+        }
 
         this.options = options
         this.endPoint = endPoint
@@ -33,7 +36,7 @@ export class Fetcher {
 
     locked = false
 
-    response() {
+    response(delay = 0) {
         return new Promise((resolve, reject) => {
 
             // You can't call this method twice
@@ -97,11 +100,11 @@ export class Fetcher {
                 return xhr.send(Fetcher.objectToFormData(body))
             }
 
-            xhr.send(body)
+            setTimeout(() => xhr.send(body), delay)
         })
     }
 
-    static baseUrl = 'http://127.0.0.1:3333'
+    static baseUrl = 'http://192.168.0.150:3333'
     static beforeEachHandlers = []
     static afterEachHandlers = []
 
@@ -128,7 +131,7 @@ export class Fetcher {
 
 
 // Add authentication token
-Fetcher.beforeEach(function (instance) {
+Fetcher.beforeEach(instance => {
     const {options} = instance
     const token = retrieveToken()
 
@@ -138,7 +141,7 @@ Fetcher.beforeEach(function (instance) {
 })
 
 // Handle refresh token
-Fetcher.afterEach(function (instance, response) {
+Fetcher.afterEach((instance, response) => {
     const refreshToken = response.header('X-refresh-token')
 
     if (refreshToken) {
