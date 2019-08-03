@@ -20,8 +20,8 @@
 </template>
 
 <script>
-    import sidebarCard from './sidebar-card';
-    import {elTooltip, elMenu} from '../../../el';
+    import sidebarCard from './sidebar-card'
+    import {elTooltip, elMenu} from '@/el'
 
     export default {
         data() {

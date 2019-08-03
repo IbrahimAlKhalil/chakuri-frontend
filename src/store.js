@@ -4,6 +4,8 @@ import auth from './modules/authenticator'
 
 Vue.use(Vuex)
 
+let confirmPassResolver
+
 export default new Vuex.Store({
     state: {
         loading: false,
@@ -13,14 +15,6 @@ export default new Vuex.Store({
                 link: '/'
             },
             {
-                title: 'চাকরির বিজ্ঞাপন দিন',
-                link: '/post-job',
-                children: [{
-                    title: 'প্রথম পাতা',
-                    link: '/'
-                }]
-            },
-            {
                 title: 'যোগাযোগ',
                 link: '/contact'
             }
@@ -28,29 +22,36 @@ export default new Vuex.Store({
         dashboardMenu: [
             {
                 title: 'ড্যাশবোর্ড',
-                link: '/dashboard',
+                link: '/user',
                 icon: 'el-icon-s-marketing'
             },
             {
-                title: 'প্রোফাইল এডিট করুন',
-                link: '/edit-profile',
-                icon: 'el-icon-edit'
+                title: 'প্রোফাইল',
+                link: '/user/profile',
+                icon: 'el-icon-lock'
             },
             {
-                title: 'প্রথম পাতা',
-                link: '/'
+                title: 'নোটিফিকেশন',
+                link: '/user/notifications',
+                icon: 'el-icon-bell',
+                badge: 5
             },
             {
-                title: 'প্রথম পাতা',
-                link: '/'
+                title: 'জীবন বৃত্তান্ত (CV)',
+                link: '/user/resume',
+                icon: 'el-icon-s-custom',
+                userType: 1
             },
             {
-                title: 'প্রথম পাতা',
-                link: '/'
+                title: 'সংরক্ষিত চাকুরী',
+                link: '/user/jobs',
+                icon: 'el-icon-s-cooperation',
+                userType: 1
             }
         ],
+        routes: null,
+        layout: 'master',
         showMenu: false,
-
         divisions: {
             type: 'division',
             title: 'বিভাগ সিলেক্ট করুন',
@@ -95,6 +96,16 @@ export default new Vuex.Store({
                     name: 'ময়মনসিংহ'
                 }
             ]
+        },
+        confirmPass: {
+            label: '',
+            model: {
+                pass: ''
+            },
+            rules: {
+                pass: [{required: true, message: ' '}]
+            },
+            show: false
         }
     },
     mutations: {
@@ -112,6 +123,37 @@ export default new Vuex.Store({
 
         changeLayout(state, layout) {
             state.layout = layout
+        },
+
+        resolveConfirmPass({confirmPass}, canceled) {
+
+            // Hide the form
+            confirmPass.show = false
+
+            // Capture the value
+            const value = canceled ? false : confirmPass.model.pass
+
+            // Clear value
+            confirmPass.model.pass = ''
+
+            // Resolve
+            confirmPassResolver(value)
+        }
+    },
+    actions: {
+        async confirmPassword({state}, label = 'এখানে আপনার পাসওয়ার্ড লিখুন') {
+            return new Promise(resolve => {
+                const {confirmPass} = state
+
+                // Set custom label
+                confirmPass.label = label
+
+                // Store the resolve function
+                confirmPassResolver = resolve
+
+                // Show the form
+                confirmPass.show = true
+            })
         }
     },
     modules: {auth}

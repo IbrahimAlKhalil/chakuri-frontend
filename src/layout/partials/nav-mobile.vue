@@ -2,7 +2,7 @@
     <div class="flex justify-center align-center menu-icon">
         <el-button icon="el-icon-menu" @click="showNav" circle/>
 
-        <transition name="fade">
+        <transition name="el-fade-in">
             <div class="back-drop" v-if="show"></div>
         </transition>
 
@@ -12,15 +12,19 @@
                     <nav>
                         <el-card class="box-card h-100">
                             <div slot="header" class="header">
-                                <div class="flex flex-wrap justify-center">
-                                    <img :src="icons.user" alt="User">
-                                </div>
+                                <template v-if="auth.user">
+                                    <div class="flex flex-wrap justify-center">
+                                        <img :src="auth.user.photo" :alt="auth.user.name">
+                                    </div>
 
+                                    <el-divider/>
+                                </template>
                                 <div class="flex flex-wrap justify-center mt-1">
                                     <auth>
                                         <ul>
                                             <li class="el-dropdown-menu__item">
-                                                <i class="el-icon-setting"></i> প্রোফাইল
+                                                <router-link to="/user"><i class="el-icon-setting"></i> একাউন্ট
+                                                </router-link>
                                             </li>
                                             <li class="el-dropdown-menu__item" @click="signOut">
                                                 <i class="fas fa-sign-out-alt"></i> প্রস্থান
@@ -38,13 +42,12 @@
                                             </router-link>
                                         </el-button-group>
                                     </auth>
-
-
                                 </div>
                             </div>
                             <div>
                                 <div class="el-menu">
-                                    <menu-item v-for="(item, index) in menu" :key="index" :index="index" :item="item"/>
+                                    <menu-item v-for="(item, index) in menu"
+                                               :key="index" :index="index" :item="item"/>
                                 </div>
                             </div>
                         </el-card>
@@ -56,23 +59,22 @@
 </template>
 
 <script>
-    import {elCard, elButton, elButtonGroup} from '../../el'
+    import {elCard, elButton, elButtonGroup, elDivider} from '../../el'
     import menuItem from './menu-item'
     import {mapState} from 'vuex'
 
     export default {
-        data() {
-            return {
-                icons: {
-                    user: require('../../assets/images/user.svg')
-                }
+        computed: {
+            ...mapState({
+                show: 'showMenu',
+                auth: 'auth'
+            }),
+
+            menu() {
+                const state = this.$store.state
+                return state.layout === 'master' ? state.menu : state.dashboardMenu
             }
         },
-
-        computed: mapState({
-            menu: 'menu',
-            show: 'showMenu'
-        }),
 
         methods: {
             showNav() {
@@ -88,7 +90,7 @@
                 await this.$store.dispatch('signOut')
             }
         },
-        components: {menuItem, elButtonGroup, elButton, elCard}
+        components: {menuItem, elButtonGroup, elButton, elCard, elDivider}
     }
 </script>
 
@@ -156,5 +158,10 @@
         padding: 0;
         margin: 0;
         width: 100%;
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
     }
 </style>

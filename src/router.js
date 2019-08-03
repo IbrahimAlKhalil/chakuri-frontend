@@ -3,6 +3,7 @@ import viddleware, {group} from '@modules/viddleware'
 import guest from '@middleware/guest'
 import auth from '@middleware/auth'
 import hideMobileNav from '@middleware/hide-mobile-nav'
+import switchLayout from '@middleware/switch-layout'
 import lazy from '@modules/lazy'
 
 const router = new VueRouter({
@@ -21,8 +22,22 @@ const router = new VueRouter({
 
         ...group(auth, [
             {
-                path: '/dashboard',
-                component: () => lazy(import('./pages/dashboard/page'))
+                path: '/user',
+                component: () => lazy(import('./pages/user/page')),
+                children: [
+                    {
+                        path: 'resume',
+                        component: () => lazy(import('./pages/resume/page'))
+                    },
+                    {
+                        path: 'notifications',
+                        component: () => lazy(import('./pages/notification/page'))
+                    },
+                    {
+                        path: 'profile',
+                        component: () => lazy(import('./pages/profile/page'))
+                    }
+                ],
             }
         ]),
 
@@ -48,4 +63,4 @@ const router = new VueRouter({
     ]
 })
 
-export default viddleware(router, [hideMobileNav])
+export default viddleware(router, [switchLayout, hideMobileNav])

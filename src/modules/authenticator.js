@@ -1,5 +1,6 @@
 import request from '@modules/request'
 import {clearTokens, retrieveToken} from '@/modules/tokenizer'
+import photo from '@assets/images/user.svg'
 
 const eventHandlers = {
     authStateChange: []
@@ -56,6 +57,10 @@ export default {
             }
 
             state.user = response.json()
+
+            if (!state.user.photo) {
+                state.user.photo = photo
+            }
         },
 
         // Call this method for  sign out
@@ -67,6 +72,12 @@ export default {
             eventHandlers.authStateChange.forEach(handler => {
                 handler()
             })
+        }
+    },
+
+    mutations: {
+        changeMobile(state, mobile) {
+            state.user.mobile = mobile
         }
     }
 }

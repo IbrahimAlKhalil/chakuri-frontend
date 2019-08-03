@@ -1,49 +1,32 @@
 <template>
-    <div class="flex align-center wrapper">
-        <el-popover v-if="auth.user" placement="top-start" trigger="click" popper-class="popover"
-                    class="avatar-wrapper">
-            <div class="avatar" slot="reference">
-                <img :src="icons.user" alt="User">
-            </div>
-            <div class="menu">
-                <router-link to="/dashboard" class="el-dropdown-menu__item">
-                    <i class="el-icon-setting"></i> প্রোফাইল
-                </router-link>
-                <div class="el-dropdown-menu__item" @click="signOut">
-                    <i class="fas fa-sign-out-alt"></i>
-                    প্রস্থান
-                </div>
-            </div>
-        </el-popover>
+    <el-popover placement="top-start" trigger="click" popper-class="popover"
+                class="avatar-wrapper">
+        <div class="avatar" slot="reference">
+            <img :src="user.photo" :alt="user.name">
+        </div>
 
-        <template v-else>
-            <router-link to="/sign-in" class="el-button el-button--primary btn">
-                <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
+        <div class="menu">
+            <router-link to="/user" class="el-dropdown-menu__item">
+                <i class="el-icon-user-solid"></i> একাউন্ট
             </router-link>
-            <router-link to="/sign-up" class="el-button btn">
-                <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
-            </router-link>
-        </template>
-    </div>
+            <div class="el-dropdown-menu__item" @click="signOut">
+                <i class="fas fa-sign-out-alt"></i>
+                প্রস্থান
+            </div>
+        </div>
+    </el-popover>
 </template>
 
 <script>
-    import {elPopover, elButton, elDialog} from '../../el'
-    import {mapState} from 'vuex'
+    import {elPopover, elDialog} from '@/el'
 
     export default {
         data() {
             return {
-                icons: {
-                    user: require('../../assets/images/user.svg')
-                },
+                user: this.$store.state.auth.user,
                 open: false
             }
         },
-
-        computed: mapState({
-            auth: 'auth'
-        }),
 
         methods: {
             signOut() {
@@ -51,7 +34,7 @@
             }
         },
 
-        components: {elButton, elPopover, elDialog}
+        components: {elPopover, elDialog}
     }
 </script>
 
@@ -76,25 +59,6 @@
             &:hover {
                 border-color: $bg;
             }
-        }
-    }
-
-    .btn {
-        margin-right: 10px;
-        text-decoration: none;
-
-        i {
-            margin-right: 10px;
-        }
-    }
-
-    .user-types {
-        padding: 10px 0;
-
-        a {
-            display: block;
-            text-decoration: none;
-            line-height: 50px;
         }
     }
 

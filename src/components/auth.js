@@ -5,8 +5,6 @@ const mixin = {
         render(createElement, guest) {
             const {$slots} = this
 
-            console.log('Hello')
-
             if (guest) {
                 return createElement('fragment', !this.auth.user ? $slots.default : $slots.else)
             }

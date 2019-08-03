@@ -132,7 +132,6 @@
                         }
                     }).response()
 
-                    this.formLoading = false
                     if (response.status === 200) {
                         // Redirect to homepage
 
@@ -142,7 +141,7 @@
 
                         await this.$store.dispatch('signIn')
 
-                        return this.$router.push({path: '/'})
+                        return history.back()
                     }
 
                     this.$notify({
@@ -151,6 +150,8 @@
                     })
                 } catch (e) {
                 }
+
+                this.formLoading = false
             }
         },
 

@@ -1,6 +1,6 @@
 <template>
     <router-link :to="item.link" class="el-menu-item" :index="index.toString()">
-        {{ item.title }}
+        <i v-if="item.icon" :class="item.icon"></i> {{ item.title }}
     </router-link>
 </template>
 

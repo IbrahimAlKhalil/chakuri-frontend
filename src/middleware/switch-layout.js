@@ -5,6 +5,6 @@ import store from '@/store'
 */
 
 export default async function (route, from, next) {
-    store.commit('changeLayout', /\/dashboard\/?.*/.test(route.path) ? 'layout-dashboard' : 'layout-master')
+    store.commit('changeLayout', /\/user\/?.*/.test(route.path) ? 'dashboard' : 'master')
     next()
 }

@@ -19,7 +19,10 @@ export elForm from 'element-ui/packages/form/src/form'
 export elFormItem from 'element-ui/packages/form/src/form-item'
 export elRadio from 'element-ui/packages/radio'
 export elRadioGroup from 'element-ui/packages/radio-group'
-export elMenuItem from 'element-ui/lib/menu-item'
+// export elMenuItem from 'element-ui/lib/menu-item'
 // export elRadio from 'element-ui/packages/radio/src/radio';
-// export elTabs from 'element-ui/packages/tabs/src/tabs';
-// export elTabPane from 'element-ui/packages/tabs/src/tab-pane';
+export elTabs from 'element-ui/packages/tabs/src/tabs';
+export elTabPane from 'element-ui/packages/tabs/src/tab-pane';
+// export elSteps from 'element-ui/packages/steps/src/steps'
+// export elStep from 'element-ui/packages/steps/src/step'
+export elBadge from 'element-ui/packages/badge/src/main'

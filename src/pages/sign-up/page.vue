@@ -230,7 +230,10 @@
                 const {rePassword, agreed, mobileLength, userExists} = this
 
                 return {
-                    name: [this.requiredRule(`${please}${this.type === 'institution' ? 'প্রতিষ্ঠানের ' : ''}নাম লিখুন`)],
+                    name: [this.requiredRule(`${please}${this.type === 'institution' ? 'প্রতিষ্ঠানের ' : ''}নাম লিখুন`), {
+                        max: 190,
+                        message: 'দুঃখিত নাম ১৯০ টির বেশি অক্ষর হতে পারে না'
+                    }],
 
                     mobile: [this.requiredRule('মোবাইল নম্বর লিখুন'),
                         {validator: mobileLength},
