@@ -2,33 +2,29 @@
     <div>
         <div class="prop">
             <p>{{field.label}}</p>
-            <p v-if="field.type !== 'lazy'">{{field.value || '--'}}</p>
-            <p v-else>{{lazyValue}}</p>
+            <p>{{value}}</p>
         </div>
 
-        <preview v-if="child" :field="child"/>
+        <preview v-if="field.child" :field="field.child"/>
     </div>
 </template>
 
 <script>
+    import {enToBn} from '@/modules/en-to-bn'
+    import {zeroPrefix} from '@/modules/zero-prefix'
+
     export default {
         name: 'preview',
         props: ['field'],
         computed: {
-            child() {
-                const {child} = this.$props.field
-
-                if (!child) {
-                    return null
-                }
-
-                return child[Object.keys(child)[0]]
-            },
-
-            lazyValue() {
+            value() {
                 const {field} = this.$props
 
-                if (Array.isArray(field.opt)) {
+                if (!field.value) {
+                    return '--'
+                }
+
+                if (field.type === 'lazy' && Array.isArray(field.opt)) {
                     let value
 
                     field.opt.some(item => {
@@ -42,7 +38,13 @@
                     return value
                 }
 
-                return '--'
+                if (field.type === 'date') {
+                    const d = new Date(field.value)
+
+                    return enToBn(`${zeroPrefix(d.getDate())}/${zeroPrefix(d.getMonth() + 1)}/${d.getFullYear()}`)
+                }
+
+                return field.value
             }
         }
     }

@@ -2,7 +2,7 @@
     <el-popover placement="top-start" trigger="click" popper-class="popover"
                 class="avatar-wrapper">
         <div class="avatar" slot="reference">
-            <img :src="user.photo" :alt="user.name">
+            <img :src="user.photo || user.altPhoto" :alt="user.name">
         </div>
 
         <div class="menu">

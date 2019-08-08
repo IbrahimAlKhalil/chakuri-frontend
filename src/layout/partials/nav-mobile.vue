@@ -14,7 +14,7 @@
                             <div slot="header" class="header">
                                 <template v-if="auth.user">
                                     <div class="flex flex-wrap justify-center">
-                                        <img :src="auth.user.photo" :alt="auth.user.name">
+                                        <img :src="auth.user.photo || auth.user.altPhoto" :alt="auth.user.name">
                                     </div>
 
                                     <el-divider/>

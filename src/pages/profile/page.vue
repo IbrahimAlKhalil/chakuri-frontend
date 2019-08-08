@@ -263,7 +263,10 @@
 
                     value[0].verified = true
 
-                    this.$store.commit('changeMobile', value[0].value)
+                    this.$store.commit('updateUser', {
+                        prop: 'mobile',
+                        value: value[0].value
+                    })
 
                     return this.$notify({
                         message: 'আপনার মোবাইল নাম্বার সফল ভাবে পরিবর্তন করা হয়েছে',

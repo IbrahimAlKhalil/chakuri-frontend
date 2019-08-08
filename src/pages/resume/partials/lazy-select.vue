@@ -1,16 +1,16 @@
 <template>
     <div class="group">
-        <el-form-item :prop="index">
-            <label :for="index">{{field.label}}</label>
-            <el-select class="sl" v-model="input" :placeholder="field.label + ' নির্ধারণ করুন'"
+        <el-form-item :prop="`${field.name}.model`" :rules="field.rules">
+            <label :for="field.name">{{field.label}}</label>
+            <el-select :id="field.name" class="sl" v-model="field.model" :placeholder="field.label + ' নির্ধারণ করুন'"
                        @input="changed($event)">
                 <div slot="empty" class="p-2 text-center" v-loading="field.loading"></div>
                 <el-option v-for="(opt, index) in field.opt" :label="opt.name" :key="index" :value="opt.id"/>
             </el-select>
         </el-form-item>
 
-        <el-form-item v-if="child" :prop="prop">
-            <lazy-select :field="child" :index="prop" v-model="models[prop]" :models="models" :value="child.value"/>
+        <el-form-item v-if="field.child" :prop="`${field.child.name}.model`" :rules="field.child.rules">
+            <lazy-select :field="field.child" :value="field.child.value"/>
         </el-form-item>
     </div>
 </template>
@@ -20,36 +20,14 @@
 
     export default {
         name: 'lazy-select',
-        props: ['field', 'index', 'models', 'value'],
+        props: ['field'],
         components: {elFormItem, elOption, elSelect},
-        data() {
-            const {value} = this.$props
-
-            return {
-                input: value
-            }
-        },
-        computed: {
-            child() {
-                const {child} = this.$props.field
-
-                if (!child) {
-                    return null
-                }
-
-                return child[this.prop]
-            },
-
-            prop() {
-                return Object.keys(this.$props.field.child)[0]
-            }
-        },
 
         methods: {
             async changed(e) {
                 this.$emit('input', e)
 
-                const {child} = this
+                const {child} = this.field
 
                 if (!child) {
                     return

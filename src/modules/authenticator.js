@@ -59,7 +59,7 @@ export default {
             state.user = response.json()
 
             if (!state.user.photo) {
-                state.user.photo = photo
+                state.user.altPhoto = photo
             }
         },
 
@@ -76,8 +76,8 @@ export default {
     },
 
     mutations: {
-        changeMobile(state, mobile) {
-            state.user.mobile = mobile
+        updateUser(state, payload) {
+            state.user[payload.prop] = payload.value
         }
     }
 }

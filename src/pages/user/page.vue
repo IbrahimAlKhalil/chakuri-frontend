@@ -54,6 +54,7 @@
 
 <style lang="scss" scoped>
     @import "../../styles/var";
+    @import "~croppr/src/css/croppr.css";
 
     .dashboard-user {
         padding: 10px;
