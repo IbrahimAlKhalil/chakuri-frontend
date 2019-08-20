@@ -27,6 +27,7 @@
     </section>
 </template>
 
+
 <script>
     export default {
         computed: {
@@ -54,7 +55,7 @@
 
 <style lang="scss" scoped>
     @import "../../styles/var";
-    @import "~croppr/src/css/croppr.css";
+    @import "~cropperjs/dist/cropper.min.css";
 
     .dashboard-user {
         padding: 10px;

@@ -20,10 +20,10 @@
 </template>
 
 <script>
-    import collapse from '@components/collapse'
-    import collapseItem from '@components/collapse-item'
+    import collapse from '../../../../components/collapse'
+    import collapseItem from '../../../../components/collapse-item'
     import factory from './modules/factory'
-    import {elTabPane, elTabs} from '@/el'
+    import {elTabPane, elTabs} from '../../../../el'
 
     export default {
         data() {
@@ -73,7 +73,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../styles/var";
+    @import "../../../../styles/var";
 
     .tabs {
         background: #fff;

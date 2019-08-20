@@ -69,8 +69,8 @@
 
 <script>
     import preview from '../partials/preview'
-    import {elButton, elButtonGroup, elForm, elFormItem, elInput, elOption, elSelect} from '@/el'
-    import {enToBn} from '@/modules/en-to-bn'
+    import {elButton, elButtonGroup, elForm, elFormItem, elInput, elOption, elSelect} from '../../../../../el'
+    import {enToBn} from '../../../../../modules/en-to-bn'
 
     export default {
         name: 'education',
@@ -293,7 +293,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../styles/var";
+    @import "../../../../../styles/var";
 
     .inputs {
         display: grid;

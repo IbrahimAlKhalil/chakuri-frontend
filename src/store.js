@@ -21,11 +21,6 @@ export default new Vuex.Store({
         ],
         dashboardMenu: [
             {
-                title: 'ড্যাশবোর্ড',
-                link: '/user',
-                icon: 'el-icon-s-marketing'
-            },
-            {
                 title: 'প্রোফাইল',
                 link: '/user/profile',
                 icon: 'el-icon-lock'
@@ -44,7 +39,7 @@ export default new Vuex.Store({
             },
             {
                 title: 'সংরক্ষিত চাকুরী',
-                link: '/user/jobs',
+                link: '/user/saved-jobs',
                 icon: 'el-icon-s-cooperation',
                 userType: 1
             }

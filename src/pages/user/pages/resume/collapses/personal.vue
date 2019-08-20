@@ -16,7 +16,7 @@
     import formItem from '../partials/form-item'
     import preview from '../partials/preview'
     import fillData from '../modules/fill-data'
-    import {makeFieldsFlat} from '@/pages/resume/modules/make-fields-flat'
+    import {makeFieldsFlat} from '../modules/make-fields-flat'
 
     export default {
         name: 'personal',
@@ -96,7 +96,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../styles/var";
+    @import "../../../../../styles/var";
 
     .inputs {
         display: grid;

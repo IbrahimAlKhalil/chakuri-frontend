@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import {elFormItem, elOption, elSelect} from '@/el'
+    import {elFormItem, elOption, elSelect} from '../../../../../el'
 
     export default {
         name: 'lazy-select',

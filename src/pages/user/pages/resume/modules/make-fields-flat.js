@@ -1,4 +1,4 @@
-import {makeLazySelectFlat} from '@/pages/resume/modules/make-lazy-select-flat'
+import {makeLazySelectFlat} from './make-lazy-select-flat'
 
 export function makeFieldsFlat(fields, rawFields) {
     // Iterate over all the fields

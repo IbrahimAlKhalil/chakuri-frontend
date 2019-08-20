@@ -10,8 +10,8 @@
 </template>
 
 <script>
-    import {enToBn} from '@/modules/en-to-bn'
-    import {zeroPrefix} from '@/modules/zero-prefix'
+    import {enToBn} from '../../../../../modules/en-to-bn'
+    import {zeroPrefix} from '../../../../../modules/zero-prefix'
 
     export default {
         name: 'preview',

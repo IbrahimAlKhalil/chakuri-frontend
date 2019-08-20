@@ -1,4 +1,4 @@
-import request from '@/modules/request'
+import request from '@modules/request'
 import Vue from 'vue'
 
 export async function loadLazySelect(field, url) {

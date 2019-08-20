@@ -23,19 +23,19 @@ const router = new VueRouter({
         ...group(auth, [
             {
                 path: '/user',
-                component: () => lazy(import('./pages/user/page')),
+                component: () => lazy(import('./pages/user/layout')),
                 children: [
                     {
                         path: 'resume',
-                        component: () => lazy(import('./pages/resume/page'))
+                        component: () => lazy(import('./pages/user/pages/resume/page'))
                     },
                     {
                         path: 'notifications',
-                        component: () => lazy(import('./pages/notification/page'))
+                        component: () => lazy(import('./pages/user/pages/notification/page'))
                     },
                     {
                         path: 'profile',
-                        component: () => lazy(import('./pages/profile/page'))
+                        component: () => lazy(import('./pages/user/pages/profile/page'))
                     }
                 ],
             }

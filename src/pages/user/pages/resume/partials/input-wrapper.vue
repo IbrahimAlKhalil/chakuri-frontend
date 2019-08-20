@@ -22,7 +22,7 @@
 </template>
 
 <script>
-    import {elForm, elButton, elButtonGroup} from '@/el'
+    import {elForm, elButton, elButtonGroup} from '../../../../../el'
 
     export default {
         props: ['edit', 'disabled', 'action', 'fields', 'edit-btn'],

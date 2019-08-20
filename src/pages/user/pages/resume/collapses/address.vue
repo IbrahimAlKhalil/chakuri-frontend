@@ -29,8 +29,8 @@
     import preview from '../partials/preview'
     import lazySelect from '../partials/lazy-select'
     import fillData from '../modules/fill-data'
-    import {loadLazySelect} from '@/pages/resume/modules/load-lazy-select-data'
-    import {makeGroupsFlat} from '@/pages/resume/modules/make-groups-flat'
+    import {loadLazySelect} from '../modules/load-lazy-select-data'
+    import {makeGroupsFlat} from '../modules/make-groups-flat'
 
     export default {
         name: 'col-address',
@@ -131,7 +131,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../styles/var";
+    @import "../../../../../styles/var";
 
     .inputs {
         display: grid;

@@ -23,7 +23,7 @@
                                     <auth>
                                         <ul>
                                             <li class="el-dropdown-menu__item">
-                                                <router-link to="/user"><i class="el-icon-setting"></i> একাউন্ট
+                                                <router-link to="/user/profile"><i class="el-icon-setting"></i> একাউন্ট
                                                 </router-link>
                                             </li>
                                             <li class="el-dropdown-menu__item" @click="signOut">

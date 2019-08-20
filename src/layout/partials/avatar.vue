@@ -6,7 +6,7 @@
         </div>
 
         <div class="menu">
-            <router-link to="/user" class="el-dropdown-menu__item">
+            <router-link to="/user/profile" class="el-dropdown-menu__item">
                 <i class="el-icon-user-solid"></i> একাউন্ট
             </router-link>
             <div class="el-dropdown-menu__item" @click="signOut">

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import {elCard, elMenu} from '@/el'
+    import {elCard, elMenu} from '../../../../el'
 
     export default {
         components: {elCard, elMenu}

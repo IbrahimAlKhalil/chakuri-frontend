@@ -10,7 +10,7 @@
 </template>
 
 <script>
-    import {elFormItem, elInput, elOption, elSelect} from '@/el'
+    import {elFormItem, elInput, elOption, elSelect} from '../../../../../el'
 
     export default {
         props: ['field'],

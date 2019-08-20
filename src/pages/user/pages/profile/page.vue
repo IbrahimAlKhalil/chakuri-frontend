@@ -1,79 +1,106 @@
 <template>
     <div class="el-card is-always-shadow" v-loading="!initialized">
+        <cropper :photo.sync="photo" @done="save($event)" @cancel="cancel"/>
+
         <div class="el-card__body wrapper">
-            <div class="img">
-                <img :src="user.photo" :alt="user.name">
-                <label>
-                    <i class="el-icon-edit"></i>
-                    <input type="file" accept="image/*" hidden>
-                </label>
+            <template v-if="!user.photo">
+                <form @submit.native.prevent="" class="flex justify-center" ref="photoForm" v-loading="loading">
+                    <label class="flex justify-center align-center up-box">
+                        <i class="el-icon-plus"></i>
+                        <input class="d-none" type="file" accept="image/jpeg,image/png" @change="crop($event)">
+                    </label>
+                </form>
+                <p class="text-center"><b>{{user.type === 1?'ছবি':'লোগো'}} আপলোড করা হয়নি, আপলোড করতে উপরের বক্সে
+                    ক্লিক করুন</b></p>
+            </template>
+
+            <div v-else class="flex justify-center" v-loading="loading">
+                <div>
+                    <img class="d-block mb-1 photo" :src="user.photo">
+                    <form @submit.native.prevent="" class="flex justify-center" ref="photoForm">
+                        <label class="align-center el-button el-button--primary flex is-plain justify-center is-circle">
+                            <i class="el-icon-edit"></i>
+                            <input class="d-none" type="file" accept="image/jpeg,image/png" @change="crop($event)">
+                        </label>
+                    </form>
+                </div>
             </div>
             <el-divider/>
 
             <el-form :model="models" :rules="rules" ref="form" @submit.native.prevent="">
-                <div v-for="(row, index) in rows" :key="index" class="row">
-                    <div class="el-card">
-                        <div class="el-card__header row-header flex justify-between align-center">
-                            <span>{{row.label}}</span>
-                            <div v-if="row.verified !== false" :class="'actions' + (row.edit?' edit':'')">
-                                <el-tooltip :content="row.edit?'বাতিল করুন':'এডিট করুন'" placement="top">
-                                    <el-button size="medium" :type="row.edit?'danger':''"
-                                               @click="toggleEdit(row)" circle>
-                                        <i :class="row.edit?'el-icon-close':'el-icon-edit'"></i>
-                                    </el-button>
-                                </el-tooltip>
+                <template v-for="(row, index) in rows">
+                    <div v-if="!row.id || row.id === user.type" :key="index" class="row">
+                        <div class="el-card">
+                            <div class="el-card__header row-header flex justify-between align-center">
+                                <span>{{row.label}}</span>
+                                <div v-if="row.verified !== false" :class="'actions' + (row.edit?' edit':'')">
+                                    <el-tooltip :content="row.edit?'বাতিল করুন':'এডিট করুন'" placement="top">
+                                        <el-button size="medium" :type="row.edit?'danger':''"
+                                                   @click="toggleEdit(row)" circle>
+                                            <i :class="row.edit?'el-icon-close':'el-icon-edit'"></i>
+                                        </el-button>
+                                    </el-tooltip>
 
-                                <el-tooltip v-if="row.edit" content="সংরক্ষণ করুন" placement="top">
-                                    <el-button size="medium" type="success"
-                                               @click="submit(row, index)" circle>
-                                        <i class="el-icon-check"></i>
-                                    </el-button>
-                                </el-tooltip>
+                                    <el-tooltip v-if="row.edit" content="সংরক্ষণ করুন" placement="top">
+                                        <el-button size="medium" type="success"
+                                                   @click="submit(row, index)" circle>
+                                            <i class="el-icon-check"></i>
+                                        </el-button>
+                                    </el-tooltip>
+                                </div>
                             </div>
-                        </div>
-                        <div class="el-card__body" v-loading="row.loading" @keyup.enter="submit(row, index)">
-                            <template v-if="!row.edit">
-                                <div v-if="!row.value">n/a</div>
-                                <div v-else-if="!row.verify">{{row.value}}</div>
-                                <template v-else>
-                                    <div v-for="(item, index) in row.value" :key="index"
-                                         :class="'mt-1'+(!item.verified?' not-verified':'')">
-                                        {{item.value}}
-                                        <span v-if="!item.verified">ভেরিফিকেশন করা হয়নি</span>
-                                    </div>
+                            <div class="el-card__body" v-loading="row.loading" @keyup.enter="submit(row, index)">
+                                <template v-if="!row.edit">
+                                    <div v-if="!row.value">n/a</div>
+                                    <div v-else-if="!row.verify">{{row.value}}</div>
+                                    <template v-else>
+                                        <div v-for="(item, index) in row.value" :key="index"
+                                             :class="'mt-1'+(!item.verified?' not-verified':'')">
+                                            {{item.value}}
+                                            <span v-if="!item.verified">ভেরিফিকেশন করা হয়নি</span>
+                                        </div>
+
+                                        <span v-if="!row.value.length">n/a</span>
+                                    </template>
+
                                 </template>
 
-                            </template>
 
+                                <el-form-item v-else :prop="index">
+                                    <el-input :type="row.type" v-model="models[index]" :placeholder="row.label"
+                                              :maxlength="row.maxLength"/>
+                                </el-form-item>
 
-                            <el-form-item v-else :prop="index">
-                                <el-input :type="row.type" v-model="models[index]" :placeholder="row.label"/>
-                            </el-form-item>
-
-                            <template v-if="row.hasOwnProperty('code') && row.value && !row.verified">
-                                <br>
-                                <p><b>{{row.value[1].value}}</b> নাম্বারে
-                                    এসএমএস
-                                    এর মাধ্যমে ৬ ডিজিটের একটি ভেরিফিকেশন কোড পাঠানো হয়েছে,
-                                    সেই কোডটি নিচের
-                                    বক্সে লিখে
-                                    ভেরিফাই করুন।</p>
-                                <el-input type="number" class="code" v-model="row.code" placeholder="কোড"/>
-                                <el-button type="primary" @click="verify">ভেরিফাই</el-button>
-                            </template>
-
+                                <template v-if="row.hasOwnProperty('code') && row.value && !row.verified">
+                                    <br>
+                                    <p><b>{{row.value[1].value}}</b> নাম্বারে
+                                        এসএমএস
+                                        এর মাধ্যমে ৬ ডিজিটের একটি ভেরিফিকেশন কোড পাঠানো হয়েছে,
+                                        সেই কোডটি নিচের
+                                        বক্সে লিখে
+                                        ভেরিফাই করুন।</p>
+                                    <el-input type="number" class="code" v-model="row.code" placeholder="কোড"/>
+                                    <el-button type="primary" @click="verify">ভেরিফাই</el-button>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </template>
             </el-form>
         </div>
     </div>
 </template>
 
 <script>
-    import {elCard, elInput, elForm, elFormItem, elDivider, elButton, elTooltip, elButtonGroup} from '@/el'
+    import {elButton, elButtonGroup, elCard, elDivider, elForm, elFormItem, elInput, elTooltip} from '../../../../el'
+    import cropper from '../../../../components/cropper'
+    import mixin from '../../mixins/photo'
 
     export default {
+        mixins: [mixin],
+
+        components: {elCard, elInput, elForm, elFormItem, elDivider, elButton, elTooltip, elButtonGroup, cropper},
+
         data() {
             const {user} = this.$store.state.auth
 
@@ -96,8 +123,21 @@
                 rows: {
                     name: {
                         type: 'text',
-                        label: 'নাম',
+                        label: (user.type === 1 ? '' : 'প্রতিষ্ঠানের নাম ') + 'নাম',
                         value: user.name
+                    },
+                    description: {
+                        type: 'textarea',
+                        label: 'প্রতিষ্ঠানের বিবরণ',
+                        value: user.description,
+                        maxLength: 2000,
+                        id: 2
+                    },
+                    address: {
+                        type: 'text',
+                        label: 'ঠিকানা',
+                        value: user.address,
+                        id: 2
                     },
                     email: {
                         type: 'email',
@@ -125,6 +165,7 @@
                     },
                 },
                 initialized: false,
+                reset: 'photoForm',
                 user
             }
         },
@@ -342,46 +383,11 @@
 
             }
         },
-
-        components: {elCard, elInput, elForm, elFormItem, elDivider, elButton, elTooltip, elButtonGroup}
     }
 </script>
 
 <style lang="scss" scoped>
-    @import "../../styles/var";
-
-    .img {
-        position: relative;
-        width: 120px;
-        height: 120px;
-        overflow: hidden;
-        background: #fff;
-        padding: 5px;
-        border: 2px solid #556080;
-        border-radius: 50%;
-        margin: auto;
-
-        img {
-            object-fit: cover;
-        }
-
-        label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40%;
-            z-index: 1;
-            font-size: 1.7rem;
-            line-height: 3rem;
-            text-align: center;
-            background: #394249d1;
-            color: #fff;
-            cursor: pointer;
-            will-change: transform;
-            transition: 100ms ease-in-out;
-        }
-    }
+    @import "../../../../styles/var";
 
     .row {
         padding: 12px 10px;
@@ -430,6 +436,28 @@
 
     .code {
         width: 120px;
+    }
+
+    .up-box {
+        width: 200px;
+        max-width: 200px;
+        height: 200px;
+        border: 1px dashed #c0ccda;
+        border-radius: 6px;
+        font-size: 2rem;
+        color: #8c939d;
+        background: #fbfdff;
+        cursor: pointer;
+
+        &:hover {
+            border: 1px dashed $--color-primary;
+        }
+    }
+
+    .photo {
+        width: 200px;
+        border-radius: 5px;
+        box-shadow: 0 0 15px 7px rgba(0, 0, 0, .1);
     }
 
     @media all and (max-width: $--md) {
