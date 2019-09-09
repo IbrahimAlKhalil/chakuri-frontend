@@ -5,6 +5,7 @@ import store from '@/store'
 */
 
 export default async function (route, from, next) {
+    store.commit('toggleNavMenu', false)
     store.commit('changeLayout', /\/user\/?.*/.test(route.path) ? 'dashboard' : 'master')
     next()
 }

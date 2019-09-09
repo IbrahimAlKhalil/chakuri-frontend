@@ -8,6 +8,7 @@
 
                 <template v-for="(field, index) in group.fields">
                     <lazy-select v-if="field.type === 'lazy'" :field="field" :key="index"/>
+
                     <form-item v-else :key="index" :field="field"/>
                 </template>
             </div>

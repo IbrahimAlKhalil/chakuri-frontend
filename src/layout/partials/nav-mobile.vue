@@ -87,7 +87,11 @@
 
             async signOut() {
                 this.hideNav()
-                await this.$store.dispatch('signOut')
+                await this.$store.dispatch('signOut').then(() => {
+                    if (this.$route.path === this.$store.state.lastAuthPath) {
+                        this.$router.push('/')
+                    }
+                })
             }
         },
         components: {menuItem, elButtonGroup, elButton, elCard, elDivider}

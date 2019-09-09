@@ -45,7 +45,7 @@
         box-shadow: 0 0 5px rgba(0, 0, 0, .1);
         position: sticky;
         top: 0;
-        z-index: 3;
+        z-index: 1004;
         padding: 0 10px;
     }
 

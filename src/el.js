@@ -26,3 +26,4 @@ export elTabPane from 'element-ui/packages/tabs/src/tab-pane';
 // export elSteps from 'element-ui/packages/steps/src/steps'
 // export elStep from 'element-ui/packages/steps/src/step'
 export elBadge from 'element-ui/packages/badge/src/main'
+export elSlider from 'element-ui/lib/slider'

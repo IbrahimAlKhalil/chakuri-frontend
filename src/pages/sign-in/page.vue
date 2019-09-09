@@ -108,7 +108,8 @@
                             message: 'অনুগ্রহ করে আপনার পাসওয়ার্ড লিখুন'
                         }
                     ]
-                }
+                },
+                prev: '/'
             }
         },
 
@@ -141,7 +142,11 @@
 
                         await this.$store.dispatch('signIn')
 
-                        return history.back()
+                        if (this.prev === '/') {
+                            return this.$router.push(this.$store.state.lastAuthPath)
+                        }
+
+                        return this.$router.push(this.prev)
                     }
 
                     this.$notify({
@@ -152,7 +157,17 @@
                 }
 
                 this.formLoading = false
+            },
+
+            setPrevious(path) {
+                this.prev = path
             }
+        },
+
+        beforeRouteEnter(to, from, next) {
+            next(vm => {
+                vm.setPrevious(from.path)
+            })
         },
 
         components: {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption}

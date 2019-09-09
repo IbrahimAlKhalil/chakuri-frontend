@@ -43,11 +43,12 @@
 
         methods: {
             show(item) {
-                if (!item.userType) {
+                if (!item.type) {
                     return true
                 }
 
-                return item.userType === this.type
+
+                return item.type === this.type
             }
         }
     }

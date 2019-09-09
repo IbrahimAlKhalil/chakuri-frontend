@@ -1,4 +1,4 @@
-import store from '@/store';
+import store from '@/store'
 
 /*
 * This middleware will check whether user is authenticated
@@ -7,19 +7,21 @@ import store from '@/store';
 */
 
 // TODO: Change redirectUrl if it needs to be
-const redirectUrl = '/sign-in';
+const redirectUrl = '/sign-in'
 
 export default async function (route, from, next) {
+    store.commit('lastAuthPath', route.path)
+
     // User should be authenticated
-    const user = await store.dispatch('initialize');
+    const user = await store.dispatch('initialize')
 
     if (!user) {
         // User is not authenticated
         // Redirect to the specified page
 
-        return next(redirectUrl);
+        return next(redirectUrl)
     }
 
     // User is authenticated
-    next();
+    next()
 }

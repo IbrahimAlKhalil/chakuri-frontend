@@ -130,7 +130,7 @@
                         type: 'textarea',
                         label: 'প্রতিষ্ঠানের বিবরণ',
                         value: user.description,
-                        maxLength: 2000,
+                        maxLength: 3000,
                         id: 2
                     },
                     address: {

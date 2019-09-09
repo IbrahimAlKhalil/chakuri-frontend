@@ -69,6 +69,10 @@
     display: block;
   }
 
+  &block-important {
+    display: block !important;
+  }
+
   &none {
     display: none;
   }

@@ -2,8 +2,7 @@ import VueRouter from 'vue-router'
 import viddleware, {group} from '@modules/viddleware'
 import guest from '@middleware/guest'
 import auth from '@middleware/auth'
-import hideMobileNav from '@middleware/hide-mobile-nav'
-import switchLayout from '@middleware/switch-layout'
+import global from '@middleware/global'
 import lazy from '@modules/lazy'
 
 const router = new VueRouter({
@@ -36,6 +35,10 @@ const router = new VueRouter({
                     {
                         path: 'profile',
                         component: () => lazy(import('./pages/user/pages/profile/page'))
+                    },
+                    {
+                        path: 'post-job',
+                        component: () => lazy(import('./pages/user/pages/job-post/page'))
                     }
                 ],
             }
@@ -63,4 +66,4 @@ const router = new VueRouter({
     ]
 })
 
-export default viddleware(router, [switchLayout, hideMobileNav])
+export default viddleware(router, [global])

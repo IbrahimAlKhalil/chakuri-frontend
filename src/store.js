@@ -26,6 +26,18 @@ export default new Vuex.Store({
                 icon: 'el-icon-lock'
             },
             {
+                title: 'চাকুরীর বিজ্ঞাপন দিন',
+                link: '/user/post-job',
+                icon: 'el-icon-s-marketing',
+                type: 2
+            },
+            {
+                title: 'আপনার বিজ্ঞাপন সমূহ',
+                link: '/user/jobs',
+                icon: 'el-icon-s-order',
+                type: 2
+            },
+            {
                 title: 'নোটিফিকেশন',
                 link: '/user/notifications',
                 icon: 'el-icon-bell',
@@ -35,13 +47,13 @@ export default new Vuex.Store({
                 title: 'জীবন বৃত্তান্ত (CV)',
                 link: '/user/resume',
                 icon: 'el-icon-s-custom',
-                userType: 1
+                type: 1
             },
             {
                 title: 'সংরক্ষিত চাকুরী',
                 link: '/user/saved-jobs',
                 icon: 'el-icon-s-cooperation',
-                userType: 1
+                type: 1
             }
         ],
         routes: null,
@@ -101,9 +113,14 @@ export default new Vuex.Store({
                 pass: [{required: true, message: ' '}]
             },
             show: false
-        }
+        },
+        lastAuthPath: '/'
     },
     mutations: {
+        lastAuthPath(state, path) {
+            state.lastAuthPath = path
+        },
+
         addChildrenToPlace(state, payload) {
             Vue.set(payload.parent, 'children', payload.children)
         },

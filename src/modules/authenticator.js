@@ -2,10 +2,6 @@ import request from '@modules/request'
 import {clearTokens, retrieveToken} from '@/modules/tokenizer'
 import photo from '@assets/images/user.svg'
 
-const eventHandlers = {
-    authStateChange: []
-}
-
 export default {
     state: {
         user: null,
@@ -36,15 +32,6 @@ export default {
             })
         },
 
-        onAuthStateChange(context, handler) {
-            eventHandlers.authStateChange.push(handler)
-        },
-
-        removeAuthStateObserver(context, {event, handler}) {
-            const handlers = eventHandlers[event]
-            handlers.splice(handler, 1)
-        },
-
         // Call this method form sign in
         // This function will return a promise which resolves user instance if fulfilled
         // TODO: Implement signIn method
@@ -68,10 +55,6 @@ export default {
         signOut({state}) {
             state.user = null
             clearTokens()
-
-            eventHandlers.authStateChange.forEach(handler => {
-                handler()
-            })
         }
     },
 

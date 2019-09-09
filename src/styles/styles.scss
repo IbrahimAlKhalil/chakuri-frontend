@@ -52,6 +52,10 @@ button, input {
   }
 }
 
+.el-form-item__error {
+  font-size: 14px;
+}
+
 @media all and (min-width: $--md) {
   ::-webkit-scrollbar {
     width: 8px;

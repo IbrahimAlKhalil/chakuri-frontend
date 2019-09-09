@@ -21,6 +21,8 @@
     import {elPopover, elDialog} from '@/el'
 
     export default {
+        components: {elPopover, elDialog},
+
         data() {
             return {
                 user: this.$store.state.auth.user,
@@ -30,11 +32,13 @@
 
         methods: {
             signOut() {
-                this.$store.dispatch('signOut')
+                this.$store.dispatch('signOut').then(() => {
+                    if (this.$route.path === this.$store.state.lastAuthPath) {
+                        this.$router.push('/')
+                    }
+                })
             }
-        },
-
-        components: {elPopover, elDialog}
+        }
     }
 </script>
 
