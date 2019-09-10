@@ -105,7 +105,7 @@
                                 name: 'name',
                                 label: 'বিজ্ঞাপনের নাম',
                                 type: 'text',
-                                max: 150,
+                                max: 80,
                                 rules: [required]
                             }
                         ]
@@ -207,7 +207,7 @@
                                 type: 'text',
                                 label: 'এলাকা/গ্রাম/রোড নম্বর',
                                 model: '',
-                                max: 150,
+                                max: 120,
                                 rules: [required]
                             }
                         ]

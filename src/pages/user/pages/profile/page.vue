@@ -67,8 +67,17 @@
 
 
                                 <el-form-item v-else :prop="index">
-                                    <el-input :type="row.type" v-model="models[index]" :placeholder="row.label"
-                                              :maxlength="row.maxLength"/>
+                                    <el-select v-if="row.type === 'select'" v-model="models[index]"
+                                               :value="models[index]"
+                                               placeholder="" class="w-100">
+                                        <div slot="empty" class="p-1" v-loading="true">
+                                            <br><br>
+                                        </div>
+                                        <el-option v-for="(option, index) in row.options" :key="index"
+                                                   :label="option.name" :value="option.id"/>
+                                    </el-select>
+                                    <el-input v-else :type="row.type" v-model="models[index]" :placeholder="row.label"
+                                              :maxlength="row.maxLength" rows="5" show-word-limit/>
                                 </el-form-item>
 
                                 <template v-if="row.hasOwnProperty('code') && row.value && !row.verified">
@@ -92,14 +101,37 @@
 </template>
 
 <script>
-    import {elButton, elButtonGroup, elCard, elDivider, elForm, elFormItem, elInput, elTooltip} from '../../../../el'
+    import {
+        elButton,
+        elButtonGroup,
+        elCard,
+        elDivider,
+        elForm,
+        elFormItem,
+        elInput,
+        elTooltip,
+        elSelect,
+        elOption
+    } from '../../../../el'
     import cropper from '../../../../components/cropper'
     import mixin from '../../mixins/photo'
 
     export default {
         mixins: [mixin],
 
-        components: {elCard, elInput, elForm, elFormItem, elDivider, elButton, elTooltip, elButtonGroup, cropper},
+        components: {
+            elCard,
+            elInput,
+            elForm,
+            elFormItem,
+            elDivider,
+            elButton,
+            elTooltip,
+            elButtonGroup,
+            cropper,
+            elSelect,
+            elOption
+        },
 
         data() {
             const {user} = this.$store.state.auth
@@ -133,8 +165,22 @@
                         maxLength: 3000,
                         id: 2
                     },
+                    category: {
+                        type: 'select',
+                        label: 'প্রতিষ্ঠানের ধরণ',
+                        value: null,
+                        options: [],
+                        id: 2
+                    },
+                    type: {
+                        type: 'select',
+                        label: 'সরকারি/বেসরকারি',
+                        value: null,
+                        options: [],
+                        id: 2
+                    },
                     address: {
-                        type: 'text',
+                        type: 'textarea',
                         label: 'ঠিকানা',
                         value: user.address,
                         id: 2
@@ -256,8 +302,24 @@
                 // Success
 
                 // Change preview if it isn't password
-                if (row.type !== 'password' && !row.verify) {
+                if (row.type !== 'password' && !row.verify && row.type !== 'select') {
                     row.value = model
+                }
+
+
+                if (row.type === 'select') {
+                    let option
+
+                    row.options.some(item => {
+                        if (item.id === model) {
+                            option = item
+                            return true
+                        }
+
+                        return false
+                    })
+
+                    row.value = option.name
                 }
 
                 if (row.verify) {
@@ -329,8 +391,8 @@
             const {rows} = this
 
             // Load email and mobile
-            const response = await this.$fetch('email-and-mobile').response()
-            const data = response.json()
+            var response = await this.$fetch('email-and-mobile').response()
+            var data = response.json()
 
             const {email} = rows
             const {mobile} = rows
@@ -381,6 +443,25 @@
                     this.rules[key].push(required)
                 }
 
+            }
+
+
+            var response = await this.$fetch('category-and-type').response()
+            var data = response.json()
+
+            const {category, type} = this.rows
+
+            category.options = data.category.options
+            type.options = data.type.options
+
+            if (data.category.selected) {
+                this.models.category = data.category.selected.id
+                category.value = data.category.selected.name
+            }
+
+            if (data.type.selected) {
+                this.models.type = data.type.selected.id
+                type.value = data.type.selected.name
             }
         },
     }

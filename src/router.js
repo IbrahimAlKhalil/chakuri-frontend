@@ -39,6 +39,10 @@ const router = new VueRouter({
                     {
                         path: 'post-job',
                         component: () => lazy(import('./pages/user/pages/job-post/page'))
+                    },
+                    {
+                        path: 'jobs',
+                        component: () => lazy(import('./pages/user/pages/your-jobs/page'))
                     }
                 ],
             }
