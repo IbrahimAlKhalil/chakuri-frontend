@@ -1,86 +1,49 @@
 <template>
     <sidebar-card title="স্পেশাল চাকুরী">
-        <el-menu class="special-jobs">
+        <div class="special-jobs el-menu">
             <template v-for="(job, index) in jobs">
-                <el-tooltip class="item" effect="dark" :content="job.name" placement="left" :key="index"
+                <el-tooltip class="item" effect="dark" :content="job.institute" placement="left" :key="index"
                             :open-delay="500">
-                    <li :index="index.toString()" class="flex el-menu-item">
-                        <div>
-                            <img :src="job.logo" :alt="job.name">
+                    <router-link :index="index.toString()" class="flex el-menu-item" :to="`/jobs/${job.id}`">
+                        <div v-if="job.logo">
+                            <img :src="job.logo | fileUrl" :alt="job.institute">
                         </div>
                         <div class="wrapper">
-                            <div class="title">{{job.title}}</div>
-                            <div class="name">{{job.name}}</div>
+                            <div class="title">{{job.institute}}</div>
+                            <div class="name">{{job.position}}</div>
                         </div>
-                    </li>
+                        <div>
+
+                        </div>
+                    </router-link>
                 </el-tooltip>
             </template>
-        </el-menu>
+        </div>
     </sidebar-card>
 </template>
 
 <script>
-    import sidebarCard from './sidebar-card'
-    import {elTooltip, elMenu} from '@/el'
+    import sidebarCard from './sidebar-card';
+    import {elTooltip, elMenu} from '@/el';
 
     export default {
-        data() {
-            return {
-                jobs: [
-                    {
-                        name: 'জামিয়া আরাবিয়া ইমদাদুল উলূম ফরিদাবাদ মাদ্রাসা',
-                        title: 'হাফেজ সাহেব',
-                        logo: require('../../../assets/images/faridabad.jpg')
-                    },
-
-                    {
-                        name: 'আল্‌-জামিয়াতুল আহ্‌লিয়া দারুল উলূম মুঈনুল ইসলাম (হাটহাজারী মাদ্রাসা)',
-                        title: 'কারি সাহেব',
-                        logo: require('../../../assets/images/hathazari.png')
-                    },
-
-                    {
-                        name: 'জামিয়া রাহমানিয়া আরাবিয়া ঢাকা বাংলাদেশ',
-                        title: 'কিতাব খানার শিক্ষক',
-                        logo: require('../../../assets/images/rahmania.png')
-                    },
-
-                    {
-                        name: 'সাত গম্বুজ মসজিদ',
-                        title: 'ইমাম সাহেব',
-                        logo: require('../../../assets/images/masjid.png')
-                    },
-
-                    {
-                        name: 'আল্‌-জামিয়াতুল আহ্‌লিয়া দারুল উলূম মুঈনুল ইসলাম (হাটহাজারী মাদ্রাসা)',
-                        title: 'হাফেজ সাহেব (শিক্ষক)',
-                        logo: require('../../../assets/images/hathazari.png')
-                    },
-
-                    {
-                        name: 'বায়তুল মোকাররম জাতীয় মসজিদ',
-                        title: 'হাফেজ সাহেব (তারাবির জন্য)',
-                        logo: require('../../../assets/images/masjid.png')
-                    }
-                ]
-            }
-        },
-
-        components: {sidebarCard, elTooltip, elMenu}
-    }
+        components: {sidebarCard, elTooltip, elMenu},
+        props: ['jobs']
+    };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import "../../../styles/var";
 
     .special-jobs {
-        background: #fffad2;
+        background: $bg-hot;
 
-        li {
+        .el-menu-item {
             overflow: hidden;
             height: auto;
             line-height: inherit;
             padding: 8px !important;
+            text-decoration: none;
         }
 
         img {

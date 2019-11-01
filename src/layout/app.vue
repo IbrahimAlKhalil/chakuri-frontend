@@ -1,7 +1,7 @@
 <template>
-    <main v-loading="signedIn === null || $store.state.loading" id="app"
+    <main v-loading="!initialized" id="app"
           class="flex direction-column w-100">
-        <template v-if="signedIn !== null">
+        <template v-if="initialized">
             <small-header/>
             <partial-header/>
             <transition name="el-fade-in">
@@ -15,7 +15,7 @@
                         <div class="el-card__header text-center">
                             <div>
                                 <div class="pic ml-auto mr-auto">
-                                    <img :src="user.photo" :alt="user.name">
+                                    <img :src="user.photo?$fileUrl(user.photo):$auth.altPhoto" :alt="user.name">
                                 </div>
 
                                 <p class="text-center">{{user.name}}</p>
@@ -55,54 +55,50 @@
 </template>
 
 <script>
-    import partialHeader from './partials/header'
-    import partialFooter from './partials/footer'
-    import smallHeader from './partials/small-header'
-    import {elFormItem, elForm, elButtonGroup, elButton, elInput} from '@/el'
+    import partialHeader from '@/layout/partials/header';
+    import partialFooter from '@/layout/partials/footer';
+    import smallHeader from '@/layout/partials/small-header';
+    import {elFormItem, elForm, elButtonGroup, elButton, elInput} from '@/el';
 
     export default {
-        data() {
-            return {
-                signedIn: null
-            }
-        },
+        components: {partialHeader, partialFooter, smallHeader, elFormItem, elForm, elButtonGroup, elButton, elInput},
 
         computed: {
             confirm() {
-                return this.$store.state.confirmPass
+                return this.$store.state.additional.confirmPass;
             },
 
             user() {
-                return this.$store.state.auth.user
+                return this.$auth.user;
+            },
+
+            loading() {
+                return this.$store.state.loading;
+            },
+
+            initialized() {
+                return this.$store.state.initialized;
             }
         },
 
         methods: {
             cancel() {
-                this.$store.commit('resolveConfirmPass', true)
+                this.$store.commit('additional/resolveConfirmPass', true);
             },
 
             async submit() {
-                const {form} = this.$refs
+                const {form} = this.$refs;
 
                 try {
-                    await form.validate()
+                    await form.validate();
                 } catch (e) {
-                    return
+                    return;
                 }
 
-                this.$store.commit('resolveConfirmPass')
+                this.$store.commit('additional/resolveConfirmPass');
             }
-        },
-
-        created() {
-            this.$store.dispatch('initialize').then(user => {
-                this.signedIn = !!user
-            })
-        },
-
-        components: {partialHeader, partialFooter, smallHeader, elFormItem, elForm, elButtonGroup, elButton, elInput}
-    }
+        }
+    };
 </script>
 
 <style lang="scss">

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import {elCard} from '../../../el';
+    import {elCard} from '@/el';
 
     export default {
         props: {
@@ -16,10 +16,10 @@
             }
         },
         components: {elCard}
-    }
+    };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
     @import "../../../styles/var";
 
     .sidebar-card {

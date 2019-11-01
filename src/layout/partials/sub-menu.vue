@@ -9,21 +9,12 @@
 
 <script>
     import menuItem from './menu-item';
-    import {elSubmenu} from '../../el';
+    import {elSubmenu} from '@/el';
 
     export default {
-        props: {
-            item: {
-                type: Object,
-                required: true
-            },
-            index: {
-                type: [Number, String],
-                required: true
-            }
-        },
-        components: {menuItem, elSubmenu}
-    }
+        components: {menuItem, elSubmenu},
+        props: ['item', 'index']
+    };
 </script>
 
 <style lang="scss">

@@ -52,13 +52,6 @@
                     </el-input>
                 </el-form-item>
 
-                <el-form-item prop="email">
-                    <label for="email" class="d-block">ইমেইল (ঐচ্ছিক)</label>
-                    <el-input id="email" type="email" v-model="models.email">
-                        <i class="fas fa-at el-input__icon" slot="prefix"></i>
-                    </el-input>
-                </el-form-item>
-
                 <el-form-item prop="password">
                     <label for="password" class="d-block">পাসওয়ার্ড</label>
                     <el-input id="password" type="password" v-model="models.password" autocomplete="new-password">
@@ -95,10 +88,11 @@
 </template>
 
 <script>
-    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elMenu} from '../../el'
-    import {saveToken} from '../../modules/tokenizer'
+    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elMenu} from '@/el';
+    import {saveToken} from '@/modules/tokenizer';
 
     export default {
+        components: {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elMenu},
         data() {
             return {
                 form: null,
@@ -106,20 +100,19 @@
                 models: {
                     name: '',
                     mobile: '',
-                    email: '',
                     password: '',
                     rePassword: '',
                     agreed: false
                 }
-            }
+            };
         },
 
         methods: {
             async submit() {
                 try {
-                    await this.$refs.form.validate()
+                    await this.$refs.form.validate();
 
-                    this.formLoading = true
+                    this.formLoading = true;
 
                     const response = await this.$fetch('register', {
                         auth: false,
@@ -127,13 +120,12 @@
                         body: {
                             name: this.models.name,
                             mobile: this.models.mobile,
-                            email: this.models.email,
                             password: this.models.password,
                             user_type_id: this.type === 'employee' ? 1 : 2
                         }
-                    }).response()
+                    }).response();
 
-                    this.formLoading = false
+                    this.formLoading = false;
                     if (response.status === 200) {
                         // Registration successful
 
@@ -141,44 +133,44 @@
                         this.$notify({
                             message: 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি করা হয়েছে',
                             type: 'success'
-                        })
+                        });
 
-                        const jwt = response.json()
+                        const jwt = response.json();
 
-                        saveToken(jwt.access_token)
+                        saveToken(jwt.access_token);
 
-                        this.$store.dispatch('signIn')
+                        await this.$store.dispatch('auth/signIn');
 
-                        // Redirect to homepage
-                        this.$router.push({path: '/'})
+                        // Redirect to profile page
+                        this.$router.push({path: 'user/profile', query: {hash: 'profile-mobile'}});
                     }
                 } catch (e) {
                 }
             },
 
             requiredRule(suffix) {
-                const please = 'অনুগ্রহ করে আপনার '
+                const please = 'অনুগ্রহ করে আপনার ';
 
                 return {
                     required: true,
                     message: `${please}${suffix}।`
-                }
+                };
             },
 
             rePassword(rule, value, callback) {
                 if (this.models.password === this.models.rePassword) {
-                    callback()
+                    callback();
                 }
 
-                callback('দুঃখিত, এই পাসওয়ার্ড এবং উপরের পাসওয়ার্ডটি এক নয়।')
+                callback('দুঃখিত, এই পাসওয়ার্ড এবং উপরের পাসওয়ার্ডটি এক নয়।');
             },
 
             agreed(rule, value, callback) {
                 if (this.models.agreed) {
-                    callback()
+                    callback();
                 }
 
-                callback('দুঃখিত, আপনাকে আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতির সাথে একমত হতে হবে।')
+                callback('দুঃখিত, আপনাকে আমাদের ব্যবহারের শর্তাবলী এবং গোপনীয়তা নীতির সাথে একমত হতে হবে।');
             },
 
             async userExists(rule, value, callback) {
@@ -188,46 +180,46 @@
                         user_type_id: this.type === 'employee' ? 1 : 2,
                         [rule.field]: this.models[rule.field]
                     }
-                }).response()
+                }).response();
 
                 if (!!response.json()) {
-                    return callback(`এই ${rule.field === 'mobile' ? 'নাম্বারটি' : 'ইমেইল ঠিকানাটি'} অন্য একটি একাউন্টে ব্যবহৃত হয়েছে`)
+                    return callback(`এই ${rule.field === 'mobile' ? 'নাম্বারটি' : 'ইমেইল ঠিকানাটি'} অন্য একটি একাউন্টে ব্যবহৃত হয়েছে`);
                 }
 
-                callback()
+                callback();
             },
 
             mobileLength(rule, value, callback) {
-                value = value.toString()
+                value = value.toString();
 
-                const length = value.length
+                const length = value.length;
 
                 if (/^\+880/.test(value) && length === 14) {
-                    return callback()
+                    return callback();
                 } else if (length === 11) {
-                    return callback()
+                    return callback();
                 }
 
 
-                callback('দুঃখিত, মোবাইল নম্বর ১১ ডিজিটের হতে হবে।')
+                callback('দুঃখিত, মোবাইল নম্বর ১১ ডিজিটের হতে হবে।');
             },
 
             navigate(type) {
-                this.$router.push({path: 'sign-up', query: {type}})
+                this.$router.push({path: 'sign-up', query: {type}});
             }
         },
 
         computed: {
             type() {
-                return this.$route.query.type
+                return this.$route.query.type;
             },
             rules() {
-                const please = 'অনুগ্রহ করে আপনার '
+                const please = 'অনুগ্রহ করে আপনার ';
                 const min = {
                     min: 8,
                     message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে আটটি অক্ষরের দৈর্ঘ্যের হতে হবে।`
-                }
-                const {rePassword, agreed, mobileLength, userExists} = this
+                };
+                const {rePassword, agreed, mobileLength, userExists} = this;
 
                 return {
                     name: [this.requiredRule(`${please}${this.type === 'institution' ? 'প্রতিষ্ঠানের ' : ''}নাম লিখুন`), {
@@ -240,25 +232,15 @@
                         {validator: userExists, trigger: 'blur'}
                     ],
 
-                    email: [{
-                        type: 'email',
-                        message: 'দুঃখিত, ইমেইল ঠিকানাটি সঠিক নয়।'
-                    }, {
-                        validator: userExists,
-                        trigger: 'blur'
-                    }],
-
                     password: [this.requiredRule('পাসওয়ার্ড লিখুন'), min],
 
                     rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassword}],
 
                     agreed: [{validator: agreed}]
-                }
+                };
             }
-        },
-
-        components: {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elMenu}
-    }
+        }
+    };
 </script>
 
 <style lang="scss" scoped>

@@ -1,172 +1,45 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import auth from './modules/authenticator'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import auth from '@/stores/auth.store';
+import menu from '@/stores/menu.store';
+import additional from '@/stores/additional.store';
 
-Vue.use(Vuex)
-
-let confirmPassResolver
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
         loading: false,
-        menu: [
-            {
-                title: 'প্রথম পাতা',
-                link: '/'
-            },
-            {
-                title: 'যোগাযোগ',
-                link: '/contact'
-            }
-        ],
-        dashboardMenu: [
-            {
-                title: 'প্রোফাইল',
-                link: '/user/profile',
-                icon: 'el-icon-lock'
-            },
-            {
-                title: 'চাকুরীর বিজ্ঞাপন দিন',
-                link: '/user/post-job',
-                icon: 'el-icon-s-marketing',
-                type: 2
-            },
-            {
-                title: 'আপনার বিজ্ঞাপন সমূহ',
-                link: '/user/jobs',
-                icon: 'el-icon-s-order',
-                type: 2
-            },
-            {
-                title: 'নোটিফিকেশন',
-                link: '/user/notifications',
-                icon: 'el-icon-bell',
-                badge: 5
-            },
-            {
-                title: 'জীবন বৃত্তান্ত (CV)',
-                link: '/user/resume',
-                icon: 'el-icon-s-custom',
-                type: 1
-            },
-            {
-                title: 'সংরক্ষিত চাকুরী',
-                link: '/user/saved-jobs',
-                icon: 'el-icon-s-cooperation',
-                type: 1
-            }
-        ],
-        routes: null,
+        initialized: false,
         layout: 'master',
-        showMenu: false,
-        divisions: {
-            type: 'division',
-            title: 'বিভাগ সিলেক্ট করুন',
-            items: [
-                {
-                    id: 1,
-                    name: 'ঢাকা'
-                },
-
-                {
-                    id: 2,
-                    name: 'সিলেট'
-                },
-
-                {
-                    id: 3,
-                    name: 'চট্টগ্রাম'
-                },
-
-                {
-                    id: 4,
-                    name: 'রাজশাহী'
-                },
-
-                {
-                    id: 5,
-                    name: 'খুলনা'
-                },
-
-                {
-                    id: 6,
-                    name: 'বরিশাল'
-                },
-
-                {
-                    id: 7,
-                    name: 'রংপুর'
-                },
-
-                {
-                    id: 8,
-                    name: 'ময়মনসিংহ'
-                }
-            ]
-        },
-        confirmPass: {
-            label: '',
-            model: {
-                pass: ''
-            },
-            rules: {
-                pass: [{required: true, message: ' '}]
-            },
-            show: false
-        },
-        lastAuthPath: '/'
+        isMobile: window.innerWidth < 992
     },
     mutations: {
-        lastAuthPath(state, path) {
-            state.lastAuthPath = path
-        },
 
-        addChildrenToPlace(state, payload) {
-            Vue.set(payload.parent, 'children', payload.children)
-        },
-
-        changeLoadingState(state, loading) {
-            state.loading = loading
-        },
-
-        toggleNavMenu(state, show) {
-            state.showMenu = show
+        loading(state, loading) {
+            state.loading = loading;
         },
 
         changeLayout(state, layout) {
-            state.layout = layout
+            state.layout = layout;
         },
 
-        resolveConfirmPass({confirmPass}, canceled) {
+        changeDevice(state, isMobile) {
+            state.isMobile = isMobile;
+        },
 
-            // Hide the form
-            confirmPass.show = false
-
-            // Capture the value
-            const value = canceled ? false : confirmPass.model.pass
-
-            // Clear value
-            confirmPass.model.pass = ''
-
-            // Resolve
-            confirmPassResolver(value)
+        initialized(state) {
+            state.initialized = true;
         }
     },
     actions: {
-        async confirmPassword({state}, label = 'এখানে আপনার পাসওয়ার্ড লিখুন') {
-            return new Promise(resolve => {
-                const {confirmPass} = state
+        async initialize({commit}) {
+            window.matchMedia('(min-width: 992px)').addEventListener('change', e => {
+                commit('changeDevice', !e.matches);
+            });
+        },
 
-                // Set custom label
-                confirmPass.label = label
-
-                // Store the resolve function
-                confirmPassResolver = resolve
-
-                // Show the form
-                confirmPass.show = true
-            })
+        async bootstrapped() {
         }
     },
-    modules: {auth}
-})
+    modules: {auth, additional, menu}
+});

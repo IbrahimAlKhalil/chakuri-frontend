@@ -12,36 +12,35 @@
                     <nav>
                         <el-card class="box-card h-100">
                             <div slot="header" class="header">
-                                <template v-if="auth.user">
+                                <template v-if="$auth.user">
                                     <div class="flex flex-wrap justify-center">
-                                        <img :src="auth.user.photo || auth.user.altPhoto" :alt="auth.user.name">
+                                        <img :src="$auth.user.photo?$fileUrl($auth.user.photo):$auth.user.altPhoto"
+                                             :alt="$auth.user.name">
                                     </div>
 
                                     <el-divider/>
                                 </template>
-                                <div class="flex flex-wrap justify-center mt-1">
-                                    <auth>
-                                        <ul>
-                                            <li class="el-dropdown-menu__item">
-                                                <router-link to="/user/profile"><i class="el-icon-setting"></i> একাউন্ট
-                                                </router-link>
-                                            </li>
-                                            <li class="el-dropdown-menu__item" @click="signOut">
-                                                <i class="fas fa-sign-out-alt"></i> প্রস্থান
-                                            </li>
-                                        </ul>
+                                <div class="mt-1 flex justify-center">
+                                    <el-button-group v-if="$auth.user">
+                                        <router-link class="el-button no-underline el-button--primary"
+                                                     :to="dashboardUrl">
+                                            <i class="el-icon-setting"></i> একাউন্ট
+                                        </router-link>
+                                        <el-button icon="fas fa-sign-out-alt" @click="signOut">
+                                            প্রস্থান
+                                        </el-button>
+                                    </el-button-group>
 
-                                        <el-button-group slot="else" class="btn-group">
-                                            <router-link to="/sign-in"
-                                                         class="el-button el-button--small el-button--primary btn">
-                                                <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
-                                            </router-link>
+                                    <el-button-group class="btn-group" v-else>
+                                        <router-link to="/sign-in"
+                                                     class="el-button el-button--small el-button--primary btn">
+                                            <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
+                                        </router-link>
 
-                                            <router-link to="/sign-up" class="el-button el-button--small btn">
-                                                <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
-                                            </router-link>
-                                        </el-button-group>
-                                    </auth>
+                                        <router-link to="/sign-up" class="el-button el-button--small btn">
+                                            <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
+                                        </router-link>
+                                    </el-button-group>
                                 </div>
                             </div>
                             <div>
@@ -59,43 +58,41 @@
 </template>
 
 <script>
-    import {elCard, elButton, elButtonGroup, elDivider} from '../../el'
-    import menuItem from './menu-item'
-    import {mapState} from 'vuex'
+    import {elCard, elButton, elButtonGroup, elDivider} from '@/el';
+    import menuItem from './menu-item';
+    import {mapState} from 'vuex';
 
     export default {
+        components: {menuItem, elButtonGroup, elButton, elCard, elDivider},
+
         computed: {
             ...mapState({
-                show: 'showMenu',
-                auth: 'auth'
+                show: ({menu}) => menu.show,
+                dashboardUrl: ({menu}) => menu.dashboardUrl
             }),
 
             menu() {
-                const state = this.$store.state
-                return state.layout === 'master' ? state.menu : state.dashboardMenu
+                const {state} = this.$store;
+                return state.layout === 'master' ? state.menu.main : state.menu.dashboard;
             }
         },
 
         methods: {
             showNav() {
-                this.$store.commit('toggleNavMenu', true)
+                this.$store.commit('menu/toggle', true);
             },
 
             hideNav() {
-                this.$store.commit('toggleNavMenu', false)
+                this.$store.commit('menu/toggle', false);
             },
 
             async signOut() {
-                this.hideNav()
-                await this.$store.dispatch('signOut').then(() => {
-                    if (this.$route.path === this.$store.state.lastAuthPath) {
-                        this.$router.push('/')
-                    }
-                })
+                this.hideNav();
+
+                await this.$store.dispatch('auth/signOut');
             }
-        },
-        components: {menuItem, elButtonGroup, elButton, elCard, elDivider}
-    }
+        }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -104,16 +101,6 @@
     .el-menu {
         display: grid;
         border-right: 0;
-    }
-
-    .menu-icon {
-        @media screen and (min-width: $--md) {
-            display: none;
-        }
-
-        button {
-            width: 44px;
-        }
     }
 
     .back-drop, .wrapper {
@@ -166,6 +153,16 @@
         a {
             text-decoration: none;
             color: inherit;
+        }
+    }
+
+    @media screen and (min-width: $__md) {
+        .menu-icon {
+            display: none;
+        }
+
+        .back-drop, .wrapper {
+            display: none;
         }
     }
 </style>

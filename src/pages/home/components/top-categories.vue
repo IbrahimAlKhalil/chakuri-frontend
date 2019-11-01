@@ -1,6 +1,6 @@
 <template>
     <div class="top-categories">
-        <router-link to="/" class="category">
+        <router-link to="/search?category=1" class="category">
             <el-card class="card">
                 <div><i class="fas fa-mosque"></i></div>
                 <div class="name">মসজিদ</div>
@@ -8,7 +8,7 @@
         </router-link>
 
 
-        <router-link to="/" class="category">
+        <router-link to="/search?category=2" class="category">
             <el-card class="card">
                 <div><i class="fas fa-school"></i></div>
                 <div class="name">মাদ্রাসা</div>
@@ -25,10 +25,11 @@
 </template>
 
 <script>
-    import {elCard} from '../../../el';
+    import {elCard} from '@/el'
+
     export default {
         components: {elCard}
-    };
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -36,7 +37,8 @@
 
     .top-categories {
         display: grid;
-        grid-template-columns: repeat(2/*3*/, minmax(60px, 1fr));
+        grid-template-columns: repeat(2 /*3*/
+        , minmax(60px, 1fr));
         gap: 10px;
     }
 

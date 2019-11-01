@@ -1,6 +1,11 @@
-import {retrieveToken, saveToken} from '@/modules/tokenizer'
+import config from '@/config';
+
+const locked = Symbol('locked');
 
 export class Fetcher {
+    [locked] = false;
+    callbacks = [];
+
     constructor(endPoint, defaultOptions) {
 
         const options = {
@@ -8,46 +13,44 @@ export class Fetcher {
             headers: {},
             body: null,
             ...defaultOptions
-        }
+        };
 
-        this.options = options
-        this.endPoint = endPoint
+        this.options = options;
+        this.endPoint = endPoint;
 
         // Create XMLHttpRequest instance
-        const xhr = this.xhr = new XMLHttpRequest
+        const xhr = this.xhr = new XMLHttpRequest;
 
         // Open the request before adding headers
-        xhr.open(options.method, `${Fetcher.baseUrl}/${endPoint}`)
+        xhr.open(options.method, `${config.baseURL}/${endPoint}`);
 
-        // Run beforeEach handlers
+        // Run before handlers
         for (let handler of Fetcher.beforeEachHandlers) {
             try {
-                handler(this)
+                handler(this);
             } catch (e) {
-                throw e
+                throw e;
             }
         }
 
         // Set request headers
         for (let header in options.headers) {
-            xhr.setRequestHeader(header, options.headers[header])
+            xhr.setRequestHeader(header, options.headers[header]);
         }
     }
-
-    locked = false
 
     response(delay = 0) {
         return new Promise((resolve, reject) => {
 
             // You can't call this method twice
-            if (this.locked) {
-                return reject('Response object is locked')
+            if (this[locked]) {
+                return reject('Response object is locked');
             }
 
             // Lock the response
-            this.locked = true
+            this[locked] = true;
 
-            const xhr = this.xhr
+            const xhr = this.xhr;
 
             // Add onload event handler
             xhr.onload = () => {
@@ -56,21 +59,21 @@ export class Fetcher {
 
                     // Convert the header string into an array
                     // of individual headers
-                    const arr = xhr.getAllResponseHeaders().trim().split(/[\r\n]+/)
+                    const arr = xhr.getAllResponseHeaders().trim().split(/[\r\n]+/);
 
                     // Create a map of header names to values
-                    const headerMap = {}
+                    const headerMap = {};
                     arr.forEach(line => {
-                        const parts = line.split(': ')
-                        const header = parts.shift()
-                        headerMap[header] = parts.join(': ')
-                    })
+                        const parts = line.split(': ');
+                        const header = parts.shift();
+                        headerMap[header] = parts.join(': ');
+                    });
 
-                    return headerMap
-                }
+                    return headerMap;
+                };
 
                 // json method
-                const json = () => JSON.parse(xhr.responseText)
+                const json = () => JSON.parse(xhr.responseText);
 
                 // Response object
                 const response = {
@@ -79,76 +82,97 @@ export class Fetcher {
                     json,
                     text: xhr.responseText,
                     status: xhr.status
-                }
+                };
 
-                // Run afterEach handlers
-                for (let handler of Fetcher.afterEachHandlers) {
+                resolve(response);
+
+                // Run callbacks
+                for (let handler of this.callbacks) {
                     try {
-                        handler(this, response)
+                        handler(this, response);
                     } catch (e) {
-                        throw e
+                        throw e;
                     }
                 }
 
-                resolve(response)
-            }
 
-            xhr.onerror = () => reject(xhr.responseText)
+                // Run after handlers
+                for (let handler of Fetcher.afterEachHandlers) {
+                    try {
+                        handler(this, response);
+                    } catch (e) {
+                        throw e;
+                    }
+                }
+            };
 
-            const body = this.options.body
+            let timeout = 0;
+
+            xhr.onabort = () => {
+                clearTimeout(timeout);
+
+                reject('Aborted');
+            };
+            xhr.onerror = () => reject(xhr.responseText);
+
+            let body = this.options.body;
+
             if (body && Object.getPrototypeOf(body) === Object.prototype) {
-                return xhr.send(Fetcher.objectToFormData(body))
+                body = Fetcher.objectToFormData(body);
             }
 
-            setTimeout(() => xhr.send(body), delay)
-        })
+            if (delay) {
+                timeout = setTimeout(() => xhr.send(body), delay);
+
+                return;
+            }
+
+            xhr.send(body);
+        });
     }
 
-    static baseUrl = 'http://192.168.0.150:3333'
-    static beforeEachHandlers = []
-    static afterEachHandlers = []
+    after(fn, req = true) {
+        this.callbacks.push(fn);
 
-    static beforeEach(handler) {
-        Fetcher.beforeEachHandlers.unshift(handler)
+        if (req) {
+            this.response();
+        }
     }
 
-    static afterEach(handler) {
-        Fetcher.afterEachHandlers.unshift(handler)
+    abort() {
+        this.xhr.abort();
+    }
+
+    static beforeEachHandlers = [];
+    static afterEachHandlers = [];
+
+    static before(handler) {
+        Fetcher.beforeEachHandlers.unshift(handler);
+    }
+
+    static after(handler) {
+        Fetcher.afterEachHandlers.unshift(handler);
     }
 
     static objectToFormData(obj) {
-        const formData = new FormData
+        const formData = new FormData;
 
         for (let key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                formData.append(key, obj[key])
+            const value = obj[key];
+
+            if (Array.isArray(value)) {
+                value.forEach((item, index) => formData.append(`${key}[${index}]`, item));
+
+                continue;
             }
+
+            formData.append(key, value);
         }
 
-        return formData
+        return formData;
     }
 }
 
-
-// Add authentication token
-Fetcher.beforeEach(instance => {
-    const {options} = instance
-    const token = retrieveToken()
-
-    if (options.auth !== false && token) {
-        options.headers.Authorization = `Bearer ${token}`
-    }
-})
-
-// Handle refresh token
-Fetcher.afterEach((instance, response) => {
-    const refreshToken = response.header('X-refresh-token')
-
-    if (refreshToken) {
-        saveToken(refreshToken)
-    }
-})
-
 export default function request(endPoint, options) {
-    return new Fetcher(endPoint, options)
+    return new Fetcher(endPoint, options);
 }

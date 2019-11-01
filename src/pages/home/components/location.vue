@@ -7,7 +7,7 @@
             </li>
         </el-menu>
 
-        <location-selector :show.sync="show" :division="division" v-model="value" @change="logger"/>
+        <location-selector :show.sync="show" :division="division" v-model="value" @input="redirect"/>
     </sidebar-card>
 </template>
 
@@ -17,12 +17,13 @@
     import {elMenu} from '@/el';
 
     export default {
+        components: {sidebarCard, locationSelector, elMenu},
         data() {
             return {
                 show: false,
                 value: null,
                 division: null,
-                divisions: this.$store.state.divisions
+                divisions: this.$store.state.additional.divisions
             };
         },
 
@@ -32,12 +33,10 @@
                 this.division = division;
             },
 
-            logger(e) {
-                console.log(e);
+            redirect(data) {
+                this.$router.push(`search?district=${data.district}&thana=${data.thana}`);
             }
-        },
-
-        components: {sidebarCard, locationSelector, elMenu}
+        }
     };
 </script>
 

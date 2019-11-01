@@ -10,10 +10,9 @@ import store from '@/store';
 const redirectUrl = '/';
 
 export default async function (route, from, next) {
-    // User should not be authenticated
-    const user = await store.dispatch('initialize');
 
-    if (!user) {
+    if (!store.state.auth.user) {
+
         // User is not authenticated
         return next();
     }

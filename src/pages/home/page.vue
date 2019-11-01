@@ -1,6 +1,6 @@
 <template>
     <section>
-        <search/>
+        <search :counts="counts"/>
         <div class="container">
             <aside class="sidebar-1">
                 <location/>
@@ -12,10 +12,10 @@
             </section>
 
             <aside class="sidebar-2">
-                <special-jobs/>
+                <special-jobs :jobs="jobs"/>
             </aside>
 
-            <jobs/>
+            <jobs :jobs="jobs"/>
         </div>
     </section>
 </template>
@@ -26,16 +26,37 @@
     import specialJobs from './components/special-jobs';
     import topCategories from './components/top-categories';
     import subCategories from './components/sub-categories';
-    import {elCard} from '../../el';
+    import {elCard} from '@/el';
     import jobs from './components/jobs';
 
     export default {
+        components: {search, location, specialJobs, elCard, topCategories, subCategories, jobs},
         data() {
             return {
-                divisions: ['ঢাকা', 'সিলেট', 'চট্টগ্রাম', 'রাজশাহী', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ'],
+                jobs: [],
+                perPage: window.innerWidth < 920 ? 6 : 10,
+                counts: {
+                    job: 0,
+                    institute: 0
+                }
             };
         },
-        components: {search, location, specialJobs, elCard, topCategories, subCategories, jobs}
+        methods: {
+            async loadJobs() {
+                const response = await this.$fetch(`job-filter?perPage=${this.perPage}`).response();
+
+                this.jobs = response.json();
+            }
+        },
+        async created() {
+            this.loadJobs();
+
+            const response = await this.$fetch('institute-jobs-count').response();
+
+            this.counts = response.json();
+
+            // TODO: Load special jobs
+        }
     };
 </script>
 

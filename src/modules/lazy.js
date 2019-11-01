@@ -1,13 +1,11 @@
-import store from '@/store'
+import store from '@/store';
 
 export default function (component) {
-    store.commit('changeLoadingState', true)
+    store.commit('loading', true);
 
     component.then(() => {
-        store.commit('changeLoadingState', false)
-    })
+        store.commit('loading', false);
+    });
 
-    return {
-        component
-    }
+    return {component};
 }

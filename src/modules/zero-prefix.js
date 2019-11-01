@@ -1,7 +1,7 @@
 export function zeroPrefix(num) {
     if (num < 10) {
-        return `0${num}`
+        return `0${num}`;
     }
 
-    return num
+    return num;
 }

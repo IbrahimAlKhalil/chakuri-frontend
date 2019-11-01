@@ -2,11 +2,11 @@
     <el-popover placement="top-start" trigger="click" popper-class="popover"
                 class="avatar-wrapper">
         <div class="avatar" slot="reference">
-            <img :src="user.photo || user.altPhoto" :alt="user.name">
+            <img :src="user.photo?$fileUrl(user.photo): $auth.altPhoto" :alt="user.name">
         </div>
 
         <div class="menu">
-            <router-link to="/user/profile" class="el-dropdown-menu__item">
+            <router-link :to="$store.state.menu.dashboardUrl" class="el-dropdown-menu__item">
                 <i class="el-icon-user-solid"></i> একাউন্ট
             </router-link>
             <div class="el-dropdown-menu__item" @click="signOut">
@@ -18,28 +18,24 @@
 </template>
 
 <script>
-    import {elPopover, elDialog} from '@/el'
+    import {elPopover, elDialog} from '@/el';
 
     export default {
         components: {elPopover, elDialog},
 
         data() {
             return {
-                user: this.$store.state.auth.user,
+                user: this.$auth.user,
                 open: false
-            }
+            };
         },
 
         methods: {
-            signOut() {
-                this.$store.dispatch('signOut').then(() => {
-                    if (this.$route.path === this.$store.state.lastAuthPath) {
-                        this.$router.push('/')
-                    }
-                })
+            async signOut() {
+                await this.$store.dispatch('auth/signOut');
             }
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -47,6 +43,7 @@
 
     .avatar-wrapper {
         height: 100%;
+        max-width: 60px;
     }
 
     .avatar {
@@ -57,6 +54,7 @@
         img {
             box-sizing: border-box;
             height: 100%;
+            width: 100%;
             border-radius: 50%;
             border: 10px solid transparent;
 

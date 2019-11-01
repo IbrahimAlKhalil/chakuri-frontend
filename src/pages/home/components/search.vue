@@ -4,16 +4,16 @@
         <div class="search-wrapper w-100 h-100 flex justify-center content-center flex-wrap">
             <el-card class="search w-100">
         <span class="title" slot="header">
-          <i class="fa fa-book-reader"></i>&nbsp;&nbsp; অনুসন্ধান করুন
+          <i class="fas fa-search"></i>&nbsp;&nbsp; অনুসন্ধান করুন
         </span>
 
                 <div class="input-wrapper">
                     <el-input prefix-icon="fa fa-search" placeholder="এখানে লিখুন" v-model="keyword"/>
-                    <el-select placeholder="প্রতিষ্ঠান এর ধরন নির্ধারণ করুন" v-model="type" multiple>
+                    <el-select placeholder="প্রতিষ্ঠান এর ধরন" v-model="category">
                         <el-option
-                                v-for="(organization, index) in organizations"
-                                :value="organization"
-                                :label="organization"
+                                v-for="(category, index) in categories"
+                                :value="category.value"
+                                :label="category.label"
                                 :key="index"
                         />
                     </el-select>
@@ -27,7 +27,7 @@
 
                     <div class="count">
                         <div>প্রতিষ্ঠান</div>
-                        <div>৪৫৬৮ টি</div>
+                        <div>{{counts.institute | enToBn}} টি</div>
                     </div>
                 </div>
                 <div class="item">
@@ -35,7 +35,7 @@
 
                     <div class="count">
                         <div>চাকুরি</div>
-                        <div>৮৫৬৮ টি</div>
+                        <div>{{counts.job | enToBn}} টি</div>
                     </div>
                 </div>
             </div>
@@ -44,27 +44,35 @@
 </template>
 
 <script>
-    import {elButton, elCard, elInput, elOption, elSelect} from '../../../el'
+    import {elButton, elCard, elInput, elOption, elSelect} from '@/el';
 
     export default {
+        components: {elCard, elInput, elSelect, elOption, elButton},
+        props: ['counts'],
         data() {
             return {
-                organizations: ['মসজিদ', 'মাদ্রাসা'],
-                type: [],
+                categories: [
+                    {
+                        label: 'মসজিদ',
+                        value: 1
+                    }, {
+                        label: 'মাদ্রাসা',
+                        value: 2
+                    }
+                ],
+                category: '',
                 keyword: ''
-            }
+            };
         },
 
         methods: {
             search() {
-                const {keyword, type} = this
+                const {keyword, category} = this;
 
-                this.$router.push({path: 'search', query: {keyword, type}})
+                this.$router.push({path: 'search', query: {keyword, category}});
             }
-        },
-
-        components: {elCard, elInput, elSelect, elOption, elButton}
-    }
+        }
+    };
 </script>
 
 <style lang="scss" scoped>

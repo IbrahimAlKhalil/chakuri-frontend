@@ -1,40 +1,34 @@
 <template>
     <div class="flex flex-md-and-up nav-desktop">
-        <auth>
-            <avatar/>
+        <avatar v-if="$auth.user"/>
 
-            <template slot="else">
-                <nav>
-                    <div class="el-menu--horizontal el-menu">
-                        <menu-item v-for="(item, index) in menu" :key="index" :index="index" :item="item"/>
-                    </div>
-                </nav>
-
-                <div class="flex align-center wrapper">
-                    <router-link to="/sign-in" class="el-button el-button--primary btn">
-                        <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
-                    </router-link>
-                    <router-link to="/sign-up" class="el-button btn">
-                        <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
-                    </router-link>
+        <template v-else>
+            <nav>
+                <div class="el-menu--horizontal el-menu">
+                    <menu-item v-for="(item, index) in $store.state.main" :key="index" :index="index" :item="item"/>
                 </div>
-            </template>
-        </auth>
+            </nav>
+
+            <div class="flex align-center wrapper">
+                <router-link to="/sign-in" class="el-button el-button--primary btn">
+                    <i class="fas fa-sign-in-alt"></i>&nbsp; লগ-ইন
+                </router-link>
+                <router-link to="/sign-up" class="el-button btn">
+                    <i class="fas fa-user-plus"></i>&nbsp; একাউন্ট তৈরি করুন
+                </router-link>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
-    import {elButton, elBadge} from '@/el'
-    import menuItem from './menu-item'
-    import avatar from './avatar'
-    import {mapState} from 'vuex'
+    import {elButton, elBadge} from '@/el';
+    import menuItem from './menu-item';
+    import avatar from './avatar';
 
     export default {
-        computed: mapState({
-            menu: 'menu'
-        }),
         components: {menuItem, avatar, elButton, elBadge}
-    }
+    };
 </script>
 
 <style lang="scss" scoped>

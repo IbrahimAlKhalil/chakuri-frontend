@@ -4,21 +4,23 @@
             <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;লগ-ইন
         </div>
 
-        <div class="flex social-login">
-            <el-button size="medium" class="facebook">
-                <i class="fab fa-facebook-f"></i>&nbsp;&nbsp;&nbsp;ফেসবুক
-            </el-button>
+        <template v-if="$route.query.moderator !== 'yes'">
+            <div class="flex social-login">
+                <el-button size="medium" class="facebook">
+                    <i class="fab fa-facebook-f"></i>&nbsp;&nbsp;&nbsp;ফেসবুক
+                </el-button>
 
-            <el-button size="medium" class="google">
-                <i class="fab fa-google"></i>&nbsp;&nbsp;&nbsp;গুগল
-            </el-button>
+                <el-button size="medium" class="google">
+                    <i class="fab fa-google"></i>&nbsp;&nbsp;&nbsp;গুগল
+                </el-button>
 
-            <el-button size="medium" class="twitter">
-                <i class="fab fa-twitter"></i>&nbsp;&nbsp;&nbsp;টুইটার
-            </el-button>
-        </div>
+                <el-button size="medium" class="twitter">
+                    <i class="fab fa-twitter"></i>&nbsp;&nbsp;&nbsp;টুইটার
+                </el-button>
+            </div>
 
-        <el-divider/>
+            <el-divider/>
+        </template>
 
         <el-form ref="form" :model="models" :rules="rules" @submit.native.prevent="submit" status-icon>
             <el-form-item prop="username">
@@ -35,10 +37,10 @@
                 </el-input>
             </el-form-item>
 
-            <el-form-item prop="type">
+            <el-form-item v-if="$route.query.moderator !== 'yes'" prop="type">
                 <label for="type" class="d-block">আপনি</label>
                 <el-select id="type" v-model="models.type" class="w-100">
-                    <i class="el-icon-key el-input__icon" slot="prefix"></i>
+                    <i class="fa fa-user el-input__icon" slot="prefix"></i>
                     <el-option v-for="(type, index) in types" :label="type.label" :value="type.value"
                                :key="index"/>
                 </el-select>
@@ -58,22 +60,32 @@
                 >&nbsp;&nbsp;লগ-ইন
                 </el-button>
             </div>
+
+
+            <div class="mt-2 text-center">
+                <router-link class="link"
+                             :to="{path: '/forgot-password', query: $route.query}">পাসওয়ার্ড
+                    ভুলে গেছেন?
+                </router-link>
+            </div>
         </el-form>
     </el-card>
 </template>
 
 <script>
-    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption} from '../../el'
-    import {retrieveToken, saveToken} from '../../modules/tokenizer'
+    import {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption} from '@/el';
+    import {saveToken} from '@modules/tokenizer';
 
     export default {
+        components: {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption},
+
         data() {
             return {
                 formLoading: false,
                 models: {
                     username: '',
                     password: '',
-                    type: 1,
+                    type: this.$route.query.moderator === 'yes' ? 3 : 1,
                     rememberMe: false,
                 },
                 types: [
@@ -100,25 +112,17 @@
                             required: true,
                             message: 'অনুগ্রহ করে আপনার পাসওয়ার্ড লিখুন।'
                         }
-                    ],
-
-                    type: [
-                        {
-                            required: true,
-                            message: 'অনুগ্রহ করে আপনার পাসওয়ার্ড লিখুন'
-                        }
                     ]
-                },
-                prev: '/'
-            }
+                }
+            };
         },
 
         methods: {
             async submit() {
                 try {
-                    await this.$refs.form.validate()
+                    await this.$refs.form.validate();
 
-                    this.formLoading = true
+                    this.formLoading = true;
 
 
                     const response = await this.$fetch('authenticate', {
@@ -131,47 +135,31 @@
                             grant_type: 'password',
                             client_id: 1
                         }
-                    }).response()
+                    }).response();
 
                     if (response.status === 200) {
                         // Redirect to homepage
 
-                        const jwt = response.json()
+                        const jwt = response.json();
 
-                        saveToken(jwt.access_token, this.models.rememberMe)
+                        saveToken(jwt.access_token, this.models.rememberMe);
 
-                        await this.$store.dispatch('signIn')
+                        await this.$store.dispatch('auth/signIn');
 
-                        if (this.prev === '/') {
-                            return this.$router.push(this.$store.state.lastAuthPath)
-                        }
-
-                        return this.$router.push(this.prev)
+                        return this.$router.push('/');
                     }
 
                     this.$notify({
                         message: 'দুঃখিত আপনার দেয়া তথ্য সঠিক নয়',
                         type: 'warning'
-                    })
+                    });
                 } catch (e) {
                 }
 
-                this.formLoading = false
-            },
-
-            setPrevious(path) {
-                this.prev = path
+                this.formLoading = false;
             }
-        },
-
-        beforeRouteEnter(to, from, next) {
-            next(vm => {
-                vm.setPrevious(from.path)
-            })
-        },
-
-        components: {elCard, elInput, elButton, elCheckbox, elDivider, elForm, elFormItem, elSelect, elOption}
-    }
+        }
+    };
 </script>
 
 <style lang="scss" scoped>

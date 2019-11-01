@@ -96,13 +96,24 @@
 }
 
 .mt-1 {
-  margin-top: 1rem;
+  margin-top: 1em;
+}
+
+.mt-2 {
+  margin-top: 2em;
 }
 
 .mb-1 {
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
 }
 
+.ml-1 {
+  margin-left: 1em;
+}
+
+.mr-1 {
+  margin-right: 1em;
+}
 
 // Padding
 
@@ -128,10 +139,25 @@
   color: #000;
 }
 
+.text-danger {
+  color: red;
+}
+
+.text-light {
+  color: #414141;
+}
+
 .dark-text {
   text-shadow: 0 0 0;
 }
 
+.text-small {
+  font-size: .9rem;
+}
+
+.no-underline {
+  text-decoration: none;
+}
 
 // Cursor
 
@@ -150,3 +176,6 @@
     color: $--icon-color-base;
   }
 }
+
+
+// Border

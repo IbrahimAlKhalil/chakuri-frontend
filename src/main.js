@@ -1,42 +1,39 @@
-import Vue from 'vue'
+import Vue from 'vue';
 
-import Vuex from 'vuex'
-import VueRouter from 'vue-router'
+import Vuex from 'vuex';
+import VueRouter from 'vue-router';
 
 // Directives
-import Loading from 'element-ui/packages/loading/src/directive'
+import Loading from 'element-ui/packages/loading/src/directive';
+import highlight from 'vue-highlight-text/public/directive.min.js';
 
-import App from '@/layout/app'
-import {Fragment} from 'vue-fragment'
-import {auth, guest} from '@components/auth'
-// import userType from '@components/user-type'
-import Notification from 'element-ui/packages/notification/src/main'
-import MessageBox from 'element-ui/packages/message-box/src/main'
-import request from '@modules/request'
 
-Vue.prototype.$notify = Notification
-Vue.prototype.$fetch = request
-Vue.prototype.$messageBox = MessageBox
+import App from '@/layout/app';
 
 // Styles
-import './styles/styles.scss'
+import '@/styles/styles.scss';
 
-import store from './store'
-import router from './router'
-// import {i18n} from './i18n';
+import store from '@/store';
+import router from '@/router';
+import common from '@/plugins/common.plugin';
+import request from '@/plugins/fetch.plugin';
+import initializeStore from '@/modules/store-initializer';
 
-Vue.use(VueRouter)
-Vue.use(Vuex)
-Vue.use(Loading)
-
-Vue.component('fragment', Fragment)
-Vue.component('auth', auth)
-Vue.component('guest', guest)
-// Vue.component('user-type', userType)
+Vue.use(VueRouter);
+Vue.use(Vuex);
+Vue.use(Loading);
+Vue.directive('highlight', highlight);
+Vue.use(common);
+Vue.use(request);
 
 new Vue({
     store,
     router,
-    // i18n,
     render: h => h(App),
-}).$mount('#app')
+    async created() {
+        await initializeStore(this.$store);
+
+        this.$store.commit('loading', false);
+        this.$store.commit('initialized');
+    }
+}).$mount('#app');

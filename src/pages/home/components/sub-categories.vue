@@ -2,36 +2,28 @@
     <el-card class="sub-categories">
         <div class="el-menu">
             <router-link v-for="(subCategory, index) in subCategories" :key="index" class="el-menu-item nav-arrow-right"
-                         to="/">
-                {{subCategory}}
+                         :to="`/search?position=${subCategory.id}`">
+                {{subCategory.name}}
             </router-link>
         </div>
     </el-card>
 </template>
 
 <script>
-    import {elCard} from '../../../el';
+    import {elCard} from '@/el';
 
     export default {
+        components: {elCard},
         data() {
             return {
-                subCategories: [
-                    'খতিব',
-                    'ইমাম',
-                    'মুয়াজ্জিন',
-                    'খাদেম',
-                    'হাফেজ সাহেব (তারাবি)',
-                    'কারি সাহেব',
-                    'শিক্ষক (হিফজ বিভাগ)',
-                    'হিসাব রক্ষক',
-                    'শিক্ষক (কিতাব বিভাগ)',
-                    'জেনারেল শিক্ষক',
-                    'শিক্ষক (ইফতা বিভাগ)',
-                    'নাজিমে তালিমাত'
-                ]
+                subCategories: []
             };
         },
-        components: {elCard}
+        async created() {
+            const response = await this.$fetch('positions').response();
+
+            this.subCategories = response.json();
+        }
     };
 </script>
 

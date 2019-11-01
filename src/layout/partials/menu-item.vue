@@ -7,16 +7,7 @@
 <script>
 
     export default {
-        props: {
-            item: {
-                type: Object,
-                required: true
-            },
-            index: {
-                type: [Number, String],
-                required: true
-            }
-        }
+        props: ['item', 'index']
     }
 </script>
 

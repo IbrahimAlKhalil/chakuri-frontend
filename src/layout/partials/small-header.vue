@@ -2,18 +2,6 @@
     <div class="wrapper flex align-center justify-between">
         <div class="spacer"></div>
 
-       <!--<el-popover placement="top-center" trigger="click" popper-class="popover" v-model="langPopoverVisible">
-            <div slot="reference" class="pointer languages shadow">
-                {{lang}}<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
-            </div>
-            <ul>
-                <li v-for="(lang, index) in languages" :key="index" class="el-dropdown-menu__item"
-                    @click="setLanguage(lang)">
-                    {{lang.name}}
-                </li>
-            </ul>
-        </el-popover>-->
-
         <div class="social-icons">
             <a href="https://www.facebook.com"><i class="fab fa-facebook-square"></i></a>
             <a href="https://www.twitter.com"><i class="fab fa-twitter-square"></i></a>
@@ -26,42 +14,6 @@
         </div>
     </div>
 </template>
-
-<!--<script>
-    import {changeLanguage} from '@/i18n';
-    import {elPopover} from '@/el';
-
-    export default {
-        data() {
-            return {
-                languages: [
-                    {
-                        code: 'bn',
-                        name: 'বাংলা'
-                    },
-
-                    {
-                        code: 'en',
-                        name: 'English'
-                    }
-                ],
-
-                lang: 'বাংলা',
-                langPopoverVisible: false
-            };
-        },
-
-        methods: {
-            setLanguage(lang) {
-                this.lang = lang.name;
-                this.langPopoverVisible = false;
-                changeLanguage(lang.code);
-            }
-        },
-
-        components: {elPopover}
-    }
-</script>-->
 
 <style lang="scss" scoped>
     @import "../../styles/var";
@@ -103,10 +55,6 @@
         .spacer {
             margin-left: auto;
         }
-
-        /*.languages {
-            margin-right: 45px;
-        }*/
 
         .social-icons {
             margin-right: 45px;

@@ -76,3 +76,17 @@ button, input {
     text-decoration: underline;
   }
 }
+
+
+.highlighted {
+  color: #de00ff !important;
+}
+
+
+.el-menu-item [class^="fas "], .el-menu-item [class^="fa "] {
+  margin-right: 5px;
+  width: 24px;
+  text-align: center;
+  font-size: 18px;
+  vertical-align: middle;
+}

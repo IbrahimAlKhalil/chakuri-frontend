@@ -23,9 +23,11 @@
 </template>
 
 <script>
-    import {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider} from '@/el'
+    import {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider} from '@/el';
 
     export default {
+        components: {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider},
+
         props: {
             show: {
                 type: Boolean,
@@ -41,25 +43,26 @@
         data() {
             return {
                 selected: [],
-                current: this.$store.state.divisions,
-                loading: false
-            }
+                current: this.$store.state.additional.divisions,
+                loading: false,
+                value: null
+            };
         },
 
         methods: {
             select(place) {
                 // Current places
-                const current = this.current
+                const current = this.current;
 
                 // Selected items
-                const selected = this.selected
+                const selected = this.selected;
 
                 // Use hasOwnProperty to prevent unnecessary prototype lookup
-                const finished = current.hasOwnProperty('finished') && current.finished
+                const finished = current.hasOwnProperty('finished') && current.finished;
 
 
                 if (finished && selected.some(item => item.type === current.type)) {
-                    selected.pop()
+                    selected.pop();
                 }
 
                 // Add the item to selected
@@ -67,248 +70,96 @@
                     type: this.current.type,
                     parent: this.current,
                     place
-                })
+                });
+
+                const value = this.value = {};
+
+                // Iterate over all the selected items and get the id
+                selected.forEach(item => {
+                    value[item.type] = item.place.id;
+                });
 
                 if (finished) {
-                    const value = {}
-
-                    // Iterate over all the selected items and get the id
-                    selected.forEach(item => {
-                        value[item.type] = item.place.id
-                    })
 
                     // Hide dialog
-                    this.$emit('update:show', false)
-                    this.$emit('input', value)
+                    this.$emit('update:show', false);
+                    this.$emit('input', value);
 
-                    return
+                    return;
                 }
 
                 // Fetch next places
-                this.fetch(place)
+                this.fetch(place);
             },
 
-            fetch(place) {
+            async fetch(place) {
 
                 // Check if places is already loaded otherwise load from database
                 if (place.hasOwnProperty('children') && place.type !== 'thana') {
-                    this.current = place.children
-                    return
+                    this.current = place.children;
+                    return;
                 }
 
                 // Load from database
 
                 // Show spinner
-                this.loading = true
+                this.loading = true;
 
-                /******** Comment out these lines before going to production *********/
-                const data = {
-                    division: {
+                let data;
+
+                if (this.current.type === 'division') {
+                    data = {
                         type: 'district',
                         title: 'জেলা সিলেক্ট করুন',
-                        items: [
-                            {
-                                id: 1,
-                                name: 'ঢাকা'
-                            },
-
-                            {
-                                id: 2,
-                                name: 'সিলেট'
-                            },
-
-                            {
-                                id: 3,
-                                name: 'চট্টগ্রাম'
-                            },
-
-                            {
-                                id: 4,
-                                name: 'বরগুনা'
-                            },
-
-                            {
-                                id: 5,
-                                name: 'ঝালকাঠি'
-                            },
-
-                            {
-                                id: 6,
-                                name: 'চাঁদপুর'
-                            },
-
-                            {
-                                id: 7,
-                                name: 'রংপুর'
-                            },
-
-                            {
-                                id: 8,
-                                name: 'কক্সবাজার'
-                            },
-
-                            {
-                                id: 9,
-                                name: 'ফেনী'
-                            },
-
-                            {
-                                id: 10,
-                                name: 'নোয়াখালী'
-                            },
-
-                            {
-                                id: 11,
-                                name: 'রাঙ্গামাটি'
-                            },
-
-                            {
-                                id: 1,
-                                name: 'ফরিদপুর'
-                            }
-                        ]
-                    },
-
-                    district: {
+                        items: []
+                    };
+                } else {
+                    data = {
                         type: 'thana',
                         title: 'থানা সিলেক্ট করুন',
-                        items: [
-                            {
-                                id: 1,
-                                name: 'আদাবর'
-                            },
-
-                            {
-                                id: 2,
-                                name: 'যাত্রাবাড়ী'
-                            },
-
-                            {
-                                id: 3,
-                                name: 'চকবাজার'
-                            },
-
-                            {
-                                id: 4,
-                                name: 'কদমতলী'
-                            },
-
-                            {
-                                id: 5,
-                                name: 'মোহাম্মদপুর'
-                            },
-
-                            {
-                                id: 6,
-                                name: 'চাঁদপুর'
-                            },
-
-                            {
-                                id: 7,
-                                name: 'সূত্রাপুর'
-                            }
-                        ]
-                    },
-
-                    thana: {
-                        type: 'village',
-                        title: 'এলাকা সিলেক্ট করুন',
                         finished: true,
-                        items: [
-                            {
-                                id: 1,
-                                name: 'শেখদি'
-                            },
-
-                            {
-                                id: 2,
-                                name: 'ধলপুর'
-                            },
-
-                            {
-                                id: 3,
-                                name: 'কাজলা'
-                            },
-
-                            {
-                                id: 4,
-                                name: 'ভাঙ্গাপ্রেস'
-                            },
-
-                            {
-                                id: 5,
-                                name: 'ওয়ারী'
-                            },
-
-                            {
-                                id: 6,
-                                name: 'চাঁদপুর'
-                            },
-
-                            {
-                                id: 7,
-                                name: 'রংপুর'
-                            },
-
-                            {
-                                id: 8,
-                                name: 'কক্সবাজার'
-                            },
-
-                            {
-                                id: 9,
-                                name: 'ফেনী'
-                            },
-
-                            {
-                                id: 10,
-                                name: 'নোয়াখালী'
-                            },
-
-                            {
-                                id: 11,
-                                name: 'রাঙ্গামাটি'
-                            },
-
-                            {
-                                id: 1,
-                                name: 'ফরিদপুর'
-                            }
-                        ]
-                    },
+                        items: []
+                    };
                 }
 
-                setTimeout(() => {
-                    this.$store.commit('addChildrenToPlace', {
-                        parent: place,
-                        children: data[this.current.type]
-                    })
+                // TODO: Remove delay
+                const response = await this.$fetch(
+                    `${data.type}s/by-${this.current.type}/${this.value[this.current.type]}`
+                ).response();
 
-                    this.current = data[this.current.type]
-                    this.loading = false
-                }, 1000)
+                data.items = response.json();
+
+                this.$store.commit('additional/addChildrenToPlace', {
+                    parent: place,
+                    children: data
+                });
+
+                this.current = data;
+                this.loading = false;
             },
 
             back(item) {
-                const selected = this.selected
-                const index = selected.indexOf(item)
+                const selected = this.selected;
+                const index = selected.indexOf(item);
 
-                selected.splice(index, selected.length - index)
-                this.current = item.parent
+                selected.splice(index, selected.length - index);
+                this.current = item.parent;
             }
         },
 
         watch: {
             division(newValue) {
+                if (!this.selected[0]) {
+                    this.select(newValue);
+                }
+
                 if (this.selected[0] && this.selected[0].place.id !== newValue.id) {
-                    this.back(this.selected[0])
-                    this.select(newValue)
+                    this.back(this.selected[0]);
+                    this.select(newValue);
                 }
             }
-        },
-
-        components: {elDialog, elBreadcrumb, elBreadcrumbItem, elMenu, elDivider}
-    }
+        }
+    };
 </script>
 
 <style lang="scss">
