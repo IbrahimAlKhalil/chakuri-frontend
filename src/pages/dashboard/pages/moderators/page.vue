@@ -1,8 +1,23 @@
 <template>
-    <data-list endpoint="dashboard/moderators" title="Moderator" :decorator="decorate" :before-check="preventOwnCheck">
-        <template #default="{items, methods}">
+    <data-list endpoint="dashboard/moderators"
+               title="Moderator"
+               :decorator="decorate"
+               :before-check="preventOwnCheck"
+               :create-form="createForm"
+               :edit-form="editForm"
+               :per-page="6"
+               :query="query">
+
+        <template #default="{data, methods}">
+            <div class="el-card mb-1">
+                <div class="el-card__body">
+                    <strong>Total items: {{data.total}}</strong>
+                </div>
+
+            </div>
+
             <div class="wrapper">
-                <div v-for="(user, index) in items" :key="index"
+                <div v-for="(user, index) in data.items" :key="index"
                      :class="['el-card item','is-always-shadow', {own: owner(user), checked: user.checked}]"
                      @click="methods.check(user)">
 
@@ -15,7 +30,8 @@
 
                         <div class="el-menu">
                             <div class="el-menu-item" @click="methods.edit(user)"><i class="fa fa-edit"></i> Edit</div>
-                            <div class="el-menu-item" @click="methods.removeItem(user)"><i class="fa fa-trash"></i> Disable
+                            <div class="el-menu-item" @click="methods.removeItem(user)"><i class="fa fa-trash"></i>
+                                Disable
                             </div>
                         </div>
                     </el-popover>
@@ -50,11 +66,16 @@
 </template>
 
 <script>
-    import dataList from '@/components/data-list';
     import {elButton, elPopover, elCheckbox} from '@/el';
+    import dataList from '@/components/data-list/lazy';
     import altPhoto from '@/assets/images/user.svg';
 
+    import createMixin from './create-mixin';
+    import editMixin from './edit-mixin';
+
     export default {
+        mixins: [createMixin, editMixin],
+
         components: {
             elButton,
             elPopover,
@@ -64,7 +85,11 @@
 
         data() {
             return {
-                altPhoto
+                altPhoto,
+                roles: [],
+                query: {
+                    show: 'enabled'
+                }
             };
         },
 
@@ -93,8 +118,10 @@
             }
         },
 
-        created() {
+        async created() {
+            const response = await this.$fetch('dashboard/roles?all=true').response();
 
+            this.roles = response.json().filter(item => item.name !== 'Admin');
         }
     };
 </script>
@@ -118,7 +145,7 @@
 
     .item {
         padding: 0;
-        word-break: break-word;
+        word-break: break-all;
         position: relative;
         cursor: pointer;
 

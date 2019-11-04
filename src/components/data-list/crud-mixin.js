@@ -2,13 +2,11 @@ import messageBox from 'element-ui/lib/message-box';
 
 export default {
     props: {
-        beforeCreate: {
-            type: Function
-        },
+        beforeCreate: Function,
+        beforeCheck: Function,
 
-        beforeCheck: {
-            type: Function
-        }
+        createForm: Array,
+        editForm: Array
     },
 
     data() {
@@ -37,8 +35,8 @@ export default {
         },
 
         edit(item) {
-            this.editDialog = true;
             this.editItem = item;
+            this.editDialog = true;
         },
 
         async create() {
@@ -49,6 +47,18 @@ export default {
             }
 
             this.createDialog = true;
+        },
+
+        addItem(item) {
+            const {items, total} = this.exposed;
+
+            if (this.$props.decorator) {
+                items.push(this.$props.decorator(item));
+            } else {
+                items.push(item);
+            }
+
+            this.exposed.total = total + 1;
         },
 
         // This method is given to the child by scoped slot

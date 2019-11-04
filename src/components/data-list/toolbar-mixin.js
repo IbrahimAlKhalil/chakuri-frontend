@@ -19,9 +19,38 @@ export default {
             default: true
         },
 
+        hideToolbar: {
+            type: Boolean,
+            default: false
+        },
+
         actions: {
             type: Array,
             default: () => ['create', 'delete']
+        },
+
+        query: Object
+    },
+
+    computed: {
+        builtQuery() {
+            const {$props} = this;
+
+            const query = {
+                ...$props.query
+            };
+
+            if ($props.search) {
+                query.keyword = this.keyword;
+            }
+
+            let queryString = '?';
+
+            for (let key in query) {
+                queryString += `${key}=${query[key]}&`;
+            }
+
+            return queryString;
         }
     },
 

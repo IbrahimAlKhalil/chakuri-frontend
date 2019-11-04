@@ -2,12 +2,13 @@
     <div>
 
         <!-- Toolbar -->
-        <div class="el-card is-always-shadow mb-1">
+        <div v-if="!hideToolbar" class="el-card is-always-shadow mb-1">
             <div class="el-card__body toolbar flex justify-between">
-                <div class="flex align-center">
+                <div class="flex align-center" @keydown.enter="reset">
                     <template v-if="search">
                         <el-input v-model="keyword" placeholder="Search"></el-input>
-                        <el-button icon="fa fa-search" type="primary" @click="$emit('search', keyword)"></el-button>
+                        <el-button icon="fa fa-search" type="primary"
+                                   @click="reset"></el-button>
                     </template>
 
                     <slot name="inputs"></slot>
@@ -45,34 +46,33 @@
             </div>
         </div>
 
-
         <!-- Show items -->
-        <component v-if="paginationType === 'lazy'" :is="tag">
-            <slot v-bind:items="exposed.items" v-bind:methods="{check, removeItem, edit}"/>
+        <component :is="tag">
+            <slot v-bind:data="exposed" v-bind:methods="{check, removeItem, edit}"/>
 
             <intersection @reveal="load"/>
 
             <empty :empty="!exposed.total" :loading="loading"/>
         </component>
 
+        <template v-if="crud && (createForm && editForm)">
+            <data-form :fields="createForm" :endpoint="endpoint" type="create" @submitted="created" :title="title"
+                       :show="createDialog"/>
 
-        <el-dialog :visible.sync="createDialog" :fullscreen="$store.state.isMobile" :title="`Create ${title}`" center
-                   append-to-body>
-        </el-dialog>
-
-        <el-dialog :visible.sync="editDialog" :fullscreen="$store.state.isMobile" :title="`Edit ${title}`"
-                   append-to-body>
-        </el-dialog>
+            <data-form :fields="editForm" :endpoint="endpoint" type="edit" :item="editItem" @submitted="updated"
+                       :title="title" :show="editDialog"/>
+        </template>
     </div>
 </template>
 
 <script>
-    import {elPopover, elDialog, elPagination} from '@/el';
+    import {elPopover} from '@/el';
     import lazyLoading from '@/components/lazy-loading';
+    import dataForm from './data-form';
 
     import crudMixin from './crud-mixin';
     import toolbarMixin from './toolbar-mixin';
-    import lazyLoadingMixin from './lazy-loading-mixin';
+    import lazyLoadingMixin from './lazy-mixin';
 
 
     export default {
@@ -80,8 +80,7 @@
         components: {
             elPopover,
             lazyLoading,
-            elDialog,
-            elPagination
+            dataForm
         },
 
         props: {
@@ -93,11 +92,6 @@
             endpoint: {
                 type: String,
                 required: true
-            },
-
-            paginationType: {
-                type: String,
-                default: 'lazy'
             }
         },
 
@@ -129,23 +123,27 @@
                 item.checked = !item.checked;
             },
 
-            /*created(user) {
-                const {items, total} = this.exposed;
-
+            created(item) {
                 this.createDialog = false;
 
-                user.checked = false;
+                this.addItem(item);
 
-                items.push(user);
+                // Notify
+                this.$notify({
+                    type: 'success',
+                    message: 'Created'
+                });
+            },
 
-                this.exposed.total = total.total + 1;
-            }*/
-        },
+            updated() {
+                this.editDialog = false;
 
-        async created() {
-            // const response = await this.$fetch('dashboard/roles?all=true').response();
-            //
-            // this.roles = response.json().filter(item => item.name !== 'Admin');
+                // Notify
+                this.$notify({
+                    type: 'success',
+                    message: 'Updated'
+                });
+            }
         }
     };
 </script>

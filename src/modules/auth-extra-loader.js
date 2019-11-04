@@ -37,7 +37,7 @@ export default async function (user) {
 
         router.onReady(() => {
             if (router.currentRoute.path !== '/') {
-                router.push(router.currentRoute.path);
+                router.push(router.currentRoute);
             }
         });
     }

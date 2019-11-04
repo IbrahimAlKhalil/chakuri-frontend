@@ -1,48 +1,55 @@
 <template>
-    <lazy-loading v-if="loaded" endpoint="dashboard/job-requests" v-model="items"
-                  :total="total" @init="joinRooms" @totalChanged="total = $event">
-        <jobs :jobs="items" :show-deadline="true">
-            <template #default="{item}">
-                <div class="flex justify-between align-center footer">
-                    <div>
-                        <div v-if="item.special" class="mb-1 el-badge">
-                            <strong class="el-badge__content el-badge__content--warning">Special</strong>
+    <data-list endpoint="dashboard/job-requests"
+               title="Moderator"
+               :per-page="6"
+               :crud="false">
+        <template #default="{data, methods}">
+            <div class="el-card mb-1">
+                <div class="el-card__body">
+                    <strong>Total items: {{data.total}}</strong>
+                </div>
+
+            </div>
+
+            <jobs :jobs="data.items" :show-deadline="true">
+                <template #default="{item}">
+                    <div class="flex justify-between align-center footer">
+                        <div>
+                            <div v-if="item.special" class="mb-1 el-badge">
+                                <strong class="el-badge__content el-badge__content--warning">Special</strong>
+                            </div>
+
+                            <div>
+                                {{formatDate(item.created_at)}}
+                            </div>
                         </div>
 
                         <div>
-                            {{formatDate(item.created_at)}}
+                            <el-button :icon="item.approving?'el-icon-loading':''" type="success"
+                                       @click="doAction({type: 'approve', item})" :disabled="item.loading">Approve
+                            </el-button>
+                            <el-button :icon="item.rejecting?'el-icon-loading':''" type="danger"
+                                       @click="doAction({type: 'reject', item})" :disabled="item.loading">Reject
+                            </el-button>
                         </div>
                     </div>
-
-                    <div>
-                        <el-button :icon="item.approving?'el-icon-loading':''" type="success"
-                                   @click="doAction({type: 'approve', item})" :disabled="item.loading">Approve
-                        </el-button>
-                        <el-button :icon="item.rejecting?'el-icon-loading':''" type="danger"
-                                   @click="doAction({type: 'reject', item})" :disabled="item.loading">Reject
-                        </el-button>
-                    </div>
-                </div>
-            </template>
-        </jobs>
-    </lazy-loading>
+                </template>
+            </jobs>
+        </template>
+    </data-list>
 </template>
 
 <script>
-    import jobs from '@/pages/home/components/jobs';
-    import lazyLoading from '@/components/lazy-loading';
     import {elButton} from '@/el';
+    import jobs from '@/pages/home/components/jobs';
+    import dataList from '@/components/data-list/lazy';
     import messageBox from 'element-ui/lib/message-box';
-    import dataList from '@/mixins/data-list';
 
     export default {
-        components: {jobs, lazyLoading, elButton},
-        mixins: [dataList],
+        components: {jobs, dataList, elButton},
 
         data() {
             return {
-                items: [],
-                totalEndpoint: 'dashboard/job-requests/count',
                 dateOptions: {
                     hour: 'numeric',
                     hour12: true,
@@ -55,12 +62,6 @@
         },
 
         methods: {
-            joinRooms() {
-                this.$socket().on('nj', item => {
-                    this.items.unshift(item);
-                    this.total = this.total + 1;
-                });
-            },
 
             formatDate(dateTime) {
                 const date = new Date(dateTime);
@@ -112,13 +113,6 @@
             }
         },
 
-        beforeDestroy() {
-            this.$socket().removeAllListeners('nj');
-        },
-
-        created() {
-
-        }
     };
 </script>
 
