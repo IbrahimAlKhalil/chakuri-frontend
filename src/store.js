@@ -11,6 +11,8 @@ export default new Vuex.Store({
         loading: false,
         initialized: false,
         layout: 'master',
+        logo: null,
+        title: '',
         isMobile: window.innerWidth < 992
     },
     mutations: {
@@ -32,10 +34,17 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        async initialize({commit}) {
+        async initialize({commit, state}) {
             window.matchMedia('(min-width: 992px)').addEventListener('change', e => {
                 commit('changeDevice', !e.matches);
             });
+
+            const {$setting} = Vue.prototype;
+
+            state.logo = await $setting('logo');
+            state.title = await $setting('title');
+
+            document.title = state.title;
         },
 
         async bootstrapped() {

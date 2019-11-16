@@ -1,179 +1,213 @@
 <template>
-    <div class="el-card">
-        <div class="el-card__header">
-            <h3 class="ml-1">আপনার বিজ্ঞাপন সমূহ</h3>
-        </div>
+    <data-list endpoint="jobs"
+               title="Job"
+               :decorator="decorate"
+               :per-page="9"
+               :query="query"
+               :actions="['delete']"
+               @deleted="resetList">
 
-        <div class="el-card__body">
-            <div class="jobs-wrapper" v-loading="loading">
-                <!--TODO: Use fade transition on all dynamic list-->
-                <transition-group name="fade">
-                    <router-link v-for="(item, index) in paginated" v-if="item" :to="jobLink(item.id)"
-                                 class="job" :key="index+'k'">
-                        <div v-if="item.approved" class="approved" title="Approved">
-                        </div>
-
-                        <div class="w-100">
-                            <h4 class="title">{{item.position}}</h4>
-                            <div class="mt-1">
-                                <b>ঠিকানাঃ</b> {{item.village}}, {{item.thana}}, {{item.district}}
-                            </div>
-                            <div class="mt-1">
-                                <b>তৈরির তারিখঃ</b> {{item.created_at | bnDate}}
-                            </div>
-                            <div class="mt-1">
-                                <b>মেয়াদ শেষ হওয়ার তারিখঃ</b> {{item.deadline | bnDate}}
-                            </div>
-                        </div>
-                        <div v-if="item.approved" class="applicant-count">
-                            <span style="color: green">{{(item.applicants || 0) | enToBn}}</span> জন আবেদন করেছেন
-                        </div>
-                    </router-link>
-                </transition-group>
-
-                <el-pagination class="flex mt-1 justify-center" :page-size="perPage" :current-page="page"
-                               background
-                               layout="prev, pager, next"
-                               :total="total"
-                               hide-on-single-page
-                               @current-change="paginate"
-                               @next-click="paginate"
-                               @prev-click="paginate">
-                </el-pagination>
+        <template v-if="!$store.state.isMobile" #inputs="{methods}">
+            <div class="p-1 flex align-center">
+                <el-select placeholder="ফিল্টার" v-model="query.show" @change="methods.reset">
+                    <el-option v-for="(option, index) in filters" :value="option.value" :label="option.label"
+                               :key="index"></el-option>
+                </el-select>
             </div>
-        </div>
-    </div>
+        </template>
+
+        <template v-if="$store.state.isMobile" #after-toolbar="{methods}">
+            <div class="p-1 flex align-center">
+                <div class="mr-1">
+                    ফিল্টারঃ
+                </div>
+                <div>
+                    <el-select placeholder="ফিল্টার" v-model="query.show" @change="methods.reset">
+                        <el-option v-for="(option, index) in filters" :value="option.value" :label="option.label"
+                                   :key="index"></el-option>
+                    </el-select>
+                </div>
+            </div>
+        </template>
+
+        <template #default="{data, methods}">
+
+            <items-count :data="data"/>
+
+            <div class="wrapper">
+                <router-link v-for="(item, index) in data.items" :key="index"
+                             class="el-card item is-always-shadow no-underline"
+                             :to="link(item)">
+
+                    <div v-if="item.special" class="el-badge special">
+                        <span class="el-badge__content el-badge__content--success">জরুরি নিয়োগ</span>
+                    </div>
+
+                    <el-popover popper-class="popover action-menu" placement="left-start">
+                        <el-button class="action-btn" slot="reference" size="small" icon="fas fa-ellipsis-v"
+                                   @click.stop.prevent=""></el-button>
+
+                        <div class="el-menu">
+                            <div class="el-menu-item" @click="edit(item)"><i class="fa fa-edit"></i> এডিট করুন</div>
+                            <div class="el-menu-item" @click="methods.removeItem(item)">
+                                <i class="fa fa-trash"></i> ডিলিট করুন
+                            </div>
+                        </div>
+                    </el-popover>
+
+                    <div class="el-card__header flex flex-wrap justify-center">
+                        <div class="w-100 text-center mt-1" v-highlight="data.highlight">{{item.position}}</div>
+                    </div>
+
+                    <div class="el-card__body">
+                        <div class="mt-1">
+                            <strong>ঠিকানাঃ </strong> <span v-highlight="data.highlight">{{item.thana}}, {{item.district}}</span>
+                        </div>
+
+                        <div class="mt-1">
+                            <strong>তৈরির তারিখঃ</strong> {{item.created_at | bnDate}}
+                        </div>
+                        <div class="mt-1">
+                            <strong>মেয়াদ শেষ হওয়ার তারিখঃ</strong> {{item.deadline | bnDate}}
+                        </div>
+                        <div class="mt-1">
+                            <strong>আবেদনকারীর সংখ্যাঃ</strong>
+                            {{item.applicants?$enToBn(item.applicants):'০'}} জন
+                        </div>
+
+                        <div class="mt-1 tags">
+                            <span class="el-badge">
+                                <span v-if="item.rejected" class="el-badge__content el-badge__content--danger">
+                                    অনুমোদন দেয়া হয়নি
+                                </span>
+
+                                <span v-else-if="!item.approved" class="el-badge__content el-badge__content--primary">
+                                    অ্যাডমিন রিভিউ চলছে
+                                </span>
+                            </span>
+                        </div>
+
+                        <div v-if="item.rejected" class="msg">
+                            {{item.message}}
+                        </div>
+                    </div>
+                </router-link>
+            </div>
+        </template>
+    </data-list>
 </template>
 
 <script>
-    import {elButton, elTabs, elTabPane, elPagination} from '@/el';
+    import {elButton, elRadioButton, elTooltip, elSelect, elOption, elCheckbox, elPopover} from '@/el';
+    import dataList from '@/components/data-list/paginated';
+    import itemsCount from '@/components/items-count';
 
     export default {
-        components: {elButton, elTabPane, elTabs, elPagination},
+
+        components: {
+            itemsCount,
+            dataList,
+            elButton,
+            elRadioButton,
+            elTooltip,
+            elSelect,
+            elOption,
+            elCheckbox,
+            elPopover
+        },
+
         data() {
             return {
-                jobs: [],
-                loading: false,
-                page: 1,
-                perPage: 4,
-                total: 0,
-                pages: []
+                query: {
+                    show: 'all'
+                },
+
+                filters: [
+                    {
+                        label: 'সবগুলো',
+                        value: 'all'
+                    }, {
+                        label: 'অনুমোদিত',
+                        value: 'approved'
+                    }, {
+                        label: 'প্রক্রিয়াধীন',
+                        value: 'pending'
+                    }, {
+                        label: 'অননুমোদিত',
+                        value: 'rejected'
+                    },
+                ]
             };
         },
 
         methods: {
-
-            async paginate(page) {
-                this.page = page;
-
-                if (!this.pages.includes(page)) {
-                    this.pages.push(page);
-                    this.load();
-                }
+            decorate(item) {
+                return item;
             },
 
-            async load() {
-                const {page, perPage} = this;
-
-                // Show spinner
-                this.loading = true;
-
-                // Get items
-                const response = await this.$fetch(`jobs?page=${page}&perPage=${perPage}`).response();
-
-                // Convert to json
-                const paginated = response.json();
-
-                // Show and store the items
-                let index = page * perPage - perPage;
-                const end = page * perPage;
-
-                for (let c = 0; index < end; index++, c++) {
-                    this.$set(this.jobs, index, paginated.data[c]);
-                }
-
-                // Hide spinner
-                this.loading = false;
-
-                // Update total items count
-                this.total = paginated.total;
+            resetList({methods}) {
+                methods.reset();
             },
 
-            jobLink(id) {
-                return `jobs/${id}`;
-            }
-        },
+            link(item) {
+                return `jobs/${item.id}`;
+            },
 
-        computed: {
-            paginated() {
-                return this.$paginate(this.jobs, this.page, this.perPage);
+            edit(item) {
+                return this.$router.push(`/dashboard/post-job/${item.id}`);
             }
-        },
-
-        async created() {
-            // TODO: Optimize performance by loading the info which is enough for showing list
-            await this.load();
         }
     };
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../../styles/var";
+    @import '../../../../styles/var';
 
-    .job {
-        padding: 25px 15px;
-        display: flex;
-        align-items: center;
-        border-bottom: 1px solid #ebeef5;
-        border-radius: 8px;
-        margin: 15px 0;
-        background: #f4f4f4;
-        text-decoration: none;
-        color: #303133;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-
-        &:last-child {
-            border-bottom: 0;
-        }
-
-        &:hover {
-            background: #eef5ff;
-
-            .title {
-                color: $--color-primary;
-            }
-        }
+    .wrapper {
+        display: grid;
+        gap: 15px;
     }
 
-    .applicant-count {
-        text-align: center;
-        font-weight: bold;
+    .item {
+        padding: 0;
+        word-break: break-all;
+        position: relative;
+        cursor: pointer;
+        display: block;
+    }
+
+    .action-menu {
+        z-index: 200 !important;
+    }
+
+    .action-btn {
+        position: absolute;
+        right: 10px;
+        top: 10px;
     }
 
     .special {
-        background: #fffad2;
-    }
-
-    .approved {
-        background: #6bd577;
         position: absolute;
-        left: -5px;
-        top: -17px;
-        padding: 28px 15px;
-        transform: rotate(45deg);
-        border-radius: 5px;
+        top: -2px;
+        left: -2px;
+        padding: 0;
+
+        .el-badge__content {
+            border-radius: 0 !important;
+        }
     }
 
-    @media all and (max-width: $--md) {
-        .job {
-            flex-wrap: wrap;
-        }
+    .msg {
+        margin-top: 12px;
+        border: 2px solid #ef6b6c;
+        padding: 4px;
+        border-radius: 3px;
+        font-weight: bold;
+    }
 
-        .applicant-count {
-            width: 100%;
-            margin-top: 30px;
+    @media all and (min-width: $--md) {
+        .wrapper {
+            grid-template-columns: repeat(3, minmax(200px, 1fr));
         }
     }
 </style>

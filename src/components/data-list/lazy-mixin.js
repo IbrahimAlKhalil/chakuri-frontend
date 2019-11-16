@@ -1,8 +1,10 @@
 import intersection from '@/components/intersection';
-import empty from '@/components/empty';
 
 export default {
-    components: {intersection, empty},
+    components: {
+        intersection,
+        empty: () => import('@/components/empty')
+    },
 
     props: {
         tag: {
@@ -29,7 +31,10 @@ export default {
             exposed: {
                 items: [],
                 total: 0,
-                keywords: []
+                highlight: {
+                    keyword: [],
+                    sensitive: false
+                }
             }
         };
     },
@@ -103,7 +108,7 @@ export default {
         async reset() {
             this.first = true;
             this.resetting = true;
-            this.exposed.keywords = this.keyword.trim().split(' ');
+            this.exposed.highlight.keyword = this.keyword.trim().split(' ');
             this.exposed.total = 0;
 
             await this.load(true);
@@ -114,15 +119,15 @@ export default {
 
     computed: {
         nextPage() {
-            const {first, $props, loadedCount} = this;
+            const {$props, loadedCount} = this;
+            const {perPage} = $props;
 
-            if (first) {
-                return 1;
-            }
+            const divided = loadedCount / perPage;
 
-            const page = Math.ceil(loadedCount / $props.perPage);
+            const page = Math.ceil(divided) || 1;
+            const currentPage = Math.floor(divided);
 
-            if (loadedCount / page === $props.perPage) {
+            if (page === currentPage) {
                 return page + 1;
             }
 
@@ -138,28 +143,10 @@ export default {
         },
 
         take() {
-            const {total} = this.exposed;
-            const {perPage, loadedCount} = this.$props;
+            const {perPage} = this.$props;
+            const {loadedCount, nextPage} = this;
 
-            if (!loadedCount) {
-                // Take all of the items at first load
-                return perPage;
-            }
-
-            const remaining = total - loadedCount;
-
-            if (remaining < perPage) {
-
-                return remaining;
-            }
-
-            const page = Math.ceil(loadedCount / perPage);
-
-            if (loadedCount / page === perPage) {
-                return perPage;
-            }
-
-            return perPage * Math.ceil(loadedCount / perPage) - loadedCount;
+            return nextPage * perPage - loadedCount;
         }
     },
 
@@ -171,12 +158,16 @@ export default {
 
         if (socketEvent) {
             this.$socket().on(socketEvent, item => {
-                this.addItem(item);
+                this.addItem(item, true);
             });
         }
     },
 
     beforeDestroy() {
-        this.$socket().removeAllListeners(this.$props.socketEvent);
+        const {socketEvent} = this.$props;
+
+        if (socketEvent) {
+            this.$socket().removeAllListeners(this.$props.socketEvent);
+        }
     }
 };

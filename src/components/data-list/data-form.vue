@@ -1,6 +1,7 @@
 <template>
-    <el-dialog :visible.sync="show" :fullscreen="$store.state.isMobile" :title="`Create ${title}`" center
-               append-to-body>
+    <el-dialog :visible="show" :fullscreen="$store.state.isMobile"
+               :title="`${type==='create'?'Create':'Update'} ${title}`" center
+               append-to-body @close="$emit(`update:show`, false)">
         <el-form :model="models" ref="form" action="#"
                  @submit.native.prevent="submit" status-icon>
             <template v-for="(field, index) in fields">
@@ -21,10 +22,14 @@
                     </el-form-item>
                 </template>
 
-                <template v-else>
+                <template v-else-if="field.type !== 'hidden'">
                     <el-form-item :prop="field.name" :rules="field.rules">
                         <label :for="type+'-'+field.name" class="d-block">{{field.label}}</label>
-                        <el-input :id="type+'-'+field.name" v-model="models[field.name]" :type="field.type">
+                        <el-input :id="type+'-'+field.name" v-model="models[field.name]" :type="field.type"
+                                  :placeholder="field.placeholder">
+                            <template v-if="field.prepend" #prepend>
+                                {{field.prepend(models)}}
+                            </template>
                         </el-input>
                     </el-form-item>
                 </template>
@@ -73,12 +78,12 @@
                     }).response();
 
                     this.loading = false;
-                    if (response.status === 200) {
+                    if (response.status === 200 || response.status === 204) {
                         if (type === 'edit') {
-                            this.updated();
+                            return this.updated();
                         }
 
-                        this.$emit('submitted', type === 'create' ? response.json() : item);
+                        this.$emit('submitted', response.json());
                     }
                 } catch (e) {
                 }
@@ -101,15 +106,20 @@
                     const select = field.type === 'select';
                     const {name} = field;
 
+                    // TODO: Fix this bug #Value can be only id instead of whole entity
                     if (select && field.multiple) {
                         this.$set(models, name, item[name].map(val => val[valueKey]));
 
                         return;
                     }
 
-                    if (select) {
+                    const value = item[name];
+
+                    if (select && typeof value === 'object') {
                         this.$set(models, name, item[name][valueKey]);
                         return;
+                    } else if (select) {
+                        this.$set(models, name, item[name]);
                     }
 
                     this.$set(models, name, item[name]);
@@ -120,7 +130,9 @@
                 const {models} = this;
                 const {item, fields} = this.$props;
 
-                fields.forEach(field => {
+                const old = {};
+
+                fields.forEach(function (field) {
                     if (!item.hasOwnProperty(field.name)) {
                         return;
                     }
@@ -129,6 +141,8 @@
                     const select = field.type === 'select';
                     const {name} = field;
                     const model = models[name];
+
+                    old[name] = item[name];
 
                     if (select && field.multiple) {
                         item[name] = field.data.filter(op => model.includes(op[valueKey]));
@@ -141,6 +155,12 @@
                     }
 
                     item[name] = model;
+                });
+
+
+                this.$emit('submitted', {
+                    old,
+                    item
                 });
             }
         },

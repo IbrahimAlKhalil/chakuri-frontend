@@ -1,43 +1,33 @@
 <template>
     <footer class="mt-auto">
         <div class="container">
-            <div>
-                <h3 class="title">আমাদের সম্পর্কে</h3>
+            <div v-for="(menu, index) in menus" :key="index">
+                <h3 class="title">{{menu.menuName}}</h3>
                 <ul class="menu">
-                    <li v-for="i in 6" :key="i">
-                        <router-link to="/">
-                            Item Abcd Teds {{ i }}
-                        </router-link>
+                    <li v-for="(item, index) in menu.items" :key="index">
+                        <component :is="item.type==='page'?'router-link':'a'" v-bind="link(item)">
+                            {{item.label}}
+                        </component>
                     </li>
                 </ul>
             </div>
 
             <div>
-                <h3 class="title">ব্যবহারকারীদের প্রশ্ন</h3>
-                <ul class="menu">
-                    <li v-for="i in 6" :key="i">
-                        <router-link to="/">
-                            Item Abcd Teds {{ i }}
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
-
-            <div>
+                <!--TODO: Make it dynamic-->
                 <h3 class="title text-center">টুলস ও মিডিয়া</h3>
                 <div class="social-icons ml-auto mr-auto">
-                    <a href="https://www.facebook.com">
+                    <a target="_blank" href="https://www.facebook.com/Khidmat-BD-111721266951818/">
                         <i class="fab fa-facebook-square"></i>
                     </a>
 
-                    <a href="https://www.twitter.com">
+                    <a target="_blank" href="https://twitter.com/Khidmat18">
                         <i class="fab fa-twitter-square"></i>
                     </a>
 
-                    <a href="https://www.linkedin.com">
+                    <a target="_blank" href="https://www.linkedin.com/in/khidmat-bd-92b952197/">
                         <i class="fab fa-linkedin"></i>
                     </a>
-                    <a href="https://www.youtube.com">
+                    <a target="_blank" href="https://www.youtube.com/channel/UCO5Lv-izV4YTIKshb8ZxLcQ?view_as=subscriber">
                         <i class="fab fa-youtube-square"></i>
                     </a>
                 </div>
@@ -46,13 +36,34 @@
             </div>
         </div>
         <div class="small-footer mt-auto p-1">
-            <small>&copy; Copyright SaharaIT&trade; all rights reserved</small>
+            <small>{{copyright}}</small>
         </div>
     </footer>
 </template>
 
 <script>
-    export default {};
+    import {mapState} from 'vuex';
+    import menuItem from '@/mixins/menu-item';
+
+    export default {
+        mixins: [menuItem],
+
+        data() {
+            return {
+                copyright: ''
+            };
+        },
+
+        computed: mapState({
+            menus: state => ([state.menu['footer-1'], state.menu['footer-2']]),
+        }),
+
+        created() {
+            this.$setting('copyright').then(text => {
+                this.copyright = text;
+            });
+        }
+    };
 </script>
 
 <style lang="scss" scoped>
@@ -88,6 +99,10 @@
             margin-top: 5px;
             color: #b2b2b2;
             text-shadow: 0 0 1px #000;
+        }
+
+        a:hover {
+            color: #dedede;
         }
     }
 

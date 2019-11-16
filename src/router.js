@@ -16,15 +16,6 @@ const router = new VueRouter({
                 component: () => lazy(import('./pages/sign-in/page'))
             },
             {
-                path: '/control',
-                redirect: {
-                    path: '/sign-in',
-                    query: {
-                        moderator: 'yes'
-                    }
-                }
-            },
-            {
                 path: '/sign-up',
                 component: () => lazy(import('./pages/sign-up/page'))
             },
@@ -56,7 +47,7 @@ const router = new VueRouter({
                         component: () => lazy(import('@/pages/dashboard/pages/profile/page'))
                     },
                     {
-                        path: 'post-job',
+                        path: 'post-job/:id?',
                         component: () => lazy(import('@/pages/dashboard/pages/job-post/page'))
                     },
                     {
@@ -67,31 +58,28 @@ const router = new VueRouter({
                     {
                         name: 'my-job',
                         path: 'jobs/:id',
-                        component: () => lazy(import('@/pages/dashboard/pages/my-jobs/applications')),
-                        children: [
-                            {
-                                path: '',
-                                component: () => lazy(import('@/pages/dashboard/pages/my-jobs/empty-applications'))
-                            },
-
-                            {
-                                name: 'resume',
-                                path: 'resume/:userId',
-                                component: () => lazy(import('@/pages/dashboard/pages/my-jobs/resume'))
-                            }
-                        ]
+                        component: () => lazy(import('@/pages/dashboard/pages/my-jobs/applications'))
                     },
                     {
-                        path: 'saved-jobs/:type',
-                        component: () => lazy(import('@/pages/dashboard/pages/saved-jobs/page'))
+                        name: 'resume',
+                        path: 'jobs/:jobId/resume/:application',
+                        component: () => lazy(import('@/pages/dashboard/pages/my-jobs/resume'))
+                    },
+                    {
+                        path: 'favorites',
+                        component: () => lazy(import('@/pages/dashboard/pages/favorites/page'))
+                    },
+                    {
+                        path: 'applications',
+                        component: () => lazy(import('@/pages/dashboard/pages/applications/page'))
                     }
                 ],
             }
         ]),
 
         {
-            path: '/articles/:id',
-            component: () => lazy(import('./pages/article/page')),
+            path: '/pages/:id',
+            component: () => lazy(import('./pages/page/page')),
         },
 
         {
@@ -109,8 +97,15 @@ const router = new VueRouter({
             component: () => lazy(import('./pages/job/page'))
         },
         {
-            path: '*',
+            path: '/404',
+            name: 'four-zero-four',
             component: () => lazy(import('@/components/four-zero-four'))
+        },
+        {
+            path: '*',
+            redirect: {
+                name: 'four-zero-four'
+            }
         }
     ]
 });

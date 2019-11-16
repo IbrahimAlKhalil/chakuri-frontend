@@ -3,7 +3,7 @@
         <nav-mobile/>
         <div class="logo">
             <router-link to="/">
-                <img :src="logo" :alt="name">
+                <img :src="$store.state.logo | fileUrl" alt="name">
             </router-link>
         </div>
         <div v-if="$auth.user" class="auth-menu flex align-center">
@@ -51,13 +51,6 @@
             elButton,
             elPopover,
             empty
-        },
-
-        data() {
-            return {
-                logo: require('@/assets/images/logo.png'),
-                name: 'Sahara Software And Technology'
-            };
         },
 
         computed: {

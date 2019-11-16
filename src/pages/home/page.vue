@@ -12,7 +12,7 @@
             </section>
 
             <aside class="sidebar-2">
-                <special-jobs :jobs="jobs"/>
+                <special-jobs :jobs="specialJobs"/>
             </aside>
 
             <jobs :jobs="jobs"/>
@@ -34,6 +34,7 @@
         data() {
             return {
                 jobs: [],
+                specialJobs: [],
                 perPage: window.innerWidth < 920 ? 6 : 10,
                 counts: {
                     job: 0,
@@ -43,9 +44,16 @@
         },
         methods: {
             async loadJobs() {
-                const response = await this.$fetch(`job-filter?perPage=${this.perPage}`).response();
+                const responses = await Promise.all([
+                    this.$fetch(`job-filter?perPage=${this.perPage}`).response(),
+                    this.$fetch(`job-filter?perPage=8&special=yes`).response()
+                ]);
 
-                this.jobs = response.json();
+                this.jobs = responses[0].json();
+
+                const specialJobs = responses[1].json();
+
+                this.specialJobs = specialJobs.length ? specialJobs : this.jobs;
             }
         },
         async created() {

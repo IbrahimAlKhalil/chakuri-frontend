@@ -1,6 +1,6 @@
 <template>
-    <transition-group tag="div" name="jump" class="wrapper">
-        <div v-for="(job, index) in jobs" :key="`${index}-j`" :class="job.focus?'focused':''">
+    <div class="wrapper">
+        <div v-for="(job, index) in jobs" :key="index" :class="job.focus?'focused':''">
             <router-link class="job" :to="`/jobs/${job.id}`">
                 <div class="flex">
                     <div v-if="job.logo">
@@ -34,7 +34,7 @@
             </router-link>
             <slot v-bind:item="job"/>
         </div>
-    </transition-group>
+    </div>
 </template>
 
 <script>
@@ -79,7 +79,7 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../../../styles/var";
+    @import "../styles/var";
 
     .wrapper {
         display: grid;

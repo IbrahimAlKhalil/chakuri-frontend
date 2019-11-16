@@ -2,7 +2,7 @@
     <div class="el-card">
         <el-form class="el-card__body" :model="flatFields" @submit.native.prevent="submit">
             <section v-for="(section, key) in fields" :key="key">
-                <h3>{{section.label}}</h3>
+                <h3 class="mt-2">{{section.label}}</h3>
                 <template v-for="(field, index) in section.fields">
                     <div v-if="field.type === 'group'" :key="index">
                         <div class="el-form-item__content">{{field.label}}</div>
@@ -47,12 +47,6 @@
                 </template>
             </section>
 
-
-            <!--<section>-->
-            <!--<h3>অতিরিক্ত তথ্য (ঐচ্ছিক)</h3>-->
-            <!--<wyswyg v-model="wyswyg" :value="wyswyg"/>-->
-            <!--</section>-->
-
             <div class="text-center mt-1">
                 <el-button class="login-btn"
                            :icon="!formLoading? 'el-icon-s-promotion' : 'el-icon-loading'"
@@ -67,9 +61,9 @@
 <script>
     import {elButton, elForm, elFormItem, elInput, elOption, elSelect, elCheckbox} from '@/el';
     import lazySelect from '../resume/partials/lazy-select';
-    // import wyswyg from '@components/wyswyg/wyswyg'
     import elCollapse from '@components/collapse';
     import elCollapseItem from '@components/collapse-item';
+    import messageBox from 'element-ui/lib/message-box';
 
     export default {
         components: {
@@ -182,6 +176,7 @@
                                 loading: true,
                                 rules: [required],
                                 child: {
+
                                     name: 'thana_id',
                                     label: 'থানা',
                                     loading: false,
@@ -278,7 +273,6 @@
         },
 
         methods: {
-
             async minDate(rule, value, callback) {
                 const d = new Date(value).getTime();
                 const response = await this.$fetch('time').response();
@@ -293,35 +287,51 @@
                 callback();
             },
 
+            confirm() {
+                return new Promise(resolve => {
+                    messageBox.confirm(`এডমিন রিভিউ করার আগে পর্যন্ত কেউ বিজ্ঞাপনটি দেখতে পারবে না`, 'সতর্কীকরণ', {
+                        confirmButtonText: 'প্রক্রিয়া সম্পন্ন করুন',
+                        cancelButtonText: 'বাতিল করুন',
+                        type: 'warning',
+                        center: true
+                    }).then(() => {
+                        resolve(true);
+                    }).catch(() => {
+                        resolve(false);
+                    });
+                });
+            },
+
             async submit(evt) {
                 try {
                     await evt.target.__vue__.validate();
                 } catch (e) {
                 }
 
-                const body = new FormData;
+                const {flatFields, edit} = this;
 
-                const {flatFields} = this;
+                if (!!edit && !(await this.confirm())) {
+                    return;
+                }
+
+                const body = new FormData;
 
                 for (const key in flatFields) {
                     body.append(key, flatFields[key].model);
                 }
 
-                // this.wyswyg.forEach((widget, index) => {
-                //     body.append(`widgets[${index}][title]`, widget.title)
-                //     body.append(`widgets[${index}][contents]`, widget.contents)
-                // })
-
-                const response = await this.$fetch('jobs', {
-                    method: 'POST',
+                const response = await this.$fetch(!!edit ? `jobs/${edit}` : 'jobs', {
+                    method: !!edit ? 'PATCH' : 'POST',
                     body,
                 }).response();
 
                 if (response.status === 200) {
-                    return this.$notify({
-                        message: response.text,
+                    this.$notify({
+                        message: 'আমরা আপনার বিজ্ঞাপন পর্যালোচনা করছি, দয়া করে অপেক্ষা করুন।',
                         type: 'success'
                     });
+
+                    return this.$router.push(`/dashboard/jobs/${response.text}`);
                 }
 
                 this.$notify({
@@ -354,6 +364,10 @@
                 }
 
                 return models;
+            },
+
+            edit() {
+                return this.$route.params.id;
             }
         },
 
@@ -367,6 +381,29 @@
                     label: item.name
                 });
             }
+
+            if (!this.edit) {
+                return;
+            }
+
+            const fields = this.flatFields;
+            this.$fetch(`jobs/${this.edit}/edit`).response()
+                .then(res => {
+
+                    const data = res.json();
+
+                    for (let key in fields) {
+                        const field = fields[key];
+
+                        this.$set(field, 'model', data[key]);
+                        this.$set(field, 'value', data[key]);
+                    }
+                }).then(async () => {
+                const response = await this.$fetch(`thanas/by-district/${fields.district_id.model}`).response();
+                const data = response.json();
+
+                this.$set(fields.district_id.child, 'opt', data.map(item => ({id: item.id, name: item.name})));
+            });
         }
     };
 </script>

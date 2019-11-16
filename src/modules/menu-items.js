@@ -2,14 +2,14 @@ export const common = {
     notification: {
         title: 'নোটিফিকেশন',
         link: 'notifications',
-        icon: 'el-icon-bell',
+        icon: 'fa fa-bell',
         badge: 0
     },
 
     profile: {
         title: 'প্রোফাইল',
         link: 'profile',
-        icon: 'el-icon-lock'
+        icon: 'fa fa-user'
     }
 };
 
@@ -21,12 +21,12 @@ export const employee = [
     },
     {
         title: 'ফেভারিট',
-        link: 'saved-jobs/favorites',
+        link: 'favorites',
         icon: 'fas fa-heart',
     },
     {
         title: 'আবেদনকৃত চাকুরী সমূহ',
-        link: 'saved-jobs/applications',
+        link: 'applications',
         icon: 'fas fa-paper-plane'
     }
 ];
@@ -42,28 +42,4 @@ export const institution = [
         link: 'jobs',
         icon: 'el-icon-s-order',
     },
-];
-
-export const moderator = [
-    {
-        title: 'Profile',
-        link: 'moderator-profile',
-        icon: 'el-icon-lock',
-    },
-    {
-        ...common.notification,
-        title: 'Notifications'
-    },
-    {
-        permission: 'moderators',
-        title: 'Moderators',
-        link: 'moderators',
-        icon: 'fa fa-user'
-    },
-    {
-        permission: 'job-requests',
-        title: 'Job Requests',
-        link: 'job-requests',
-        icon: 'el-icon-s-order',
-    }
 ];

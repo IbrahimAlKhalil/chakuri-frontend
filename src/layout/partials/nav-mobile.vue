@@ -23,11 +23,11 @@
                                 <div class="mt-1 flex justify-center">
                                     <el-button-group v-if="$auth.user">
                                         <router-link class="el-button no-underline el-button--primary"
-                                                     :to="dashboardUrl">
+                                                     to="/dashboard/profile">
                                             <i class="el-icon-setting"></i> একাউন্ট
                                         </router-link>
                                         <el-button icon="fas fa-sign-out-alt" @click="signOut">
-                                            প্রস্থান
+                                            লগ আউট
                                         </el-button>
                                     </el-button-group>
 
@@ -67,13 +67,12 @@
 
         computed: {
             ...mapState({
-                show: ({menu}) => menu.show,
-                dashboardUrl: ({menu}) => menu.dashboardUrl
+                show: ({menu}) => menu.show
             }),
 
             menu() {
                 const {state} = this.$store;
-                return state.layout === 'master' ? state.menu.main : state.menu.dashboard;
+                return state.layout === 'master' ? state.menu.header.items : state.menu.dashboard;
             }
         },
 

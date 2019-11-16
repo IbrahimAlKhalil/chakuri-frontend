@@ -1,5 +1,5 @@
 <template>
-    <sidebar-card title="স্পেশাল চাকুরী">
+    <sidebar-card title="জরুরি নিয়োগ">
         <div class="special-jobs el-menu">
             <template v-for="(job, index) in jobs">
                 <el-tooltip class="item" effect="dark" :content="job.institute" placement="left" :key="index"

@@ -1,6 +1,12 @@
 <template>
     <el-card class="sub-categories">
-        <div class="el-menu">
+        <div class="el-menu" v-loading="!subCategories.length">
+            <template v-if="!subCategories.length">
+                <div v-for="i in 9" :key="i" class="el-menu-item nav-arrow-right">
+                    ...
+                </div>
+            </template>
+
             <router-link v-for="(subCategory, index) in subCategories" :key="index" class="el-menu-item nav-arrow-right"
                          :to="`/search?position=${subCategory.id}`">
                 {{subCategory.name}}

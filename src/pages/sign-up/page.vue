@@ -17,7 +17,7 @@
             </el-menu>
         </div>
         <template v-else>
-            <div class="flex social-login">
+            <!--<div class="flex social-login">
                 <el-button size="medium" class="facebook">
                     <i class="fab fa-facebook-f"></i>&nbsp;&nbsp;&nbsp;ফেসবুক
                 </el-button>
@@ -29,7 +29,7 @@
                 <el-button size="medium" class="twitter">
                     <i class="fab fa-twitter"></i>&nbsp;&nbsp;&nbsp;টুইটার
                 </el-button>
-            </div>
+            </div>-->
 
             <el-divider/>
 
@@ -142,7 +142,7 @@
                         await this.$store.dispatch('auth/signIn');
 
                         // Redirect to profile page
-                        this.$router.push({path: 'user/profile', query: {hash: 'profile-mobile'}});
+                        this.$router.push({path: 'dashboard/profile', query: {hash: 'profile-mobile'}});
                     }
                 } catch (e) {
                 }

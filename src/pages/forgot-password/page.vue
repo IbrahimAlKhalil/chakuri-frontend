@@ -13,7 +13,7 @@
                     </el-input>
                 </el-form-item>
 
-                <el-form-item v-if="!moderator" prop="type">
+                <el-form-item prop="type">
                     <label for="type" class="d-block">আপনি</label>
                     <el-select id="type" v-model="models.type" class="w-100" placeholder="">
                         <i class="el-icon-key el-input__icon" slot="prefix"></i>
@@ -70,8 +70,7 @@
 
                 rules: {
                     mobile: [requiredRule('মোবাইল নম্বর বা ইমেইল লিখুন।')]
-                },
-                moderator: false
+                }
             };
         },
 
@@ -113,12 +112,6 @@
                 this.$router.push({
                     path: '/password-reset'
                 });
-            }
-        },
-        created() {
-            if (this.$route.query.moderator === 'yes') {
-                this.$set(this.$data, 'moderator', true);
-                this.$set(this.$data.models, 'type', 3);
             }
         }
     };

@@ -1,8 +1,10 @@
 import {elPagination} from '@/el';
-import empty from '@/components/empty';
 
 export default {
-    components: {elPagination, empty},
+    components: {
+        elPagination,
+        empty: () => import('@/components/empty')
+    },
 
     props: {
         tag: {
@@ -26,7 +28,10 @@ export default {
             exposed: {
                 items: [],
                 total: 0,
-                keywords: []
+                highlight: {
+                    keyword: [],
+                    sensitive: false
+                }
             },
 
             lastPage: 0
@@ -65,6 +70,7 @@ export default {
 
             // Update total
             if (total !== exposed.total) {
+                exposed.total = total;
                 this.$emit('totalChanged', total);
             }
 
@@ -91,7 +97,7 @@ export default {
 
         async reset() {
             this.resetting = true;
-            this.exposed.keywords = this.keyword.trim().split(' ');
+            this.exposed.highlight.keyword = this.keyword.trim().split(' ');
 
             await this.goTo(1);
 
@@ -112,11 +118,6 @@ export default {
     },
 
     async created() {
-        // Update count
-        this.$fetch(`${this.$props.endpoint}/count`).response().then(response => {
-            this.exposed.total = parseInt(response.json().count);
-        });
-
         await this.load();
 
         this.$emit('input', this.exposed);

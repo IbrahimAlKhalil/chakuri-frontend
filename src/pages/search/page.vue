@@ -78,7 +78,10 @@
 
         <transition name="jump">
             <div v-show="!filterAppearance" class="jobs" v-loading="jobLoading">
+
                 <jobs :jobs="jobs" :keyword="highlight"/>
+
+                <empty :empty="!jobs.length" :card="true"></empty>
 
                 <el-card v-if="total > perPage" class="mt-1">
                     <el-pagination class="flex justify-center" :page-size="perPage" :current-page="page" background
@@ -109,17 +112,17 @@
         elDivider,
         elInput,
         elOption,
-        elRadioGroup,
         elSelect,
         elPagination
     } from '@/el';
     import jobs from '../home/components/jobs';
+    import Empty from '@/components/empty';
 
     export default {
         components: {
+            Empty,
             elCard,
             elInput,
-            elRadioGroup,
             elCheckbox,
             elDivider,
             elSelect,

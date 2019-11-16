@@ -11,21 +11,21 @@
                                    @click="reset"></el-button>
                     </template>
 
-                    <slot name="inputs"></slot>
+                    <slot name="inputs" v-bind:methods="{reset}"></slot>
                 </div>
 
                 <div class="tools">
                     <template v-if="crud">
-                        <el-tooltip v-if="actions.includes('create')" content="Create">
+                        <el-tooltip v-if="actions.includes('create')" content="তৈরী করুন">
                             <el-button icon="fa fa-plus" @click="create" circle></el-button>
                         </el-tooltip>
 
-                        <el-tooltip v-if="actions.includes('delete')" content="Delete">
+                        <el-tooltip v-if="actions.includes('delete')" content="ডিলিট করুন">
                             <el-button icon="fa fa-trash" @click="remove(true)" circle></el-button>
                         </el-tooltip>
                     </template>
 
-                    <slot name="tool-btns"></slot>
+                    <slot name="tool-btns" v-bind:methods="{remove, create}" v-bind:data="exposed"></slot>
                 </div>
 
                 <div class="menu">
@@ -34,21 +34,23 @@
 
                         <div class="el-menu">
                             <template v-if="crud">
-                                <div class="el-menu-item" @click="create"><i class="fa fa-plus"></i> Create</div>
-                                <div class="el-menu-item" @click="remove(true)"><i class="fa fa-trash"></i> Delete
+                                <div class="el-menu-item" @click="create"><i class="fa fa-plus"></i> তৈরী করুন</div>
+                                <div class="el-menu-item" @click="remove(true)"><i class="fa fa-trash"></i> ডিলিট করুন
                                 </div>
                             </template>
 
-                            <slot name="tool-menu"></slot>
+                            <slot name="tool-menu" v-bind:methods="{remove, create}" v-bind:data="exposed"></slot>
                         </div>
                     </el-popover>
                 </div>
             </div>
+
+            <slot v-bind:methods="{reset}" name="after-toolbar"></slot>
         </div>
 
         <!-- Show items -->
         <component :is="tag">
-            <slot v-bind:data="exposed" v-bind:methods="{check, removeItem, edit}"/>
+            <slot v-bind:data="exposed" v-bind:methods="{check, removeItem, edit, reset}"/>
 
             <intersection @reveal="load"/>
 
@@ -57,19 +59,15 @@
 
         <template v-if="crud && (createForm && editForm)">
             <data-form :fields="createForm" :endpoint="endpoint" type="create" @submitted="created" :title="title"
-                       :show="createDialog"/>
+                       :show.sync="createDialog"/>
 
             <data-form :fields="editForm" :endpoint="endpoint" type="edit" :item="editItem" @submitted="updated"
-                       :title="title" :show="editDialog"/>
+                       :title="title" :show.sync="editDialog"/>
         </template>
     </div>
 </template>
 
 <script>
-    import {elPopover} from '@/el';
-    import lazyLoading from '@/components/lazy-loading';
-    import dataForm from './data-form';
-
     import crudMixin from './crud-mixin';
     import toolbarMixin from './toolbar-mixin';
     import lazyLoadingMixin from './lazy-mixin';
@@ -78,9 +76,7 @@
     export default {
         mixins: [crudMixin, toolbarMixin, lazyLoadingMixin],
         components: {
-            elPopover,
-            lazyLoading,
-            dataForm
+            dataForm: () => import('./data-form')
         },
 
         props: {
@@ -121,28 +117,6 @@
                 }
 
                 item.checked = !item.checked;
-            },
-
-            created(item) {
-                this.createDialog = false;
-
-                this.addItem(item);
-
-                // Notify
-                this.$notify({
-                    type: 'success',
-                    message: 'Created'
-                });
-            },
-
-            updated() {
-                this.editDialog = false;
-
-                // Notify
-                this.$notify({
-                    type: 'success',
-                    message: 'Updated'
-                });
             }
         }
     };

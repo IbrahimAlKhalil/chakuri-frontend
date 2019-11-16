@@ -4,7 +4,7 @@
             <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;লগ-ইন
         </div>
 
-        <template v-if="$route.query.moderator !== 'yes'">
+        <!--<template>
             <div class="flex social-login">
                 <el-button size="medium" class="facebook">
                     <i class="fab fa-facebook-f"></i>&nbsp;&nbsp;&nbsp;ফেসবুক
@@ -20,7 +20,7 @@
             </div>
 
             <el-divider/>
-        </template>
+        </template>-->
 
         <el-form ref="form" :model="models" :rules="rules" @submit.native.prevent="submit" status-icon>
             <el-form-item prop="username">
@@ -37,7 +37,7 @@
                 </el-input>
             </el-form-item>
 
-            <el-form-item v-if="$route.query.moderator !== 'yes'" prop="type">
+            <el-form-item prop="type">
                 <label for="type" class="d-block">আপনি</label>
                 <el-select id="type" v-model="models.type" class="w-100">
                     <i class="fa fa-user el-input__icon" slot="prefix"></i>
@@ -85,7 +85,7 @@
                 models: {
                     username: '',
                     password: '',
-                    type: this.$route.query.moderator === 'yes' ? 3 : 1,
+                    type: 1,
                     rememberMe: false,
                 },
                 types: [

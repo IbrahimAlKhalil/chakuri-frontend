@@ -10,7 +10,7 @@ function resolveNotificationMenuItem(rootState) {
     }
 
     rootState.menu.dashboard.some(item => {
-        const ok = item.title === 'নোটিফিকেশন' || 'Notifications';
+        const ok = item.link === '/dashboard/notifications';
 
         if (ok) {
             menuItem = item;

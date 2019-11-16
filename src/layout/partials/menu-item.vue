@@ -1,14 +1,23 @@
 <template>
-    <router-link :to="item.link" class="el-menu-item" :index="index.toString()">
-        <i v-if="item.icon" :class="item.icon"></i> {{ item.title }}
-    </router-link>
+    <component :is="item.type === 'page'?'router-link':'a'" v-bind="href" :index="index.toString()"
+               class="el-menu-item">
+        {{item.label}}
+    </component>
 </template>
 
 <script>
+    import menuItem from '@/mixins/menu-item';
 
     export default {
-        props: ['item', 'index']
-    }
+        mixins: [menuItem],
+        props: ['item', 'index'],
+
+        computed: {
+            href() {
+                return this.link(this.$props.item);
+            }
+        }
+    };
 </script>
 
 

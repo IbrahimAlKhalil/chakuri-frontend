@@ -6,12 +6,12 @@
         </div>
 
         <div class="menu">
-            <router-link :to="$store.state.menu.dashboardUrl" class="el-dropdown-menu__item">
+            <router-link to="/dashboard/profile" class="el-dropdown-menu__item">
                 <i class="el-icon-user-solid"></i> একাউন্ট
             </router-link>
             <div class="el-dropdown-menu__item" @click="signOut">
                 <i class="fas fa-sign-out-alt"></i>
-                প্রস্থান
+                লগ আউট
             </div>
         </div>
     </el-popover>

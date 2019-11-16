@@ -5,7 +5,8 @@
         <template v-else>
             <nav>
                 <div class="el-menu--horizontal el-menu">
-                    <menu-item v-for="(item, index) in $store.state.main" :key="index" :index="index" :item="item"/>
+                    <menu-item v-for="(item, index) in $store.state.menu.header.items" :key="index" :index="index"
+                               :item="item"/>
                 </div>
             </nav>
 

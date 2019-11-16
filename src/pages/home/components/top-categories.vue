@@ -1,35 +1,44 @@
 <template>
-    <div class="top-categories">
-        <router-link to="/search?category=1" class="category">
-            <el-card class="card">
-                <div><i class="fas fa-mosque"></i></div>
-                <div class="name">মসজিদ</div>
-            </el-card>
-        </router-link>
+    <div class="top-categories" v-loading="!items.length">
+        <template>
+            <router-link v-for="(item, index) in items" :key="index" :to="`/search?category=${item.id}`"
+                         class="category">
+                <el-card class="card">
+                    <div><i :class="item.icon"></i></div>
+                    <div class="name">{{item.name}}</div>
+                </el-card>
+            </router-link>
+        </template>
 
-
-        <router-link to="/search?category=2" class="category">
-            <el-card class="card">
-                <div><i class="fas fa-school"></i></div>
-                <div class="name">মাদ্রাসা</div>
-            </el-card>
-        </router-link>
-
-        <!--<router-link to="/" class="category">
-            <el-card class="card">
-                <div><i class="fas fa-chalkboard-teacher"></i></div>
-                <div class="name">টিউশনি</div>
-            </el-card>
-        </router-link>-->
+        <template v-if="!items.length">
+            <div v-for="i in 2" class="category" :key="i">
+                <el-card class="card">
+                    <div><i class="fas fa-question-circle"></i></div>
+                    <div class="name">...</div>
+                </el-card>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
-    import {elCard} from '@/el'
+    import {elCard} from '@/el';
 
     export default {
-        components: {elCard}
-    }
+        components: {elCard},
+
+        data() {
+            return {
+                items: []
+            };
+        },
+
+        async created() {
+            const response = await this.$fetch('categories').response();
+
+            this.items = response.json();
+        }
+    };
 </script>
 
 <style lang="scss" scoped>

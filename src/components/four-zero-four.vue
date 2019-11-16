@@ -1,5 +1,5 @@
 <template>
-    <div class="el-card">
+    <div class="el-card is-always-shadow">
         <div class="el-card__body text-center">
             <div class="four-zero-four">404</div>
 
@@ -8,13 +8,18 @@
     </div>
 </template>
 
-<style>
+<style scoped>
     .four-zero-four {
         font-size: 8em;
     }
 
     .msg {
         font-size: 3em;
+    }
+
+    .el-card {
+        margin: 1em;
+        padding-bottom: 3em;
     }
 </style>
 

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-    import {elFormItem, elOption, elSelect} from '../../../../../el'
+    import {elFormItem, elOption, elSelect} from '../../../../../el';
 
     export default {
         name: 'lazy-select',
@@ -25,40 +25,40 @@
 
         methods: {
             async changed(e) {
-                this.$emit('input', e)
+                this.$emit('input', e);
 
-                const {child} = this.field
+                const {child} = this.field;
 
                 if (!child) {
-                    return
+                    return;
                 }
 
                 // Clear child value
 
-                const response = await this.$fetch(`${this.$props.field.action}/${e}`).response()
-                const data = response.json()
+                const response = await this.$fetch(`${this.$props.field.action}/${e}`).response();
+                const data = response.json();
 
-                this.$set(child, 'opt', data.map(item => ({id: item.id, name: item.name})))
+                this.$set(child, 'opt', data.map(item => ({id: item.id, name: item.name})));
             }
         },
 
         async created() {
-            const {field} = this.$props
+            const {field} = this.$props;
 
             if (this.$props.value) {
-                return
+                return;
             }
 
             if (!field.hasOwnProperty('top')) {
-                return
+                return;
             }
 
-            const response = await this.$fetch(field.route).response()
-            const data = response.json()
+            const response = await this.$fetch(field.route).response();
+            const data = response.json();
 
-            this.$set(field, 'opt', data.map(item => ({id: item.id, name: item.name})))
+            this.$set(field, 'opt', data.map(item => ({id: item.id, name: item.name})));
         }
-    }
+    };
 </script>
 
 <style lang="scss" scoped>

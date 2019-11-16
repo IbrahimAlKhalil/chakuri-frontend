@@ -1,20 +1,20 @@
+import request from '@/modules/request';
+
 export default {
     namespaced: true,
 
     state: {
-        main: [
-            {
-                title: 'প্রথম পাতা',
-                link: '/'
-            },
-            {
-                title: 'যোগাযোগ',
-                link: '/contact'
-            }
-        ],
+        header: {
+            items: []
+        },
         dashboard: [],
-        show: false,
-        dashboardUrl: '/dashboard/profile'
+        'footer-1': {
+            items: []
+        },
+        'footer-2': {
+            items: []
+        },
+        show: false
     },
 
     mutations: {
@@ -24,10 +24,19 @@ export default {
 
         dashboardMenu(state, items) {
             state.dashboard = items;
-        },
+        }
+    },
 
-        dashboardUrl(state, url) {
-            state.dashboardUrl = url;
+    actions: {
+        async initialize({state}) {
+            request('menu').response().then(res => {
+                const menu = res.json();
+
+                for (let key in menu) {
+                    state[key] = menu[key];
+                }
+            });
+
         }
     }
 };
