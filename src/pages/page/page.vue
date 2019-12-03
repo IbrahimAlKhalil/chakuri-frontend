@@ -19,15 +19,28 @@
             };
         },
 
-        async created() {
-            const response = await this.$fetch(`pages/${this.$route.params.id}`).response();
+        methods: {
+            async load() {
+                const response = await this.$fetch(`pages/${this.$route.params.id}`).response();
 
-            if (response.status === 404) {
-                return this.$router.replace({name: 'four-zero-four'});
+                if (response.status === 404) {
+                    return this.$router.replace({name: 'four-zero-four'});
+                }
+
+                this.page = response.json();
             }
+        },
 
-            this.page = response.json();
-        }
+        watch: {
+            '$route.params': function () {
+                this.page = null;
+                this.load();
+            }
+        },
+
+        created() {
+            this.load();
+        },
     };
 </script>
 
