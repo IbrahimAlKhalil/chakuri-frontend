@@ -17,18 +17,18 @@
                 <h3 class="title text-center">টুলস ও মিডিয়া</h3>
                 <div class="social-icons ml-auto mr-auto">
                     <a target="_blank" href="https://www.facebook.com/Khidmat-BD-111721266951818/">
-                        <i class="fab fa-facebook-square"></i>
+                        <i class="fab fa-facebook-square"/>
                     </a>
 
                     <a target="_blank" href="https://twitter.com/Khidmat18">
-                        <i class="fab fa-twitter-square"></i>
+                        <i class="fab fa-twitter-square"/>
                     </a>
 
                     <a target="_blank" href="https://www.linkedin.com/in/khidmat-bd-92b952197/">
-                        <i class="fab fa-linkedin"></i>
+                        <i class="fab fa-linkedin"/>
                     </a>
                     <a target="_blank" href="https://www.youtube.com/channel/UCO5Lv-izV4YTIKshb8ZxLcQ?view_as=subscriber">
-                        <i class="fab fa-youtube-square"></i>
+                        <i class="fab fa-youtube-square"/>
                     </a>
                 </div>
 
