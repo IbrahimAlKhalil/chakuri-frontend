@@ -97,6 +97,10 @@ const router = new VueRouter({
             component: () => lazy(import('./pages/job/page'))
         },
         {
+          path: '/email-verification/:token',
+          component: () => lazy(import('@components/email-verification'))
+        },
+        {
             path: '/404',
             name: 'four-zero-four',
             component: () => lazy(import('@/components/four-zero-four'))

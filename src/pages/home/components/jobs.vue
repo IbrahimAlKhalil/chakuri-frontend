@@ -18,7 +18,7 @@
                         <div><i :class="showDeadline?'fas fa-clock':'fas fa-graduation-cap'"></i>&nbsp&nbsp;<span
                                 class="requirement">{{showDeadline?deadline(job.deadline):job.education}}</span>
                         </div>
-                        <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{experience(job)}} (অভিজ্ঞতা)</span>
+                        <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{rangeValue(job, 'experience', 'বছর', 'অভিজ্ঞতা না থাকলেও চলবে')}} (অভিজ্ঞতা)</span>
                         </div>
                     </div>
 
@@ -27,7 +27,9 @@
                                 class="requirement" v-highlight="{keyword, sensitive: false}">{{job.thana}}, {{job.district}}</span>
                         </div>
                         <div><b>৳</b>&nbsp&nbsp;<span
-                                class="requirement">{{salary(job)}}</span>
+                                class="requirement">{{rangeValue(job, 'salary','টাকা (মাসিক)', 'আলোচনা সাপেক্ষে')}} {{job.negotiable &&
+                    (job.salary_to ||
+                    job.salary_from)?'(আলোচনা সাপেক্ষে)':''}}</span>
                         </div>
                     </div>
                 </div>
@@ -42,39 +44,37 @@
     export default {
         props: ['jobs', 'keyword', 'show-deadline'],
         methods: {
-            experience(job) {
+            rangeValue(job, name, append, unmentioned) {
+                const fromValue = job[`${name}_from`];
+                const toValue = job[`${name}_to`];
+
                 const enToBn = this.$enToBn;
 
-                let experience;
-
-                if (job.experience_from === job.experience_to || job.experience_from === 0) {
-                    experience = enToBn(job.experience_from) + ' বছর';
-                } else {
-                    experience = `${enToBn(job.experience_from)} - ${enToBn(job.experience_to)} বছর`;
+                if (!toValue && !fromValue) {
+                    return unmentioned;
                 }
 
-                return experience;
-            },
-
-            salary(job) {
-                const enToBn = this.$enToBn;
-                let salary;
-
-                if (job.salary_from === job.salary_to || job.salary_from === 0) {
-                    salary = enToBn(job.salary_from) + ' টাকা (মাসিক)';
-                } else {
-                    salary = `${enToBn(job.salary_from)} - ${enToBn(job.salary_to)} টাকা (মাসিক)`;
+                if (fromValue === toValue) {
+                    return `${enToBn(fromValue)} ${append}`;
                 }
 
-                return salary;
+                if (!toValue) {
+                    return `সর্বনিম্ন ${enToBn(fromValue)} ${append}`;
+                }
+
+                if (!fromValue) {
+                    return `সর্বোচ্চ ${enToBn(toValue)} ${append}`;
+                }
+
+                return enToBn(`${fromValue} - ${toValue} ${append}`);
             },
 
             deadline(deadline) {
                 const date = new Date(deadline);
 
                 return this.$bnDate(date);
-            }
-        }
+            },
+        },
     };
 </script>
 

@@ -86,9 +86,10 @@
                 models: {
                     password: '',
                     rePassword: '',
-                    token: ''
+                    token: '',
                 },
                 verified: false,
+                passwordLength: 8,
             };
         },
 
@@ -102,18 +103,24 @@
             },
 
             async verify() {
+                try {
+                    await this.$refs.form.validate();
+                } catch (e) {
+                    return;
+                }
+
                 this.loading = true;
 
                 const data = JSON.parse(sessionStorage.getItem(config.prpk));
 
                 const body = {
                     ...data,
-                    token: this.models.token
+                    token: this.models.token,
                 };
 
                 const response = await this.$fetch('verify-password-token', {
                     method: 'POST',
-                    body
+                    body,
                 }).response();
 
                 this.loading = false;
@@ -121,7 +128,7 @@
                 if (response.status === 422) {
                     this.$notify({
                         type: 'error',
-                        message: response.text
+                        message: response.text,
                     });
                 }
 
@@ -140,18 +147,18 @@
                     password: this.models.password,
                     rePassword: this.models.rePassword,
                     mobile: data.mobile,
-                    type: data.type
+                    type: data.type,
                 };
 
                 const response = await this.$fetch('reset-password', {
                     method: 'POST',
-                    body
+                    body,
                 }).response();
 
                 if (response.status === 422) {
                     return this.$notify({
                         type: 'error',
-                        message: response.text
+                        message: response.text,
                     });
                 }
 
@@ -159,40 +166,41 @@
 
                 this.$notify({
                     type: 'success',
-                    message: 'আপনার পাসওয়ার্ডটি সফলভাবে পরিবর্তিত হয়েছে'
+                    message: 'আপনার পাসওয়ার্ডটি সফলভাবে পরিবর্তিত হয়েছে',
                 });
 
                 this.$router.push({
-                    path: '/sign-in'
+                    path: '/sign-in',
                 });
-            }
+            },
         },
 
         computed: {
             rules() {
-                const {rePassword} = this;
+                const {rePassword, passwordLength, $enToBn} = this;
+
+                const min = {
+                    min: parseInt(passwordLength),
+                    message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে ${$enToBn(passwordLength)} অক্ষরের দৈর্ঘ্যের হতে হবে।`,
+                };
 
                 return {
-                    password: [
-                        this.requiredRule('পাসওয়ার্ড লিখুন'),
-                        {
-                            min: 8,
-                            message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে আটটি অক্ষরের দৈর্ঘ্যের হতে হবে।`
-                        }
-                    ],
+                    password: [this.requiredRule('পাসওয়ার্ড লিখুন'), min],
 
-                    rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassword}]
+                    rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassword}],
                 };
-            }
+            },
         },
 
         async created() {
             if (!sessionStorage.getItem(config.prpk)) {
-                this.$router.push({
-                    path: 'forgot-password'
+                return this.$router.push({
+                    path: 'forgot-password',
                 });
             }
-        }
+
+            this.passwordLength = await this.$setting('minPassword');
+        },
     };
 </script>
 

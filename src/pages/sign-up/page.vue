@@ -69,8 +69,8 @@
                 <el-form-item prop="agreed" class="agreed">
                     <el-checkbox v-model="models.agreed">
                         আমি ব্যবহারের
-                        <router-link to="/articles/terms-of-use" target="_blank" class="link">শর্তাবলী</router-link>&nbsp;এবং
-                        <router-link to="/articles/privacy-policy" target="_blank" class="link">গোপনীয়তা নীতির
+                        <router-link :to="termsPage" target="_blank" class="link">শর্তাবলী</router-link>&nbsp;এবং
+                        <router-link :to="privacyPage" target="_blank" class="link">গোপনীয়তা নীতির
                         </router-link>&nbsp;সঙ্গে
                         একমত
                     </el-checkbox>
@@ -102,8 +102,11 @@
                     mobile: '',
                     password: '',
                     rePassword: '',
-                    agreed: false
-                }
+                    agreed: false,
+                },
+                passwordLength: 8,
+                termsPage: '',
+                privacyPage: '',
             };
         },
 
@@ -121,8 +124,8 @@
                             name: this.models.name,
                             mobile: this.models.mobile,
                             password: this.models.password,
-                            user_type_id: this.type === 'employee' ? 1 : 2
-                        }
+                            user_type_id: this.type === 'employee' ? 1 : 2,
+                        },
                     }).response();
 
                     this.formLoading = false;
@@ -132,7 +135,7 @@
                         // Notify
                         this.$notify({
                             message: 'আপনার অ্যাকাউন্ট সফলভাবে তৈরি করা হয়েছে',
-                            type: 'success'
+                            type: 'success',
                         });
 
                         const jwt = response.json();
@@ -153,7 +156,7 @@
 
                 return {
                     required: true,
-                    message: `${please}${suffix}।`
+                    message: `${please}${suffix}।`,
                 };
             },
 
@@ -178,8 +181,8 @@
                     method: 'POST',
                     body: {
                         user_type_id: this.type === 'employee' ? 1 : 2,
-                        [rule.field]: this.models[rule.field]
-                    }
+                        [rule.field]: this.models[rule.field],
+                    },
                 }).response();
 
                 if (!!response.json()) {
@@ -206,7 +209,7 @@
 
             navigate(type) {
                 this.$router.push({path: 'sign-up', query: {type}});
-            }
+            },
         },
 
         computed: {
@@ -215,31 +218,39 @@
             },
             rules() {
                 const please = 'অনুগ্রহ করে আপনার ';
+                const {passwordLength, $enToBn} = this;
+
                 const min = {
-                    min: 8,
-                    message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে আটটি অক্ষরের দৈর্ঘ্যের হতে হবে।`
+                    min: parseInt(passwordLength),
+                    message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে ${$enToBn(passwordLength)} অক্ষরের দৈর্ঘ্যের হতে হবে।`,
                 };
                 const {rePassword, agreed, mobileLength, userExists} = this;
 
                 return {
                     name: [this.requiredRule(`${please}${this.type === 'institution' ? 'প্রতিষ্ঠানের ' : ''}নাম লিখুন`), {
                         max: 190,
-                        message: 'দুঃখিত নাম ১৯০ টির বেশি অক্ষর হতে পারে না'
+                        message: 'দুঃখিত নাম ১৯০ টির বেশি অক্ষর হতে পারে না',
                     }],
 
                     mobile: [this.requiredRule('মোবাইল নম্বর লিখুন'),
                         {validator: mobileLength},
-                        {validator: userExists, trigger: 'blur'}
+                        {validator: userExists, trigger: 'blur'},
                     ],
 
                     password: [this.requiredRule('পাসওয়ার্ড লিখুন'), min],
 
                     rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassword}],
 
-                    agreed: [{validator: agreed}]
+                    agreed: [{validator: agreed}],
                 };
-            }
-        }
+            },
+        },
+
+        async created() {
+            this.passwordLength = await this.$setting('minPassword');
+            this.termsPage = await this.$setting('terms-and-conditions-page');
+            this.privacyPage = await this.$setting('privacy-policy-page');
+        },
     };
 </script>
 

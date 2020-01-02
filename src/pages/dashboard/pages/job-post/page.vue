@@ -1,51 +1,153 @@
 <template>
     <div class="el-card">
-        <el-form class="el-card__body" :model="flatFields" @submit.native.prevent="submit">
-            <section v-for="(section, key) in fields" :key="key">
-                <h3 class="mt-2">{{section.label}}</h3>
-                <template v-for="(field, index) in section.fields">
-                    <div v-if="field.type === 'group'" :key="index">
-                        <div class="el-form-item__content">{{field.label}}</div>
+        <el-form class="el-card__body" :model="models" :rules="rules" @submit.native.prevent="submit">
+            <section>
+                <!--                <h3 class="mt-2">কাজ</h3>-->
 
-                        <div class="group">
-                            <el-form-item :prop="`${field.fields[0].name}.model`"
-                                          :rules="field.fields[0].rules">
-                                <el-input :type="field.fields[0].type" v-model="field.fields[0].model">
-                                    <template slot="append">{{field.fields[0].label}}</template>
-                                </el-input>
-                            </el-form-item>
 
-                            <el-form-item :prop="`${field.fields[1].name}.model`"
-                                          :rules="field.fields[1].rules">
-                                <el-input :type="field.fields[1].type" v-model="field.fields[1].model">
-                                    <template slot="append">{{field.fields[1].label}}</template>
-                                </el-input>
-                            </el-form-item>
-                        </div>
-                    </div>
-                    <lazy-select v-else-if="field.type === 'lazy'" :field="field" :key="index"/>
-                    <div v-else-if="field.type === 'check'" class="mb-1">
-                        <el-checkbox v-model="field.model">{{field.label}}</el-checkbox>
-                        <br/><br/>
-                    </div>
-                    <el-form-item v-else :key="index" :prop="`${field.name}.model`"
-                                  :rules="field.rules">
-                        <label class="d-block" :for="index">{{field.label}}</label>
+                <el-form-item prop="position_id">
+                    <label class="d-block" for="position">পদ</label>
 
-                        <el-select v-if="field.type === 'select'" v-model="field.model"
-                                   class="d-block-important" placeholder="">
-                            <div slot="empty"></div>
-                            <el-option v-for="(opt, index) in field.opt" :value="opt.value" :label="opt.label"
-                                       :key="index"/>
-                        </el-select>
+                    <el-select v-model="models.position_id"
+                               id="position"
+                               class="d-block-important" placeholder="পদ নির্ধারণ করুন"
+                               @focus="loadOptions('positions', position)">
+                        <div slot="empty"></div>
+                        <el-option v-for="(option, index) in position.options" :value="option.value"
+                                   :label="option.label" :key="index"/>
+                    </el-select>
+                </el-form-item>
 
-                        <el-input v-else :type="field.type" v-model="field.model"
-                                  :placeholder="field.placeholder" :maxlength="field.max" rows="5" show-word-limit>
-                            <template v-if="field.append" slot="append">{{field.append}}</template>
-                        </el-input>
-                    </el-form-item>
-                </template>
+                <el-form-item prop="vacancy">
+                    <label class="d-block" for="vacancy">কর্মখালি (ঐচ্ছিক)</label>
+
+                    <el-input type="number" id="vacancy" v-model="models.vacancy" min="1">
+                    </el-input>
+                </el-form-item>
+
+
+                <el-form-item prop="nature">
+                    <label class="d-block" for="nature">চাকরীর ধরন (ঐচ্ছিক)</label>
+
+                    <el-select
+                            id="nature"
+                            v-model="models.nature"
+                            class="d-block-important" placeholder="চাকরীর ধরন নির্ধারণ করুন">
+                        <div slot="empty"></div>
+                        <el-option :value="1" label="ফুলটাইম"/>
+                        <el-option :value="2" label="পার্টটাইম"/>
+                    </el-select>
+                </el-form-item>
+
+                <range-input name="salary" append="টাকা (মাসিক)" :models="models"
+                             label="বেতন (ঐচ্ছিক)" :negotiable="true" @typeChange="rangeTypeChange"/>
+
+                <el-form-item prop="negotiable">
+                    <el-checkbox v-model="models.negotiable" :disabled="negotiableDisabled">বেতন আলোচনা সাপেক্ষে
+                    </el-checkbox>
+                    <br/>
+                </el-form-item>
+
+                <el-form-item prop="responsibilities">
+                    <label class="d-block" for="responsibilities">দায়িত্ব (ঐচ্ছিক)</label>
+                    <el-input type="textarea" id="responsibilities" :maxlength="5000" rows="5" show-word-limit
+                              v-model="models.responsibilities">
+                    </el-input>
+                </el-form-item>
+
+                <el-form-item prop="deadline">
+                    <label class="d-block" for="deadline">আবেদনের শেষ তারিখ / বিজ্ঞাপনের মেয়াদোত্তীর্ণের তারিখ</label>
+
+                    <el-input type="date" id="deadline" v-model="models.deadline">
+                    </el-input>
+                </el-form-item>
             </section>
+
+            <section>
+                <!--                <h3 class="mt-2">ঠিকানা</h3>-->
+
+                <div class="group">
+                    <el-form-item prop="district_id">
+                        <label class="d-block" for="district">জেলা</label>
+
+                        <el-select v-model="models.district_id"
+                                   id="district"
+                                   class="d-block-important" placeholder="জেলা নির্ধারণ করুন"
+                                   @focus="loadDistricts"
+                                   @change="unselectThana">
+                            <div slot="empty"></div>
+                            <el-option v-for="(option, index) in district.options" :value="option.value"
+                                       :label="option.label" :key="index"/>
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item prop="thana_id">
+                        <label class="d-block" for="thana">থানা</label>
+
+                        <el-select v-model="models.thana_id"
+                                   id="thana"
+                                   class="d-block-important" placeholder="থানা নির্ধারণ করুন"
+                                   @focus="loadOptions(`thanas/by-district/${models.district_id}`, thana)"
+                                   :disabled="!models.district_id">
+                            <div slot="empty"></div>
+                            <el-option v-for="(option, index) in thana.options" :value="option.value"
+                                       :label="option.label" :key="index"/>
+                        </el-select>
+                    </el-form-item>
+                </div>
+
+                <el-form-item prop="village">
+                    <label class="d-block" for="village">এলাকা / গ্রাম / রোড নম্বর</label>
+                    <el-input type="textarea" id="village" :maxlength="200" rows="5" show-word-limit
+                              v-model="models.village">
+                    </el-input>
+                </el-form-item>
+            </section>
+
+            <section>
+                <!--                <h3 class="mt-2">আবেদনকারী সম্পর্কে তথ্য</h3>-->
+
+                <range-input name="age" append="বছর" :models="models" label="বয়স (ঐচ্ছিক)"/>
+
+                <range-input name="experience" append="বছর" :models="models" label="অভিজ্ঞতা (ঐচ্ছিক)"/>
+
+                <el-form-item prop="education">
+                    <label class="d-block" for="education">শিক্ষাগত যোগ্যতা (ঐচ্ছিক)</label>
+                    <el-input type="textarea" id="education" :maxlength="200" rows="5" show-word-limit
+                              v-model="models.education">
+                    </el-input>
+                </el-form-item>
+
+
+                <el-form-item prop="gender">
+                    <label class="d-block" for="gender">লিঙ্গ</label>
+
+                    <el-select v-model="models.gender"
+                               id="gender"
+                               class="d-block-important" placeholder="লিঙ্গ নির্ধারণ করুন">
+                        <div slot="empty"></div>
+                        <el-option :value="1" label="পুরুষ"/>
+                        <el-option :value="2" label="মহিলা"/>
+                        <el-option :value="3" label="পুরুষ বা মহিলা"/>
+                    </el-select>
+                </el-form-item>
+
+
+                <el-form-item prop="additional">
+                    <label class="d-block" for="additional">আবেদনকারীর জন্য আবশ্যকীয় (ঐচ্ছিক)</label>
+                    <el-input type="textarea" id="additional" :maxlength="5000" rows="5" show-word-limit
+                              v-model="models.additional">
+                    </el-input>
+                </el-form-item>
+            </section>
+
+            <el-form-item prop="special">
+                <el-checkbox v-model="models.special">জরুরি নিয়োগ <b>(এখানে টিক দিলে
+                    আপনার বিজ্ঞাপনটি জরুরী নিয়োগ বিজ্ঞপ্তি হিসেবে দেখানো হবে)</b>
+                    &nbsp;<router-link class="link" :to="specialInfoLink">জরুরী নিয়োগ সম্পর্কে বিস্তারিত জানুন
+                    </router-link>
+                </el-checkbox>
+            </el-form-item>
 
             <div class="text-center mt-1">
                 <el-button class="login-btn"
@@ -59,8 +161,8 @@
 </template>
 
 <script>
-    import {elButton, elForm, elFormItem, elInput, elOption, elSelect, elCheckbox} from '@/el';
-    import lazySelect from '../resume/partials/lazy-select';
+    import {elButton, elForm, elFormItem, elInput, elOption, elSelect, elCheckbox, elRadioButton} from '@/el';
+    import rangeInput from './range-input';
     import elCollapse from '@components/collapse';
     import elCollapseItem from '@components/collapse-item';
     import messageBox from 'element-ui/lib/message-box';
@@ -72,203 +174,40 @@
             elInput,
             elSelect,
             elOption,
-            lazySelect,
-            // wyswyg,
             elButton,
             elCollapse,
             elCollapseItem,
-            elCheckbox
+            elCheckbox,
+            elRadioButton,
+            rangeInput,
         },
 
         data() {
-            const required = {
-                required: true,
-                message: 'অনুগ্রহ করে এই ঘরটি পূরণ করুন'
-            };
-
-            const {minDate} = this;
-
             return {
                 formLoading: false,
-                fields: [
-                    {
-                        label: 'কাজ',
-                        fields: [
-                            {
-                                name: 'position_id',
-                                label: 'পদ',
-                                type: 'select',
-                                opt: [],
-                                rules: [required]
-                            },
-                            {
-                                name: 'vacancy',
-                                label: 'কর্মখালি',
-                                type: 'number'
-                            },
-                            {
-                                name: 'nature',
-                                label: 'চাকরীর ধরন',
-                                model: 1,
-                                value: 1,
-                                type: 'select',
-                                opt:
-                                    [
-                                        {
-                                            value: 1,
-                                            label: 'ফুল টাইম'
-                                        },
-                                        {
-                                            value: 2,
-                                            label: 'পার্ট টাইম'
-                                        }
-                                    ],
-                                rules: [required]
-                            },
-                            {
-                                name: 'salary',
-                                label: 'বেতন',
-                                type: 'group',
-                                fields: [
-                                    {
-                                        name: 'salary_from',
-                                        label: 'থেকে',
-                                        type: 'number'
-                                    },
-                                    {
-                                        name: 'salary_to',
-                                        label: 'টাকা (মাসিক)',
-                                        type: 'number'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'negotiable',
-                                label: 'বেতন আলোচনা সাপেক্ষে',
-                                type: 'check',
-                                model: false
-                            },
-                            {
-                                name: 'responsibilities',
-                                label: 'দায়িত্ব',
-                                type: 'textarea',
-                                rules: [required],
-                                max: 5000
-                            },
-                            {
-                                name: 'deadline',
-                                label: 'আবেদনের শেষ তারিখ',
-                                type: 'date',
-                                rules: [required, {validator: minDate}]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'ঠিকানা',
-                        fields: [
-                            {
-                                name: 'district_id',
-                                label: 'জেলা',
-                                top: true,
-                                type: 'lazy',
-                                route: 'districts',
-                                action: 'thanas/by-district',
-                                loading: true,
-                                rules: [required],
-                                child: {
+                models: {
+                    gender: 1,
+                    negotiable: false,
+                    special: false,
+                },
+                district: {
+                    loading: true,
+                    options: [],
+                },
+                thana: {
+                    loading: true,
+                    options: [],
+                },
+                position: {
+                    loading: true,
+                    options: [],
+                },
 
-                                    name: 'thana_id',
-                                    label: 'থানা',
-                                    loading: false,
-                                    rules: [required],
-                                    type: 'lazy'
-                                }
-                            },
-                            {
-                                name: 'village',
-                                type: 'text',
-                                label: 'এলাকা/গ্রাম/রোড নম্বর',
-                                model: '',
-                                max: 120,
-                                rules: [required]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'আবেদনকারী সম্পর্কে তথ্য',
-                        fields: [
-                            {
-                                name: 'age',
-                                label: 'বয়স',
-                                type: 'group',
-                                fields: [
-                                    {
-                                        name: 'age_from',
-                                        label: 'থেকে',
-                                        type: 'number'
-                                    },
-                                    {
-                                        name: 'age_to',
-                                        label: 'বছর',
-                                        type: 'number'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'experience',
-                                label: 'অভিজ্ঞতা',
-                                type: 'group',
-                                fields: [
-                                    {
-                                        name: 'experience_from',
-                                        label: 'থেকে',
-                                        type: 'number'
-                                    },
-                                    {
-                                        name: 'experience_to',
-                                        label: 'বছর',
-                                        type: 'number'
-                                    }
-                                ]
-                            },
-                            {
-                                name: 'education',
-                                label: 'শিক্ষাগত যোগ্যতা',
-                                type: 'textarea',
-                                max: 200
-                            },
-                            {
-                                name: 'gender',
-                                label: 'লিঙ্গ',
-                                model: 1,
-                                value: 1,
-                                type: 'select',
-                                opt: [
-                                    {
-                                        value: 1,
-                                        label: 'পুরুষ অথবা মহিলা'
-                                    },
-                                    {
-                                        value: 2,
-                                        label: 'পুরুষ'
-                                    },
-                                    {
-                                        value: 3,
-                                        label: 'মহিলা'
-                                    }
-                                ],
-                                rules: [required]
-                            },
-                            {
-                                name: 'additional',
-                                label: 'আবেদনকারীর জন্য আবশ্যকীয়',
-                                type: 'textarea',
-                                max: 5000
-                            },
-                        ]
-                    },
-                ],
-                // wyswyg: []
+                ageType: 1,
+
+                negotiableDisabled: false,
+
+                specialInfoLink: '',
             };
         },
 
@@ -287,28 +226,13 @@
                 callback();
             },
 
-            confirm() {
-                return new Promise(resolve => {
-                    messageBox.confirm(`এডমিন রিভিউ করার আগে পর্যন্ত কেউ বিজ্ঞাপনটি দেখতে পারবে না`, 'সতর্কীকরণ', {
-                        confirmButtonText: 'প্রক্রিয়া সম্পন্ন করুন',
-                        cancelButtonText: 'বাতিল করুন',
-                        type: 'warning',
-                        center: true
-                    }).then(() => {
-                        resolve(true);
-                    }).catch(() => {
-                        resolve(false);
-                    });
-                });
-            },
-
             async submit(evt) {
                 try {
                     await evt.target.__vue__.validate();
                 } catch (e) {
                 }
 
-                const {flatFields, edit} = this;
+                const {models, edit} = this;
 
                 if (!!edit && !(await this.confirm())) {
                     return;
@@ -316,8 +240,8 @@
 
                 const body = new FormData;
 
-                for (const key in flatFields) {
-                    body.append(key, flatFields[key].model);
+                for (const key in models) {
+                    body.append(key, models[key]);
                 }
 
                 const response = await this.$fetch(!!edit ? `jobs/${edit}` : 'jobs', {
@@ -328,7 +252,7 @@
                 if (response.status === 200) {
                     this.$notify({
                         message: 'আমরা আপনার বিজ্ঞাপন পর্যালোচনা করছি, দয়া করে অপেক্ষা করুন।',
-                        type: 'success'
+                        type: 'success',
                     });
 
                     return this.$router.push(`/dashboard/jobs/${response.text}`);
@@ -336,75 +260,108 @@
 
                 this.$notify({
                     message: 'দুঃখিত কিছু ভুল হয়েছে দয়া করে আবার চেষ্টা করুন',
-                    type: 'error'
+                    type: 'error',
                 });
-            }
+            },
+
+            async loadOptions(endpoint, field) {
+                if (field.loaded) {
+                    return;
+                }
+
+                const response = await this.$fetch(endpoint).response();
+                const data = response.json();
+
+                field.options = data.map(item => ({
+                    value: item.id,
+                    label: item.name,
+                }));
+            },
+
+            rangeTypeChange(evt) {
+                this.negotiableDisabled = this.models.negotiable = evt === 5;
+            },
+
+            loadDistricts() {
+                this.loadOptions('districts', this.district);
+                this.$set(this.thana, 'loaded', false);
+            },
+
+            unselectThana() {
+                this.$set(this.models, 'thana_id', null);
+            },
+
+            confirm() {
+                return new Promise(resolve => {
+                    messageBox.confirm(`এডমিন রিভিউ করার আগে পর্যন্ত কেউ বিজ্ঞাপনটি দেখতে পারবে না`, 'সতর্কীকরণ', {
+                        confirmButtonText: 'প্রক্রিয়া সম্পন্ন করুন',
+                        cancelButtonText: 'বাতিল করুন',
+                        type: 'warning',
+                        center: true,
+                    }).then(() => {
+                        resolve(true);
+                    }).catch(() => {
+                        resolve(false);
+                    });
+                });
+            },
         },
 
         computed: {
-            flatFields() {
-                const models = {};
-
-                for (const section of this.fields) {
-                    for (const field of section.fields) {
-                        if (field.type === 'group') {
-                            field.fields.forEach(item => {
-                                models[item.name] = item;
-                            });
-
-                            continue;
-                        }
-
-                        models[field.name] = field;
-
-                        if (field.child) {
-                            models[field.child.name] = field.child;
-                        }
-                    }
-                }
-
-                return models;
-            },
 
             edit() {
                 return this.$route.params.id;
-            }
+            },
+
+            rules() {
+                const required = {
+                    required: true,
+                    message: 'অনুগ্রহ করে এই ঘরটি পূরণ করুন',
+                };
+
+                const {minDate} = this;
+
+                return {
+                    position_id: [required],
+                    deadline: [required, {validator: minDate}],
+                    gender: [required],
+                    village: [required],
+                    district_id: [required],
+                    thana_id: [required],
+                };
+            },
+
+            ageStrings() {
+                const {age_from, age_to} = this.models;
+
+                if (!age_from && !age_to) {
+                    return ['থেকে', 'বছর'];
+                }
+            },
         },
 
         async created() {
-            const response = await this.$fetch('positions').response();
-            const data = response.json();
-
-            for (const item of data) {
-                this.flatFields.position_id.opt.push({
-                    value: item.id,
-                    label: item.name
-                });
-            }
+            this.specialInfoLink = await this.$setting('special-job-info-page-link');
 
             if (!this.edit) {
                 return;
             }
 
-            const fields = this.flatFields;
-            this.$fetch(`jobs/${this.edit}/edit`).response()
-                .then(res => {
+            const {models, thana} = this;
 
-                    const data = res.json();
+            this.loadOptions('positions', this.position);
+            this.loadOptions('districts', this.district);
 
-                    for (let key in fields) {
-                        const field = fields[key];
+            const job = (await this.$fetch(`jobs/${this.edit}/edit`).response()).json();
 
-                        this.$set(field, 'model', data[key]);
-                        this.$set(field, 'value', data[key]);
-                    }
-                }).then(async () => {
-                const response = await this.$fetch(`thanas/by-district/${fields.district_id.model}`).response();
-                const data = response.json();
+            job.deadline = new Date(job.deadline).toISOString().split('T')[0];
 
-                this.$set(fields.district_id.child, 'opt', data.map(item => ({id: item.id, name: item.name})));
-            });
-        }
+            for (let key in job) {
+                this.$set(models, key, job[key]);
+            }
+
+            this.loadOptions(`thanas/by-district/${models.district_id}`, thana);
+        },
     };
 </script>
 
@@ -412,6 +369,11 @@
 
     .group {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-gap: 10px;
+    }
+
+    .select {
+        display: block !important;
     }
 </style>

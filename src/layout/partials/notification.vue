@@ -77,7 +77,7 @@
         position: relative;
 
         &.unseen {
-            background: #f5f8ff;
+            background: transparentize($--color-primary, .92);
         }
     }
 

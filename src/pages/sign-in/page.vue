@@ -22,7 +22,7 @@
             <el-divider/>
         </template>-->
 
-        <el-form ref="form" :model="models" :rules="rules" @submit.native.prevent="submit" status-icon>
+        <el-form ref="form" :model="models" :rules="rules" @submit.native.prevent="submit">
             <el-form-item prop="username">
                 <label for="username" class="d-block">ইমেইল / ফোন নম্বর</label>
                 <el-input id="username" v-model="models.username">
@@ -32,7 +32,7 @@
 
             <el-form-item prop="password">
                 <label for="password" class="d-block">পাসওয়ার্ড</label>
-                <el-input id="password" type="password" v-model="models.password">
+                <el-input id="password" type="password" v-model="models.password" show-password>
                     <i class="el-icon-key el-input__icon" slot="prefix"></i>
                 </el-input>
             </el-form-item>
@@ -91,29 +91,29 @@
                 types: [
                     {
                         value: 1,
-                        label: 'চাকুরী অনুসন্ধানকারী'
+                        label: 'চাকুরী অনুসন্ধানকারী',
                     },
 
                     {
                         value: 2,
-                        label: 'নিয়োগদাতা'
-                    }
+                        label: 'নিয়োগদাতা',
+                    },
                 ],
                 rules: {
                     username: [
                         {
                             required: true,
-                            message: 'অনুগ্রহ করে আপনার মোবাইল নম্বর বা ইমেইল লিখুন।'
-                        }
+                            message: 'অনুগ্রহ করে আপনার মোবাইল নম্বর বা ইমেইল লিখুন।',
+                        },
                     ],
 
                     password: [
                         {
                             required: true,
-                            message: 'অনুগ্রহ করে আপনার পাসওয়ার্ড লিখুন।'
-                        }
-                    ]
-                }
+                            message: 'অনুগ্রহ করে আপনার পাসওয়ার্ড লিখুন।',
+                        },
+                    ],
+                },
             };
         },
 
@@ -133,8 +133,8 @@
                             password: this.models.password,
                             user_type_id: this.models.type,
                             grant_type: 'password',
-                            client_id: 1
-                        }
+                            client_id: 1,
+                        },
                     }).response();
 
                     if (response.status === 200) {
@@ -151,14 +151,14 @@
 
                     this.$notify({
                         message: 'দুঃখিত আপনার দেয়া তথ্য সঠিক নয়',
-                        type: 'warning'
+                        type: 'warning',
                     });
                 } catch (e) {
                 }
 
                 this.formLoading = false;
-            }
-        }
+            },
+        },
     };
 </script>
 

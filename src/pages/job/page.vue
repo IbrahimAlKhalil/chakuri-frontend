@@ -32,18 +32,24 @@
                 <h4>দায়িত্ব</h4>
                 <div>
                     <ul>
-                        <li v-for="(item, index) in responsibilities" :key="index">{{item}}</li>
+                        <template v-for="(item, index) in responsibilities">
+                            <li v-if="item && (item !== ' ' || item !== '')" :key="index">{{item}}</li>
+                        </template>
                     </ul>
                 </div>
 
                 <h4>আবেদনকারীর জন্য আবশ্যকীয়</h4>
                 <div>
                     <ul>
-                        <li v-for="(item, index) in additinal" :key="index">{{item}}</li>
+                        <template v-for="(item, index) in additinal">
+                            <li v-if="item && (item !== ' ' || item !== '')" :key="index">{{item}}</li>
+                        </template>
                     </ul>
                 </div>
                 <h4>বেতন</h4>
-                <p class="data">{{salary}} {{job.nature?'(আলোচনা সাপেক্ষে)':''}}</p>
+                <p class="data">{{rangeValue('salary','টাকা (মাসিক)', 'আলোচনা সাপেক্ষে')}} {{job.negotiable &&
+                    (job.salary_to ||
+                    job.salary_from)?'(আলোচনা সাপেক্ষে)':''}}</p>
                 <h4>ঠিকানা</h4>
                 <p class="data">{{job.location}}</p>
             </el-card>
@@ -53,7 +59,7 @@
                     <div class="sidebar-job-info">
                         <p>
                             <span>বয়সঃ</span>
-                            <span>&nbsp;&nbsp; {{job.age_from | enToBn}} - {{job.age_to | enToBn}} বছর</span>
+                            <span>&nbsp;&nbsp; {{rangeValue('age', 'বছর', 'উল্লেখ করা হয়নি')}}</span>
                         </p>
 
                         <p>
@@ -68,7 +74,7 @@
 
                         <p>
                             <span>অভিজ্ঞতাঃ</span>
-                            <span>&nbsp;&nbsp; {{job.experience_from | enToBn}} - {{job.experience_to | enToBn}} বছর</span>
+                            <span>&nbsp;&nbsp; {{rangeValue('experience', 'বছর', 'অভিজ্ঞতা না থাকলেও চলবে')}}</span>
                         </p>
 
                         <p>
@@ -86,7 +92,7 @@
                     </el-button>
 
                     <el-button v-else type="info" size="big" icon="fas fa-check">&nbsp;&nbsp;
-                        আপনি ইতিমধ্যে এই কাজের জন্য আবেদন করেছেন
+                        আবেদন করা হয়েছে
                     </el-button>
                 </el-card>
             </div>
@@ -107,12 +113,11 @@
                 job: null,
                 applied: false,
                 favorite: false,
-                applying: false
+                applying: false,
             };
         },
 
         methods: {
-
             async apply() {
                 if (!this.$auth.user) {
                     this.$router.push('/sign-in');
@@ -126,8 +131,8 @@
                 const response = await this.$fetch('applications', {
                     method: 'POST',
                     body: {
-                        id: job.id
-                    }
+                        id: job.id,
+                    },
                 }).response();
 
                 this.applying = false;
@@ -135,7 +140,7 @@
                 if (response.status !== 200) {
                     return this.$notify({
                         type: 'error',
-                        message: response.text
+                        message: response.text,
                     });
                 }
 
@@ -143,7 +148,7 @@
 
                 return this.$notify({
                     type: 'success',
-                    message: response.text
+                    message: response.text,
                 });
             },
 
@@ -157,14 +162,39 @@
                 const response = await this.$fetch('favorites', {
                     method: 'POST',
                     body: {
-                        id: job.id
-                    }
+                        id: job.id,
+                    },
                 }).response();
 
                 if (response.status === 200) {
                     this.favorite = !this.favorite;
                 }
-            }
+            },
+
+            rangeValue(name, append, unmentioned) {
+                const fromValue = this.job[`${name}_from`];
+                const toValue = this.job[`${name}_to`];
+
+                const enToBn = this.$enToBn;
+
+                if (!toValue && !fromValue) {
+                    return unmentioned;
+                }
+
+                if (fromValue === toValue) {
+                    return `${enToBn(fromValue)} ${append}`;
+                }
+
+                if (!toValue) {
+                    return `সর্বনিম্ন ${enToBn(fromValue)} ${append}`;
+                }
+
+                if (!fromValue) {
+                    return `সর্বোচ্চ ${enToBn(toValue)} ${append}`;
+                }
+
+                return enToBn(`${fromValue} - ${toValue} ${append}`);
+            },
         },
 
         computed: {
@@ -177,28 +207,13 @@
                 return this.job.additional.split('\n');
             },
 
-            salary() {
-                const {salary_from, salary_to} = this.job;
-                const enToBn = this.$enToBn;
-
-                if (salary_from === 0) {
-                    return `${enToBn(salary_from)} টাকা (মাসিক)`;
-                }
-
-                if (salary_from === salary_to) {
-                    return `${enToBn(salary_from)} টাকা (মাসিক)`;
-                }
-
-                return enToBn(`${salary_from} - ${salary_to}  টাকা (মাসিক)`);
-            },
-
             authenticated() {
                 return !!this.$auth.user;
             },
 
             normalUser() {
                 return this.authenticated && this.$auth.user.type === 1;
-            }
+            },
         },
 
         async created() {
@@ -213,7 +228,7 @@
 
             if (responses[0].status === 404) {
                 return this.$router.push({
-                    name: 'four-zero-four'
+                    name: 'four-zero-four',
                 });
             }
 
@@ -225,7 +240,7 @@
                 this.favorite = favoriteAndApplied.favorite;
                 this.applied = favoriteAndApplied.applied;
             }
-        }
+        },
     };
 </script>
 

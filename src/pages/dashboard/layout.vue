@@ -81,7 +81,7 @@
     }
 
     .router-link-active {
-        background: transparentize($--link-color, .9);
+        background: transparentize($--color-primary, .9);
         color: $--link-color;
     }
 

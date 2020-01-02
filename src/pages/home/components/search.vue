@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <div class="background h-100"></div>
+        <div class="background h-100" :style="background"></div>
         <div class="search-wrapper w-100 h-100 flex justify-center content-center flex-wrap">
             <el-card class="search w-100">
         <span class="title" slot="header">
@@ -54,14 +54,15 @@
                 categories: [
                     {
                         label: 'মসজিদ',
-                        value: 1
+                        value: 1,
                     }, {
                         label: 'মাদ্রাসা',
-                        value: 2
-                    }
+                        value: 2,
+                    },
                 ],
                 category: '',
-                keyword: ''
+                keyword: '',
+                banner: '',
             };
         },
 
@@ -70,8 +71,20 @@
                 const {keyword, category} = this;
 
                 this.$router.push({path: 'search', query: {keyword, category}});
-            }
-        }
+            },
+        },
+
+        computed: {
+            background() {
+                return {
+                    background: `url("${this.$fileUrl(this.banner)}") no-repeat`,
+                };
+            },
+        },
+
+        async created() {
+            this.banner = await this.$setting('banner');
+        },
     };
 </script>
 
@@ -84,9 +97,8 @@
     }
 
     .background {
-        background: url("../../../assets/images/sky.jpg") no-repeat;
-        background-size: cover;
         filter: blur(1px);
+        background-size: cover !important;
     }
 
     .search-wrapper {

@@ -2,8 +2,8 @@
     <div v-loading="data.loading"
          class="mt-1 el-card not-received is-always-shadow">
         <div class="p-1 text-center">
-            <b v-if="!change">Didn't receive {{title}}?</b>
-            <b v-else>Change your {{name}} </b>
+            <b v-if="!change">{{title}} পাননি?</b>
+            <b v-else>{{name}} পরিবর্তন করুন</b>
         </div>
 
 
@@ -23,10 +23,10 @@
 
             <template v-else>
                 <el-button type="primary"
-                           @click="change = true">Change {{name}}
+                           @click="change = true">{{name}} পরিবর্তন করুন
                 </el-button>
                 <el-button type="primary" @click="resendToken">
-                    Resend
+                    আবার পাঠান
                 </el-button>
             </template>
         </div>
@@ -45,8 +45,8 @@
             return {
                 change: false,
                 model: {
-                    value: ''
-                }
+                    value: '',
+                },
             };
         },
 
@@ -83,7 +83,7 @@
 
                 const response = await this.$fetch('update-verification-payload', {
                     method: 'POST',
-                    body
+                    body,
                 }).response();
 
 
@@ -99,7 +99,7 @@
                 data.time = 180;
 
                 this.$emit('update', body);
-            }
-        }
+            },
+        },
     };
 </script>
