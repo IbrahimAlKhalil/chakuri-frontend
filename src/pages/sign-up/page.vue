@@ -46,7 +46,7 @@
                 </el-form-item>
 
                 <el-form-item prop="mobile">
-                    <label for="mobile" class="d-block">মোবাইল নম্বর</label>
+                    <label for="mobile" class="d-block">মোবাইল নম্বর (ইংরেজিতে)</label>
                     <el-input id="mobile" v-model="models.mobile">
                         <i class="fas fa-mobile-alt el-input__icon" slot="prefix"></i>
                     </el-input>
@@ -54,7 +54,8 @@
 
                 <el-form-item prop="password">
                     <label for="password" class="d-block">পাসওয়ার্ড</label>
-                    <el-input id="password" type="password" v-model="models.password" autocomplete="new-password">
+                    <el-input id="password" type="password" v-model="models.password" autocomplete="new-password"
+                              show-password>
                         <i class="el-icon-key el-input__icon" slot="prefix"></i>
                     </el-input>
                 </el-form-item>
