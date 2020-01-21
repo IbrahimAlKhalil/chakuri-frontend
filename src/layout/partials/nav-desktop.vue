@@ -28,7 +28,7 @@
     import avatar from './avatar';
 
     export default {
-        components: {menuItem, avatar, elButton, elBadge}
+        components: {menuItem, avatar, elButton, elBadge},
     };
 </script>
 
@@ -39,6 +39,7 @@
 
     .el-menu {
         border-bottom: 0;
+        display: flex;
     }
 
     .btn {
