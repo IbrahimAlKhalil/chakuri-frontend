@@ -39,7 +39,11 @@
 
     .el-menu {
         border-bottom: 0;
-        display: flex;
+
+        &:after, &:before {
+            display: unset !important;
+            content: unset !important;
+        }
     }
 
     .btn {
