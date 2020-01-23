@@ -3,11 +3,9 @@
         <avatar v-if="$auth.user"/>
 
         <template v-else>
-            <nav>
-                <div class="el-menu--horizontal el-menu">
-                    <menu-item v-for="(item, index) in $store.state.menu.header.items" :key="index" :index="index"
-                               :item="item"/>
-                </div>
+            <nav class="el-menu--horizontal el-menu">
+                <menu-item v-for="(item, index) in $store.state.menu.header.items" :key="index" :index="index"
+                           :item="item"/>
             </nav>
 
             <div class="flex align-center wrapper">
