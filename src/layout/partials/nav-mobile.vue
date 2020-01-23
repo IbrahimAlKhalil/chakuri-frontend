@@ -14,7 +14,7 @@
                             <div slot="header" class="header">
                                 <template v-if="$auth.user">
                                     <div class="flex flex-wrap justify-center">
-                                        <img :src="$auth.user.photo?$fileUrl($auth.user.photo):$auth.user.altPhoto"
+                                        <img :src="$auth.user.photo?$fileUrl($auth.user.photo):$auth.altPhoto"
                                              :alt="$auth.user.name">
                                     </div>
 
@@ -67,13 +67,13 @@
 
         computed: {
             ...mapState({
-                show: ({menu}) => menu.show
+                show: ({menu}) => menu.show,
             }),
 
             menu() {
                 const {state} = this.$store;
                 return state.layout === 'master' ? state.menu.header.items : state.menu.dashboard;
-            }
+            },
         },
 
         methods: {
@@ -89,8 +89,8 @@
                 this.hideNav();
 
                 await this.$store.dispatch('auth/signOut');
-            }
-        }
+            },
+        },
     };
 </script>
 
