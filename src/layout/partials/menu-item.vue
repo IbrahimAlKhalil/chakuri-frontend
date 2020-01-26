@@ -15,8 +15,8 @@
         computed: {
             href() {
                 return this.link(this.$props.item);
-            }
-        }
+            },
+        },
     };
 </script>
 

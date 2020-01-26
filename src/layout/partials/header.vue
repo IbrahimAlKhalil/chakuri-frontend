@@ -2,7 +2,7 @@
     <el-header class="flex justify-between header">
         <nav-mobile/>
         <div class="logo">
-            <router-link to="/">
+            <router-link to="/" class="logo-url d-block">
                 <img :src="$store.state.logo | fileUrl" alt="name">
             </router-link>
         </div>
@@ -50,12 +50,12 @@
             elBadge,
             elButton,
             elPopover,
-            empty
+            empty,
         },
 
         computed: {
             ...mapState({
-                notification: state => state.notification
+                notification: state => state.notification,
             }),
         },
 
@@ -68,8 +68,8 @@
                 }
 
                 dispatch('notification/hideCount');
-            }
-        }
+            },
+        },
     };
 </script>
 
@@ -86,7 +86,13 @@
     }
 
     .logo {
-        padding: 10px;
+        height: 100%;
+
+        a {
+            height: 100%;
+            box-sizing: border-box;
+            padding: 5px 0;
+        }
 
         img {
             height: 100%;
