@@ -26,15 +26,15 @@
         data() {
             return {
                 user: this.$auth.user,
-                open: false
+                open: false,
             };
         },
 
         methods: {
             async signOut() {
                 await this.$store.dispatch('auth/signOut');
-            }
-        }
+            },
+        },
     };
 </script>
 
@@ -53,8 +53,8 @@
 
         img {
             box-sizing: border-box;
-            height: 100%;
-            width: 100%;
+            height: 60px;
+            width: 60px;
             border-radius: 50%;
             border: 10px solid transparent;
 
