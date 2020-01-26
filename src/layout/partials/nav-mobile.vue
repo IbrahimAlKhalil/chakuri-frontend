@@ -155,6 +155,10 @@
         }
     }
 
+    .menu-icon {
+        margin-right: 6px;
+    }
+
     @media screen and (min-width: $__md) {
         .menu-icon {
             display: none;
