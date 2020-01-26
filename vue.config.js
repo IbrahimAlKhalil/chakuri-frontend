@@ -10,8 +10,8 @@ module.exports = {
 
     pwa: {
         name: 'KhidmatBD',
-        themeColor: '#3d7fff',
-        msTileColor: '#ffffff'
+        themeColor: '#ee6305',
+        msTileColor: '#ffffff',
     },
 
     configureWebpack: {
@@ -24,19 +24,19 @@ module.exports = {
                 '@middleware': resolve(__dirname, 'src/middleware'),
                 '@modules': resolve(__dirname, 'src/modules'),
                 '@pages': resolve(__dirname, 'src/pages'),
-                '@styles': resolve(__dirname, 'src/styles')
-            }
+                '@styles': resolve(__dirname, 'src/styles'),
+            },
         },
         optimization: {
-            usedExports: true
+            usedExports: true,
         },
         plugins: [
             // CKEditor needs its own plugin to be built using webpack.
             new CKEditorWebpackPlugin({
                 // See https://ckeditor.com/docs/ckeditor5/latest/features/ui-language.html
-                language: 'en'
-            })
-        ]
+                language: 'en',
+            }),
+        ],
     },
 
     chainWebpack: config => {
@@ -77,8 +77,8 @@ module.exports = {
                     themeImporter: {
                         themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
                     },
-                    minify: true
+                    minify: true,
                 });
             });
-    }
+    },
 };
