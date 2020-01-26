@@ -127,7 +127,8 @@
 
     .header {
         img {
-            width: 100px;
+            width: 80px;
+            height: 80px;
         }
     }
 
