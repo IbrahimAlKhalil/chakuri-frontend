@@ -2,10 +2,6 @@
   "name": "chakuri",
   "version": "0.1.0",
   "private": true,
-  "sideEffects": [
-    "*.scss",
-    "*.vue"
-  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -39,6 +35,11 @@
     "babel-jest": "^23.6.0",
     "node-sass": "^4.13.0",
     "sass-loader": "^7.1.0",
+    "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.5.21"
-  }
+  },
+  "sideEffects": [
+    "*.scss",
+    "*.vue"
+  ]
 }

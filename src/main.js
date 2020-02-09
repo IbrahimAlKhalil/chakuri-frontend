@@ -18,6 +18,7 @@ import router from '@/router';
 import common from '@/plugins/common.plugin';
 import request from '@/plugins/fetch.plugin';
 import initializeStore from '@/modules/store-initializer';
+import './plugins/element.js'
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
