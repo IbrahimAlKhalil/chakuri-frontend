@@ -3,12 +3,17 @@
         <div v-for="(job, index) in jobs" :key="`${index}-j`" :class="job.focus?'focused':''">
             <router-link class="job" :to="`/jobs/${job.id}`">
                 <div class="flex">
-                    <div v-if="job.logo">
+                    <div v-if="job.admin_job">
+                        <img :src="$store.state.logo | fileUrl" :alt="job.institute_name">
+                    </div>
+                    <div v-else-if="job.logo">
                         <img :src="job.logo | fileUrl" :alt="job.institute">
                     </div>
 
                     <div class="title-wrapper">
-                        <div class="name" v-highlight="{keyword, sensitive: false}">{{job.institute}}</div>
+                        <div class="name" v-highlight="{keyword, sensitive: false}">
+                            {{job.admin_job?job.institute_name:job.institute}}
+                        </div>
                         <div class="title" v-highlight="{keyword, sensitive: false}">{{job.position}}</div>
                     </div>
                 </div>

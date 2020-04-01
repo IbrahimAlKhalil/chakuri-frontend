@@ -2,14 +2,18 @@
     <sidebar-card title="জরুরি নিয়োগ">
         <div class="special-jobs el-menu">
             <template v-for="(job, index) in jobs">
-                <el-tooltip class="item" effect="dark" :content="job.institute" placement="left" :key="index"
+                <el-tooltip class="item" effect="dark" :content="getName(job)"
+                            placement="left" :key="index"
                             :open-delay="500">
                     <router-link :index="index.toString()" class="flex el-menu-item" :to="`/jobs/${job.id}`">
-                        <div v-if="job.logo">
+                        <div v-if="job.admin_job">
+                            <img :src="$store.state.logo | fileUrl" :alt="job.institute_name">
+                        </div>
+                        <div v-else-if="job.logo">
                             <img :src="job.logo | fileUrl" :alt="job.institute">
                         </div>
                         <div class="wrapper">
-                            <div class="title">{{job.institute}}</div>
+                            <div class="title">{{getName(job)}}</div>
                             <div class="name">{{job.position}}</div>
                         </div>
                         <div>
@@ -24,11 +28,16 @@
 
 <script>
     import sidebarCard from './sidebar-card';
-    import {elTooltip, elMenu} from '@/el';
+    import {elMenu, elTooltip} from '@/el';
 
     export default {
         components: {sidebarCard, elTooltip, elMenu},
-        props: ['jobs']
+        props: ['jobs'],
+        methods: {
+            getName(job) {
+                return job.admin_job ? job.institute_name : job.institute;
+            },
+        },
     };
 </script>
 

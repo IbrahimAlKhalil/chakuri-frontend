@@ -85,15 +85,22 @@
                 </el-card>
 
                 <el-card v-if="!authenticated || normalUser" class="mt-1 text-center">
-                    <el-button v-if="!applied" type="primary" size="big"
-                               :icon="applying?'el-icon-loading':'fab fa-telegram-plane'"
-                               @click="apply" :disabled="applying">&nbsp;&nbsp;
-                        আবেদন করুন
-                    </el-button>
+                    <template v-if="job.admin_job">
+                        <div class="how-to-apply">
+                            {{job.how_to_apply}}
+                        </div>
+                    </template>
+                    <template v-else>
+                        <el-button v-if="!applied" type="primary" size="big"
+                                   :icon="applying?'el-icon-loading':'fab fa-telegram-plane'"
+                                   @click="apply" :disabled="applying">&nbsp;&nbsp;
+                            আবেদন করুন
+                        </el-button>
 
-                    <el-button v-else type="info" size="big" icon="fas fa-check">&nbsp;&nbsp;
-                        আবেদন করা হয়েছে
-                    </el-button>
+                        <el-button v-else type="info" size="big" icon="fas fa-check">&nbsp;&nbsp;
+                            আবেদন করা হয়েছে
+                        </el-button>
+                    </template>
                 </el-card>
             </div>
 
@@ -102,7 +109,7 @@
 </template>
 
 <script>
-    import {elCard, elDivider, elButton} from '@/el';
+    import {elButton, elCard, elDivider} from '@/el';
     import fourZeroFour from '@/components/four-zero-four';
 
     export default {
@@ -204,6 +211,9 @@
             },
 
             additinal() {
+                if (!this.job.additional) {
+                    return '';
+                }
                 return this.job.additional.split('\n');
             },
 
@@ -256,6 +266,11 @@
         @media all and (min-width: $--md) {
             grid-template-columns: 10fr 5fr;
         }
+    }
+
+    .how-to-apply {
+        font-weight: bold;
+        font-size: 1.2em;
     }
 
     .title {
