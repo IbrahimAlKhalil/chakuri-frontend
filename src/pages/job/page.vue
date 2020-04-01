@@ -29,23 +29,27 @@
 
                 <h4>চাকরীর ধরন</h4>
                 <p class="data">{{job.nature}}</p>
-                <h4>দায়িত্ব</h4>
-                <div>
-                    <ul>
-                        <template v-for="(item, index) in responsibilities">
-                            <li v-if="item && (item !== ' ' || item !== '')" :key="index">{{item}}</li>
-                        </template>
-                    </ul>
-                </div>
+                <template v-if="responsibilities">
+                    <h4>দায়িত্ব</h4>
+                    <div>
+                        <ul>
+                            <template v-for="(item, index) in responsibilities">
+                                <li v-if="item && (item !== ' ' || item !== '')" :key="index">{{item}}</li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
 
-                <h4>আবেদনকারীর জন্য আবশ্যকীয়</h4>
-                <div>
-                    <ul>
-                        <template v-for="(item, index) in additinal">
-                            <li v-if="item && (item !== ' ' || item !== '')" :key="index">{{item}}</li>
-                        </template>
-                    </ul>
-                </div>
+                <template v-if="additinal">
+                    <h4>আবেদনকারীর জন্য আবশ্যকীয়</h4>
+                    <div>
+                        <ul>
+                            <template v-for="(item, index) in additinal">
+                                <li v-if="item && (item !== ' ' || item !== '')" :key="index">{{item}}</li>
+                            </template>
+                        </ul>
+                    </div>
+                </template>
                 <h4>বেতন</h4>
                 <p class="data">{{rangeValue('salary','টাকা (মাসিক)', 'আলোচনা সাপেক্ষে')}} {{job.negotiable &&
                     (job.salary_to ||
@@ -207,12 +211,16 @@
         computed: {
 
             responsibilities() {
+                if (!this.job.responsibilities) {
+                    return null;
+                }
+
                 return this.job.responsibilities.split('\n');
             },
 
             additinal() {
                 if (!this.job.additional) {
-                    return '';
+                    return null;
                 }
                 return this.job.additional.split('\n');
             },
