@@ -23,7 +23,7 @@
                         <div><i :class="showDeadline?'fas fa-clock':'fas fa-graduation-cap'"></i>&nbsp&nbsp;<span
                                 class="requirement">{{showDeadline?deadline(job.deadline):job.education}}</span>
                         </div>
-                        <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{rangeValue(job, 'experience', 'বছর', 'অভিজ্ঞতা না থাকলেও চলবে')}} (অভিজ্ঞতা)</span>
+                        <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{rangeValue(job, 'experience', 'বছর (অভিজ্ঞতা)', 'অভিজ্ঞতা না থাকলেও চলবে')}}</span>
                         </div>
                     </div>
 
