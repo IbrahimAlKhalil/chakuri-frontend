@@ -7,7 +7,7 @@
                             :open-delay="500">
                     <router-link :index="index.toString()" class="flex el-menu-item" :to="`/jobs/${job.id}`">
                         <div v-if="job.admin_job">
-                            <img :src="$store.state.logo | fileUrl" :alt="job.institute_name">
+                            <img :src="logo" :alt="job.institute_name">
                         </div>
                         <div v-else-if="job.logo">
                             <img :src="job.logo | fileUrl" :alt="job.institute">
@@ -29,10 +29,16 @@
 <script>
     import sidebarCard from './sidebar-card';
     import {elMenu, elTooltip} from '@/el';
+    import logo from '@/assets/images/App logo SVG 512.svg';
 
     export default {
         components: {sidebarCard, elTooltip, elMenu},
         props: ['jobs'],
+        data() {
+            return {
+                logo,
+            };
+        },
         methods: {
             getName(job) {
                 return job.admin_job ? job.institute_name : job.institute;

@@ -4,7 +4,7 @@
             <router-link class="job" :to="`/jobs/${job.id}`">
                 <div class="flex">
                     <div v-if="job.admin_job">
-                        <img :src="$store.state.logo | fileUrl" :alt="job.institute_name">
+                        <img :src="logo" :alt="job.institute_name">
                     </div>
                     <div v-else-if="job.logo">
                         <img :src="job.logo | fileUrl" :alt="job.institute">
@@ -45,9 +45,15 @@
 </template>
 
 <script>
+    import logo from '@/assets/images/App logo SVG 512.svg';
 
     export default {
         props: ['jobs', 'keyword', 'show-deadline'],
+        data() {
+            return {
+                logo,
+            };
+        },
         methods: {
             rangeValue(job, name, append, unmentioned) {
                 const fromValue = job[`${name}_from`];
