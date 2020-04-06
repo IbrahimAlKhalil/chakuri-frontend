@@ -73,7 +73,7 @@
 
                         <p>
                             <span>শিক্ষাগত যোগ্যতাঃ</span>
-                            <span>&nbsp;&nbsp; {{job.education}}</span>
+                            <span>&nbsp;&nbsp; {{job.education || 'উল্লেখ করা হয়নি'}}</span>
                         </p>
 
                         <p>
