@@ -48,7 +48,7 @@
 
 
             <el-form-item v-else>
-                <el-input type="number" v-model="exact" @input="inputExact" min="0">
+                <el-input type="number" v-model="exact" min="0">
                     <template slot="append">{{append}}</template>
                 </el-input>
             </el-form-item>
@@ -70,8 +70,8 @@
 
         data() {
             return {
-                type: 1,
-                exact: '',
+                typeValue: 1,
+                exactValue: 0,
             };
         },
 
@@ -81,22 +81,68 @@
 
                 switch (type) {
                     case 1:
-                        return 'সর্বনিম্ন';
+                        return 'Minimum';
                     case 2:
-                        return 'সর্বোচ্চ';
+                        return 'Maximum';
                     default:
                         return '';
                 }
             },
+
+            type: {
+                get() {
+                    const {models, name} = this.$props;
+                    const fromValue = models[`${name}_from`];
+                    const toValue = models[`${name}_to`];
+
+                    // Minimum
+                    if (fromValue > 0 && toValue === 0) {
+                        return 1;
+                    }
+
+                    // Maximum
+                    if (toValue > 0 && fromValue === 0) {
+                        return 2;
+                    }
+
+                    // Not specified
+                    if (fromValue === 0 && toValue === 0) {
+                        return this.typeValue;
+                    }
+
+                    // Out and out
+                    if (fromValue === toValue) {
+                        return 4;
+                    }
+
+                    if (fromValue < toValue) {
+                        return 3;
+                    }
+
+                    return this.typeValue;
+                },
+                set(value) {
+                    this.typeValue = value;
+                },
+            },
+
+            exact: {
+                get() {
+                    const {models, name} = this.$props;
+
+                    return models[`${name}_from`];
+                },
+
+                set(value) {
+                    const {models, name} = this.$props;
+
+                    models[`${name}_from`] = models[`${name}_to`] = value;
+                    this.exactValue = value;
+                },
+            },
         },
 
         methods: {
-            inputExact(evt) {
-                const {models, name} = this.$props;
-
-                models[`${name}_from`] = models[`${name}_to`] = evt;
-            },
-
             rangeTypeChange(evt) {
                 const {name, models} = this.$props;
 
@@ -110,8 +156,10 @@
         created() {
             const {name, models} = this.$props;
 
-            this.$set(models, `${name}_from`, 0);
-            this.$set(models, `${name}_to`, 0);
+            if (this.type === 1) {
+                this.$set(models, `${name}_from`, 0);
+                this.$set(models, `${name}_to`, 0);
+            }
         },
     };
 </script>
