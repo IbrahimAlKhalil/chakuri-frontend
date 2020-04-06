@@ -12,6 +12,9 @@
                         <div v-else-if="job.logo">
                             <img :src="job.logo | fileUrl" :alt="job.institute">
                         </div>
+                        <div v-else>
+                            <img :src="mosque" :alt="job.institute">
+                        </div>
                         <div class="wrapper">
                             <div class="title">{{getName(job)}}</div>
                             <div class="name">{{job.position}}</div>
@@ -30,6 +33,7 @@
     import sidebarCard from './sidebar-card';
     import {elMenu, elTooltip} from '@/el';
     import logo from '@/assets/images/App logo SVG 512.svg';
+    import mosque from '@/assets/images/islam.svg';
 
     export default {
         components: {sidebarCard, elTooltip, elMenu},
@@ -37,6 +41,7 @@
         data() {
             return {
                 logo,
+                mosque,
             };
         },
         methods: {

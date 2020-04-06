@@ -9,6 +9,9 @@
                     <div v-else-if="job.logo">
                         <img :src="job.logo | fileUrl" :alt="job.institute">
                     </div>
+                    <div v-else>
+                        <img :src="mosque" :alt="job.institute">
+                    </div>
 
                     <div class="title-wrapper">
                         <div class="name" v-highlight="{keyword, sensitive: false}">
@@ -21,7 +24,7 @@
                 <div class="info mt-1">
                     <div class="row">
                         <div><i :class="showDeadline?'fas fa-clock':'fas fa-graduation-cap'"></i>&nbsp&nbsp;<span
-                                class="requirement">{{showDeadline?deadline(job.deadline):job.education}}</span>
+                                class="requirement">{{showDeadline?deadline(job.deadline):job.education||'শিক্ষাগত যোগ্যতা উল্লেখ করা হয়নি'}}</span>
                         </div>
                         <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{rangeValue(job, 'experience', 'বছর (অভিজ্ঞতা)', 'অভিজ্ঞতা না থাকলেও চলবে')}}</span>
                         </div>
@@ -46,12 +49,14 @@
 
 <script>
     import logo from '@/assets/images/App logo SVG 512.svg';
+    import mosque from '@/assets/images/islam.svg';
 
     export default {
         props: ['jobs', 'keyword', 'show-deadline'],
         data() {
             return {
                 logo,
+                mosque,
             };
         },
         methods: {

@@ -38,15 +38,15 @@
                 perPage: window.innerWidth < 920 ? 6 : 10,
                 counts: {
                     job: 0,
-                    institute: 0
-                }
+                    institute: 0,
+                },
             };
         },
         methods: {
             async loadJobs() {
                 const responses = await Promise.all([
                     this.$fetch(`job-filter?perPage=${this.perPage}`).response(),
-                    this.$fetch(`job-filter?perPage=8&special=yes`).response()
+                    this.$fetch(`job-filter/special-jobs?perPage=8`).response(),
                 ]);
 
                 this.jobs = responses[0].json();
@@ -54,7 +54,7 @@
                 const specialJobs = responses[1].json();
 
                 this.specialJobs = specialJobs.length ? specialJobs : this.jobs;
-            }
+            },
         },
         async created() {
             this.loadJobs();
@@ -64,7 +64,7 @@
             this.counts = response.json();
 
             // TODO: Load special jobs
-        }
+        },
     };
 </script>
 
