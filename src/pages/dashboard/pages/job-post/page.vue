@@ -1,6 +1,6 @@
 <template>
-    <div class="el-card">
-        <el-form class="el-card__body" :model="models" :rules="rules" @submit.native.prevent="submit">
+    <div class="el-card" v-loading="!loaded">
+        <el-form v-if="loaded" class="el-card__body" :model="models" :rules="rules" @submit.native.prevent="submit">
             <section>
                 <!--                <h3 class="mt-2">কাজ</h3>-->
 
@@ -161,7 +161,7 @@
 </template>
 
 <script>
-    import {elButton, elForm, elFormItem, elInput, elOption, elSelect, elCheckbox, elRadioButton} from '@/el';
+    import {elButton, elCheckbox, elForm, elFormItem, elInput, elOption, elRadioButton, elSelect} from '@/el';
     import rangeInput from './range-input';
     import elCollapse from '@components/collapse';
     import elCollapseItem from '@components/collapse-item';
@@ -208,6 +208,7 @@
                 negotiableDisabled: false,
 
                 specialInfoLink: '',
+                loaded: false,
             };
         },
 
@@ -360,7 +361,9 @@
                 this.$set(models, key, job[key]);
             }
 
-            this.loadOptions(`thanas/by-district/${models.district_id}`, thana);
+            await this.loadOptions(`thanas/by-district/${models.district_id}`, thana);
+
+            this.loaded = true;
         },
     };
 </script>

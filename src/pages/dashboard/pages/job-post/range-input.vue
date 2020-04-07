@@ -69,8 +69,21 @@
         props: ['name', 'append', 'models', 'label', 'negotiable'],
 
         data() {
+            const {models, name} = this.$props;
+            const fromValue = models[`${name}_from`];
+            const toValue = models[`${name}_to`];
+            let type = 1;
+
+            if (toValue > 0 && !fromValue) {
+                type = 2;
+            } else if (fromValue === toValue && (fromValue && toValue)) {
+                type = 4;
+            } else if (fromValue < toValue) {
+                type = 3;
+            }
+
             return {
-                typeValue: 1,
+                type,
                 exactValue: 0,
             };
         },
@@ -87,43 +100,6 @@
                     default:
                         return '';
                 }
-            },
-
-            type: {
-                get() {
-                    const {models, name} = this.$props;
-                    const fromValue = models[`${name}_from`];
-                    const toValue = models[`${name}_to`];
-
-                    // Minimum
-                    if (fromValue > 0 && toValue === 0) {
-                        return 1;
-                    }
-
-                    // Maximum
-                    if (toValue > 0 && fromValue === 0) {
-                        return 2;
-                    }
-
-                    // Not specified
-                    if (fromValue === 0 && toValue === 0) {
-                        return this.typeValue;
-                    }
-
-                    // Out and out
-                    if (fromValue === toValue) {
-                        return 4;
-                    }
-
-                    if (fromValue < toValue) {
-                        return 3;
-                    }
-
-                    return this.typeValue;
-                },
-                set(value) {
-                    this.typeValue = value;
-                },
             },
 
             exact: {
@@ -155,10 +131,15 @@
 
         created() {
             const {name, models} = this.$props;
+            const fromName = `${name}_from`;
+            const toName = `${name}_to`;
 
-            if (this.type === 1) {
-                this.$set(models, `${name}_from`, 0);
-                this.$set(models, `${name}_to`, 0);
+            if (!models.hasOwnProperty(fromName)) {
+                this.$set(models, fromName, 0);
+            }
+
+            if (!models.hasOwnProperty(toName)) {
+                this.$set(models, toName, 0);
             }
         },
     };
