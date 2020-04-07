@@ -342,9 +342,14 @@
         },
 
         async created() {
-            this.specialInfoLink = await this.$setting('special-job-info-page-link');
+            try {
+                this.specialInfoLink = await this.$setting('special-job-info-page-link');
+            } catch (e) {
+            }
+
 
             if (!this.edit) {
+                this.loaded = true;
                 return;
             }
 
