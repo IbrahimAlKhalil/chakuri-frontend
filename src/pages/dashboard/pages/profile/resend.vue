@@ -8,7 +8,7 @@
 
 
         <div class="el-card__body text-center">
-            <el-form v-if="change" :model="model" @submit.native.prevent="edit">
+            <el-form v-if="change" :model="model" @submit.native.prevent="edit" ref="form">
                 <el-form-item prop="value" :rules="rules">
                     <el-input v-model="model.value"/>
                 </el-form-item>
@@ -74,6 +74,13 @@
 
             async edit() {
                 const {type, data} = this.$props;
+                const {form} = this.$refs;
+
+                try {
+                    await form.validate();
+                } catch (e) {
+                    return;
+                }
 
                 // Show spinner
                 data.loading = true;
