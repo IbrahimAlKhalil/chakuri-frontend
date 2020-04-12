@@ -6,6 +6,8 @@
             <div v-for="(group, index) in groups" :key="index">
                 <h3>{{group.label}}</h3>
 
+                <el-checkbox v-if="index === 1" v-model="sameAddr" label="স্থায়ী ঠিকানা আর বর্তমান ঠিকানা একই"
+                             @change="mergeAddr"/>
                 <template v-for="(field, index) in group.fields">
                     <lazy-select v-if="field.type === 'lazy'" :field="field" :key="index"/>
 
@@ -42,6 +44,31 @@
                 initialized: false,
                 groups: [
                     {
+                        label: 'স্থায়ী ঠিকানা',
+                        fields: [
+                            {
+                                name: 'district',
+                                label: 'জেলা ',
+                                type: 'lazy',
+                                top: true,
+                                route: 'districts',
+                                action: 'thanas/by-district',
+                                loading: true,
+                                child: {
+                                    name: 'thana',
+                                    label: 'থানা ',
+                                    loading: false,
+                                    type: 'lazy'
+                                }
+                            },
+                            {
+                                name: 'village',
+                                type: 'text',
+                                label: 'এলাকা/গ্রাম/রোড নম্বর'
+                            }
+                        ]
+                    },
+                    {
                         label: 'বর্তমান ঠিকানা',
                         fields: [
                             {
@@ -66,34 +93,48 @@
                             }
                         ]
                     },
-                    {
-                        label: 'স্থায়ী ঠিকানা',
-                        fields: [
-                            {
-                                name: 'district',
-                                label: 'জেলা ',
-                                type: 'lazy',
-                                top: true,
-                                route: 'districts',
-                                action: 'thanas/by-district',
-                                loading: true,
-                                child: {
-                                    name: 'thana',
-                                    label: 'থানা ',
-                                    loading: false,
-                                    type: 'lazy'
-                                }
-                            },
-                            {
-                                name: 'village',
-                                type: 'text',
-                                label: 'এলাকা/গ্রাম/রোড নম্বর'
-                            }
-                        ]
-                    }
                 ],
-                flatFields: {}
+                flatFields: {},
+                sameAddr: false,
             }
+        },
+
+        methods: {
+            mergeAddr() {
+                const prefix = 'present_';
+                const names = ['district', 'thana', 'village'];
+                const value = this.sameAddr;
+
+                const fields = this.flatFields;
+
+                if (value) {
+                    if (names.some(name => fields[name].model === null || fields[name].model === '')) {
+                        this.sameAddr = false;
+
+                        return this.$notify({
+                            message: 'অনুগ্রহ করে আগে স্থায়ী ঠিকানা পূরণ করুন',
+                            type: 'warning'
+                        });
+                    }
+
+                    names.forEach(name => {
+                        const present = fields[`${prefix}${name}`];
+
+                        present.model = fields[name].model;
+
+                        this.$set(present, 'disabled', true);
+                    });
+
+                    const {present_district} = fields;
+
+                    loadLazySelect(fields.present_thana, `${present_district.action}/${present_district.model}`);
+                } else {
+                    names.forEach(name => {
+                        this.$set(fields[`${prefix}${name}`], 'disabled', false);
+                        this.sameAddrValue = false;
+                    });
+                }
+            },
         },
 
         async created() {
@@ -114,6 +155,26 @@
                 this.$set(flatFields[key], 'rules', required)
             }
 
+            const prefix = 'present_';
+            const names = ['district', 'thana', 'village'];
+
+            const areAllSame = !names.some(name => {
+                return flatFields[name].model !== flatFields[`${prefix}${name}`].model;
+            });
+
+            const areAllNull = !names.some(name => {
+                return flatFields[name].model || flatFields[`${prefix}${name}`].model;
+            });
+
+            const sameAddr = !areAllNull && areAllSame
+
+            this.sameAddr = sameAddr;
+
+            if (sameAddr) {
+                names.forEach(name => {
+                    this.$set(flatFields[`${prefix}${name}`], 'disabled', true);
+                });
+            }
 
             // Load lazy-select data
             // TODO:: Optimization needed

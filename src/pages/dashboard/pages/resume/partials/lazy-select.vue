@@ -3,14 +3,14 @@
         <el-form-item :prop="`${field.name}.model`" :rules="field.rules">
             <label :for="field.name">{{field.label}}</label>
             <el-select :id="field.name" class="sl" v-model="field.model" :placeholder="field.label + ' নির্ধারণ করুন'"
-                       @input="changed($event)">
+                       @input="changed($event)" :disabled="field.disabled">
                 <div slot="empty" class="p-2 text-center" v-loading="field.loading"></div>
                 <el-option v-for="(opt, index) in field.opt" :label="opt.name" :key="index" :value="opt.id"/>
             </el-select>
         </el-form-item>
 
         <el-form-item v-if="field.child" :prop="`${field.child.name}.model`" :rules="field.child.rules">
-            <lazy-select :field="field.child" :value="field.child.value"/>
+            <lazy-select :field="field.child" :value="field.child.value" :disabled="field.child.disabled"/>
         </el-form-item>
     </div>
 </template>
