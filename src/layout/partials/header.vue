@@ -16,7 +16,7 @@
                 <div>
                     <div class="items">
                         <div class="el-menu">
-                            <notification v-for="(item, index) in notification.items.slice(0, 6)" :key="index"
+                            <notification v-for="(item, index) in notificationItems" :key="index"
                                           :item="item" small/>
                         </div>
 
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
     import empty from '@/components/empty';
     import {elHeader, elBadge, elButton, elPopover} from '@/el';
     import Notification from '@/layout/partials/notification';
@@ -54,9 +53,13 @@
         },
 
         computed: {
-            ...mapState({
-                notification: state => state.notification,
-            }),
+            notification() {
+                return this.$store.state.notification;
+            },
+
+            notificationItems() {
+                return this.notification.items.slice(1, 6);
+            }
         },
 
         methods: {
