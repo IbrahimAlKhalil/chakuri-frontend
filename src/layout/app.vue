@@ -4,9 +4,7 @@
         <template v-if="initialized">
             <small-header/>
             <partial-header/>
-            <transition name="el-fade-in">
-                <router-view/>
-            </transition>
+            <router-view/>
             <partial-footer/>
 
             <transition name="el-fade-in">

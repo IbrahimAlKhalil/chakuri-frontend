@@ -20,9 +20,7 @@
         </aside>
 
         <section class="contents">
-            <transition name="el-fade-in">
-                <router-view/>
-            </transition>
+            <router-view/>
         </section>
     </section>
 </template>
