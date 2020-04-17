@@ -18,7 +18,12 @@ import router from '@/router';
 import common from '@/plugins/common.plugin';
 import request from '@/plugins/fetch.plugin';
 import initializeStore from '@/modules/store-initializer';
-import './plugins/element.js'
+
+import lang from 'element-ui/lib/locale/lang/en'
+import locale from 'element-ui/lib/locale'
+
+// configure language
+locale.use(lang);
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
