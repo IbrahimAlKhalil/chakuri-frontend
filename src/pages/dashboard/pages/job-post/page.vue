@@ -161,7 +161,17 @@
 </template>
 
 <script>
-    import {elButton, elCheckbox, elForm, elFormItem, elInput, elOption, elRadioButton, elSelect} from '@/el';
+    import {
+        elDatePicker,
+        elButton,
+        elCheckbox,
+        elForm,
+        elFormItem,
+        elInput,
+        elOption,
+        elRadioButton,
+        elSelect
+    } from '@/el';
     import rangeInput from './range-input';
     import elCollapse from '@components/collapse';
     import elCollapseItem from '@components/collapse-item';
@@ -180,6 +190,7 @@
             elCheckbox,
             elRadioButton,
             rangeInput,
+            elDatePicker
         },
 
         data() {

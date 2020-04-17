@@ -26,3 +26,4 @@ export elTabPane from 'element-ui/packages/tabs/src/tab-pane';
 export elBadge from 'element-ui/packages/badge/src/main';
 // export elSlider from 'element-ui/lib/slider'
 export elPagination from 'element-ui/lib/pagination';
+export elDatePicker from 'element-ui/lib/date-picker';

@@ -14,11 +14,11 @@
 </template>
 
 <script>
-    import {elFormItem, elInput, elOption, elSelect} from '../../../../../el'
+    import {elDatePicker, elFormItem, elInput, elOption, elSelect} from '../../../../../el'
 
     export default {
         props: ['field'],
-        components: {elInput, elFormItem, elOption, elSelect}
+        components: {elInput, elFormItem, elOption, elSelect, elDatePicker}
     }
 </script>
 
