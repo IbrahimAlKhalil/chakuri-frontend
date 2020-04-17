@@ -57,9 +57,9 @@
 
                 <el-form-item prop="deadline">
                     <label class="d-block" for="deadline">আবেদনের শেষ তারিখ / বিজ্ঞাপনের মেয়াদোত্তীর্ণের তারিখ</label>
-
-                    <el-input type="date" id="deadline" v-model="models.deadline">
-                    </el-input>
+                    <el-date-picker class="date-field" format="MMMM dd yyyy" value-format="yyyy-MM-dd"
+                                    id="deadline"
+                                    v-model="models.deadline"></el-date-picker>
                 </el-form-item>
             </section>
 
@@ -383,5 +383,10 @@
 
     .select {
         display: block !important;
+    }
+
+    .date-field {
+        width: 100%;
+        display: block;
     }
 </style>
