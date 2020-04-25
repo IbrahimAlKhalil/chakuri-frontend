@@ -115,7 +115,7 @@
         elSelect,
         elPagination
     } from '@/el';
-    import jobs from '../home/components/jobs';
+    import jobs from '@/components/jobs';
     import Empty from '@/components/empty';
 
     export default {

@@ -1,14 +1,22 @@
 <template>
-    <div class="wrapper">
-        <div v-for="(job, index) in jobs" :key="index" :class="job.focus?'focused':''">
-            <router-link class="job" :to="`/jobs/${job.id}`">
+    <transition-group tag="div" name="jump" class="wrapper">
+        <div v-for="(job, index) in jobs" :key="`${index}-j`" class="job">
+            <router-link class="job-inner" :to="`/jobs/${job.id}`">
                 <div class="flex">
-                    <div v-if="job.logo">
+                    <div v-if="job.admin_job">
+                        <img :src="logo" :alt="job.institute_name">
+                    </div>
+                    <div v-else-if="job.logo">
                         <img :src="job.logo | fileUrl" :alt="job.institute">
+                    </div>
+                    <div v-else>
+                        <img :src="mosque" :alt="job.institute">
                     </div>
 
                     <div class="title-wrapper">
-                        <div class="name" v-highlight="{keyword, sensitive: false}">{{job.institute}}</div>
+                        <div class="name" v-highlight="{keyword, sensitive: false}">
+                            {{job.admin_job?job.institute_name:job.institute}}
+                        </div>
                         <div class="title" v-highlight="{keyword, sensitive: false}">{{job.position}}</div>
                     </div>
                 </div>
@@ -16,9 +24,9 @@
                 <div class="info mt-1">
                     <div class="row">
                         <div><i :class="showDeadline?'fas fa-clock':'fas fa-graduation-cap'"></i>&nbsp&nbsp;<span
-                                class="requirement">{{showDeadline?deadline(job.deadline):job.education}}</span>
+                                class="requirement">{{showDeadline?deadline(job.deadline):job.education||'শিক্ষাগত যোগ্যতা উল্লেখ করা হয়নি'}}</span>
                         </div>
-                        <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{experience(job)}} (অভিজ্ঞতা)</span>
+                        <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{rangeValue(job, 'experience', 'বছর (অভিজ্ঞতা)', 'অভিজ্ঞতা না থাকলেও চলবে')}}</span>
                         </div>
                     </div>
 
@@ -27,54 +35,61 @@
                                 class="requirement" v-highlight="{keyword, sensitive: false}">{{job.thana}}, {{job.district}}</span>
                         </div>
                         <div><b>৳</b>&nbsp&nbsp;<span
-                                class="requirement">{{salary(job)}}</span>
+                                class="requirement">{{rangeValue(job, 'salary','টাকা (মাসিক)', 'আলোচনা সাপেক্ষে')}} {{job.negotiable &&
+                    (job.salary_to ||
+                    job.salary_from)?'(আলোচনা সাপেক্ষে)':''}}</span>
                         </div>
                     </div>
                 </div>
             </router-link>
-            <slot v-bind:item="job"/>
         </div>
-    </div>
+    </transition-group>
 </template>
 
 <script>
+    import logo from '@/assets/images/App logo SVG 512.svg';
+    import mosque from '@/assets/images/islam.svg';
 
     export default {
         props: ['jobs', 'keyword', 'show-deadline'],
+        data() {
+            return {
+                logo,
+                mosque,
+            };
+        },
         methods: {
-            experience(job) {
+            rangeValue(job, name, append, unmentioned) {
+                const fromValue = job[`${name}_from`];
+                const toValue = job[`${name}_to`];
+
                 const enToBn = this.$enToBn;
 
-                let experience;
-
-                if (job.experience_from === job.experience_to || job.experience_from === 0) {
-                    experience = enToBn(job.experience_from) + ' বছর';
-                } else {
-                    experience = `${enToBn(job.experience_from)} - ${enToBn(job.experience_to)} বছর`;
+                if (!toValue && !fromValue) {
+                    return unmentioned;
                 }
 
-                return experience;
-            },
-
-            salary(job) {
-                const enToBn = this.$enToBn;
-                let salary;
-
-                if (job.salary_from === job.salary_to || job.salary_from === 0) {
-                    salary = enToBn(job.salary_from) + ' টাকা (মাসিক)';
-                } else {
-                    salary = `${enToBn(job.salary_from)} - ${enToBn(job.salary_to)} টাকা (মাসিক)`;
+                if (fromValue === toValue) {
+                    return `${enToBn(fromValue)} ${append}`;
                 }
 
-                return salary;
+                if (!toValue) {
+                    return `সর্বনিম্ন ${enToBn(fromValue)} ${append}`;
+                }
+
+                if (!fromValue) {
+                    return `সর্বোচ্চ ${enToBn(toValue)} ${append}`;
+                }
+
+                return enToBn(`${fromValue} - ${toValue} ${append}`);
             },
 
             deadline(deadline) {
                 const date = new Date(deadline);
 
                 return this.$bnDate(date);
-            }
-        }
+            },
+        },
     };
 </script>
 
@@ -84,7 +99,7 @@
     .wrapper {
         display: grid;
         grid-template-columns: repeat(1, minmax(300px, 1fr));
-        gap: 15px;
+        grid-gap: 15px;
         grid-area: jobs;
     }
 
@@ -97,8 +112,6 @@
 
     .job {
         min-height: 140px;
-        display: flex;
-        flex-wrap: wrap;
         padding: 10px;
         border-radius: $--card-border-radius;
         box-shadow: $--box-shadow-base;
@@ -112,6 +125,14 @@
             background: $--color-secondary;
             color: #fff;
         }
+    }
+
+    .job-inner {
+        display: flex;
+        flex-wrap: wrap;
+        height: 100%;
+        text-decoration: inherit;
+        color: inherit;
     }
 
     .requirement {

@@ -27,7 +27,7 @@
     import topCategories from './components/top-categories';
     import subCategories from './components/sub-categories';
     import {elCard} from '@/el';
-    import jobs from './components/jobs';
+    import jobs from '@/components/jobs';
 
     export default {
         components: {search, location, specialJobs, elCard, topCategories, subCategories, jobs},
