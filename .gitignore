@@ -1,6 +1,9 @@
 .idea
 .vscode
 yarn.lock
-dist
+/dist
+/www/
 node_modules
 yarn-error.log
+/platforms/
+/plugins/

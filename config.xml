@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.khidmatbd.mobile" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Khidmat BD</name>
+    <description>
+        Assalamualaikum, Khidmat BD is a job finder software for the religious person and who graduated from the
+        madrasha education system. Our aim is creating an easy way for those who are hesitant about his job. We`ll
+        always help you to build your future dream. Khidmat BD always with you to get a good job for you.
+
+        Khidmat BD is an easy way for giving and receiving all services based work on madrasas and mosques
+        .
+        Goals and objectives
+        1. Providing qualified people with an honorable place according to their abilities.
+        2. To create an online platform that is as feasible as possible for those who are devoted to the religion.
+        To open the door to new possibilities for dedicated learners dedicated to human servants.
+        ৪. Overcoming the olama on their own activism.
+
+        How you'll use it?
+        It's A simple and easy application to use, because, we`ve given our full attention to give our user a user
+        friendly app
+        You have to just create an account with a valid phone number.and a strong password after that select the job
+        finder option, if you find a job as an employee. If you are the employer you must select the employer option,
+        and you have to remember that every login moment.
+
+        We hope you will be able to use it easily. It's nothing too much heard. So enjoy our app and drive your dream
+        with Khidmat BD
+    </description>
+    <author email="mdarifur475@gmail.com" href="https://khidmatbd.com">
+        Khidmat BD Team
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <icon src="res/icon/nodpi.png" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+    </platform>
+    <preference name="StatusBarBackgroundColor" value="#ee6305" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-statusbar" spec="~2.4.3" />
+</widget>

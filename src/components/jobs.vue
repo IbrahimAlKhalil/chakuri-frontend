@@ -15,7 +15,7 @@
 
                     <div class="title-wrapper">
                         <div class="name" v-highlight="{keyword, sensitive: false}">
-                            {{job.admin_job?job.institute_name:job.institute}}
+                            {{cutText(job.admin_job?job.institute_name:job.institute)}}
                         </div>
                         <div class="title" v-highlight="{keyword, sensitive: false}">{{job.position}}</div>
                     </div>
@@ -24,7 +24,7 @@
                 <div class="info mt-1">
                     <div class="row">
                         <div><i :class="showDeadline?'fas fa-clock':'fas fa-graduation-cap'"></i>&nbsp&nbsp;<span
-                                class="requirement">{{showDeadline?deadline(job.deadline):job.education||'শিক্ষাগত যোগ্যতা উল্লেখ করা হয়নি'}}</span>
+                                class="requirement">{{showDeadline?deadline(job.deadline):(cutText(job.education, 33)||'শিক্ষাগত যোগ্যতা উল্লেখ করা হয়নি')}}</span>
                         </div>
                         <div><i class="fas fa-briefcase"></i>&nbsp&nbsp;<span class="requirement">{{rangeValue(job, 'experience', 'বছর (অভিজ্ঞতা)', 'অভিজ্ঞতা না থাকলেও চলবে')}}</span>
                         </div>
@@ -89,6 +89,18 @@
 
                 return this.$bnDate(date);
             },
+
+            cutText(text, length = 100) {
+                if (!text) {
+                    return text;
+                }
+
+                if (text.length >= length) {
+                    return `${text.slice(0, length)}...`;
+                }
+
+                return text;
+            }
         },
     };
 </script>

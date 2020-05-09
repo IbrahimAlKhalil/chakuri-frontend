@@ -71,7 +71,7 @@ export default {
 
                 return enToBn(`${zeroPrefix(date.getDate())}/${zeroPrefix(date.getMonth() + 1)}/${date.getFullYear()}`);
 
-            }
+            },
         };
 
         for (let key in filters) {

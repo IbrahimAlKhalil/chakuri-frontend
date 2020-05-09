@@ -7,8 +7,11 @@ import lazy from '@modules/lazy';
 
 // TODO: Add 404 page
 
+const isAndroid = !!window.cordova;
+
 const router = new VueRouter({
-    mode: 'history',
+    mode: isAndroid ? 'hash' : 'history',
+    base: isAndroid ? '/index.html' : '/',
     routes: [
         ...group(guest, [
             {
@@ -97,8 +100,8 @@ const router = new VueRouter({
             component: () => lazy(import('./pages/job/page'))
         },
         {
-          path: '/email-verification/:token',
-          component: () => lazy(import('@components/email-verification'))
+            path: '/email-verification/:token',
+            component: () => lazy(import('@components/email-verification'))
         },
         {
             path: '/404',

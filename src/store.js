@@ -13,7 +13,8 @@ export default new Vuex.Store({
         layout: 'master',
         logo: null,
         title: '',
-        isMobile: window.innerWidth < 992
+        isMobile: window.innerWidth < 992,
+        isAndroid: !!window.cordova,
     },
     mutations: {
 

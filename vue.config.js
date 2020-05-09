@@ -3,10 +3,27 @@ const {resolve} = path;
 const CKEditorWebpackPlugin = require('@ckeditor/ckeditor5-dev-webpack-plugin');
 const {styles} = require('@ckeditor/ckeditor5-dev-utils');
 
+const template = process.env.TARGET_PLATFORM === 'android' ? 'cordova.html' : 'index.html';
+
 module.exports = {
+    outputDir: 'www',
+    publicPath: './',
     transpileDependencies: [
         /ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/,
     ],
+    pages: {
+        index: {
+            // entry for the page
+            entry: 'src/main.js',
+            // the source template
+            template: `public/${template}`,
+            // output as dist/index.html
+            filename: 'index.html',
+            // chunks to include on this page, by default includes
+            // extracted common chunks and vendor chunks.
+            chunks: ['chunk-vendors', 'chunk-common', 'index']
+        },
+    },
 
     pwa: {
         name: 'KhidmatBD',
