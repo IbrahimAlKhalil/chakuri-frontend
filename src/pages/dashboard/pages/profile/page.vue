@@ -195,7 +195,7 @@
                 rows: {
                     name: {
                         type: 'text',
-                        label: (user.type === 1 ? '' : 'প্রতিষ্ঠানের নাম ') + 'নাম',
+                        label: user.type === 2 ? 'প্রতিষ্ঠানের নাম' : 'নাম',
                         value: user.name
                     },
                     description: {
