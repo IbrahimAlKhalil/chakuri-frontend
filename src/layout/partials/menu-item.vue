@@ -1,7 +1,7 @@
 <template>
     <component :is="item.type === 'page'?'router-link':'a'" v-bind="href" :index="index.toString()"
                class="el-menu-item">
-        {{item.title}}
+        {{item.label}}
     </component>
 </template>
 

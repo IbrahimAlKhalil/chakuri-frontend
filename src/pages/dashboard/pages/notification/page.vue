@@ -36,7 +36,7 @@
                 // TODO: Fix infinite loop
 
                 await dispatch('notification/loadItems');
-                dispatch('notification/hideCount');
+                await dispatch('notification/hideCount');
 
                 if (entry.rootBounds.top < elm.getBoundingClientRect().top) {
                     await dispatch('notification/loadItems');

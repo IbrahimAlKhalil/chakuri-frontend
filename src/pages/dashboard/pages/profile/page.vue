@@ -4,7 +4,7 @@
 
         <div class="el-card__body">
             <template v-if="!user.photo">
-                <form @submit.native.prevent="" class="flex justify-center" ref="photoForm" v-loading="loading">
+                <form @submit.prevent="" class="flex justify-center" ref="photoForm" v-loading="loading">
                     <label class="flex justify-center align-center up-box">
                         <i class="el-icon-plus"></i>
                         <input class="d-none" type="file" accept="image/jpeg,image/png" @change="crop($event)">
@@ -17,7 +17,7 @@
             <div v-else class="flex justify-center" v-loading="loading">
                 <div>
                     <img class="d-block mb-1 photo" :src="user.photo | fileUrl">
-                    <form @submit.native.prevent="" class="flex justify-center" ref="photoForm">
+                    <form @submit.prevent="" class="flex justify-center" ref="photoForm">
                         <label class="align-center el-button el-button--primary flex is-plain justify-center is-circle">
                             <i class="el-icon-edit"></i>
                             <input class="d-none" type="file" accept="image/jpeg,image/png" @change="crop($event)">

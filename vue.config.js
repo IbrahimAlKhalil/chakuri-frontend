@@ -5,9 +5,8 @@ const {styles} = require('@ckeditor/ckeditor5-dev-utils');
 
 const template = process.env.TARGET_PLATFORM === 'android' ? 'cordova.html' : 'index.html';
 
-module.exports = {
+const configuration = {
     outputDir: 'www',
-    publicPath: './',
     transpileDependencies: [
         /ckeditor5-[^/\\]+[/\\]src[/\\].+\.js$/,
     ],
@@ -22,6 +21,17 @@ module.exports = {
             // chunks to include on this page, by default includes
             // extracted common chunks and vendor chunks.
             chunks: ['chunk-vendors', 'chunk-common', 'index']
+        },
+        admin: {
+            // entry for the page
+            entry: 'src/admin/main.js',
+            // the source template
+            template: 'public/index.html',
+            // output as dist/index.html
+            filename: 'admin.html',
+            // chunks to include on this page, by default includes
+            // extracted common chunks and vendor chunks.
+            chunks: ['chunk-vendors', 'chunk-common', 'admin']
         },
     },
 
@@ -99,3 +109,9 @@ module.exports = {
             });
     },
 };
+
+if (process.env.TARGET_PLATFORM === 'android') {
+    configuration.publicPath = './';
+}
+
+module.exports = configuration;

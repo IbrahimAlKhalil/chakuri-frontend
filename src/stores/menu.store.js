@@ -24,7 +24,7 @@ export default {
 
         dashboardMenu(state, items) {
             state.dashboard = items;
-        }
+        },
     },
 
     actions: {

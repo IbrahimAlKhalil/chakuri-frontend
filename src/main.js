@@ -32,6 +32,10 @@ Vue.directive('highlight', highlight);
 Vue.use(common);
 Vue.use(request);
 
+window.loadAuthDep = async function (user) {
+    return (await import('@/modules/auth-extra-loader')).default(user);
+};
+
 new Vue({
     store,
     router,

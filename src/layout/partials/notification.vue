@@ -1,12 +1,12 @@
 <template>
     <router-link :class="`el-menu-item flex align-center ${!item.seen?' unseen':''}`"
-                 :to="link" @click.native="seen(item)">
+                 to="/" @click.native="seen">
         <div class="pic" v-if="item.pic" :style="style">
         </div>
 
         <div class="flex justify-between align-center w-100">
             <div :class="`message ${small?' small':''}`">
-                <strong>{{item.title}}</strong> {{item.message}}
+                <strong>{{item.title}}</strong> {{item.message}} {{link}}
             </div>
 
             <!--<div class="blur"></div>-->
@@ -53,13 +53,15 @@
                         return `/dashboard/jobs/${link.id}`;
                     case 'page':
                         return `/pages/${link.id}`;
+                    case 'new-job':
+                        return `/dashboard/job-requests#j${link.id}`;
                 }
             }
         },
 
         methods: {
-            seen(item) {
-                this.$store.dispatch('notification/seen', item);
+            seen() {
+                this.$store.dispatch('notification/seen', this.$props.item);
             }
         },
     };

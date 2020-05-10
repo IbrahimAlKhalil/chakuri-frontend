@@ -35,7 +35,7 @@
         },
 
         beforeDestroy() {
-            this.$observer.unobserve(this.$refs.elm);
+            // this.$observer.unobserve(this.$refs.elm);
         }
     };
 </script>

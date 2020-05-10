@@ -2,9 +2,9 @@
  * This module handles authentication related functionality
  */
 
-import request, {Fetcher} from '../modules/request';
-import {clearTokens, retrieveToken, saveToken} from '../modules/tokenizer';
-import photo from '../assets/images/user.svg';
+import request, {Fetcher} from '@/modules/request';
+import {clearTokens, retrieveToken, saveToken} from '@/modules/tokenizer';
+import photo from '@/assets/images/user.svg';
 import safeRedirect from '@/modules/safe-redirect';
 
 // Auth state change handlers
@@ -75,9 +75,7 @@ export default {
                     return;
                 }
 
-                const loadAuthDep = (await import('@/modules/auth-extra-loader')).default;
-
-                loadAuthDep(user);
+                await window.loadAuthDep(user);
 
             }, true);
 
