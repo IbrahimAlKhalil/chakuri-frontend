@@ -50,7 +50,7 @@ const router = new VueRouter({
                     },
                     {
                         path: 'post-job/:id?',
-                        component: () => lazy(import('./pages/dashboard/pages/post-job/page')),
+                        component: () => lazy(import('@/pages/dashboard/pages/job-post/page')),
                     },
                     {
                         path: 'jobs',

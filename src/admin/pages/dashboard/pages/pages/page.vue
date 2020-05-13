@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/pages"
-               title="Position"
+               title="পেজ"
                :decorator="decorate"
                :per-page="10"
                :before-create="create">
@@ -23,10 +23,10 @@
 
                 <template #actions="{item}">
                     <div class="el-menu-item" @click="edit(item)">
-                        <i class="fa fa-edit"></i> Edit
+                        <i class="fa fa-edit"></i> এডিট করুন
                     </div>
                     <div class="el-menu-item" @click="methods.removeItem(item)">
-                        <i class="fa fa-trash"></i> Delete
+                        <i class="fa fa-trash"></i> ডিলিট করুন
                     </div>
                 </template>
             </data-table>
@@ -44,7 +44,7 @@
 
         data() {
             return {
-                cols: ['Title', 'Link', 'Author']
+                cols: ['শিরোনাম', 'লিংক', 'লেখক']
             };
         },
 

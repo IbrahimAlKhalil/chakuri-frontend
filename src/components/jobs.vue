@@ -42,6 +42,7 @@
                     </div>
                 </div>
             </router-link>
+            <slot v-bind:item="job"/>
         </div>
     </transition-group>
 </template>
@@ -74,7 +75,7 @@
                 }
 
                 if (!toValue) {
-                    return `সর্বনিম্ন ${enToBn(fromValue)} ${append}`;
+                    return `নূন্যতম ${enToBn(fromValue)} ${append}`;
                 }
 
                 if (!fromValue) {

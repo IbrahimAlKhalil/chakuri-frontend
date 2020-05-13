@@ -1,6 +1,6 @@
 <template>
     <el-dialog :visible="show" :fullscreen="$store.state.isMobile"
-               :title="`${type==='create'?'Create':'Update'} ${title}`" center
+               :title="`${title} ${type==='create'?'তৈরী করুন':'আপডেট করুন'}`" center
                append-to-body @close="$emit(`update:show`, false)">
         <el-form :model="models" ref="form" action="#"
                  @submit.native.prevent="submit" status-icon>
@@ -10,7 +10,7 @@
                         <label :for="type+'-'+field.name" class="d-block">{{field.label}}</label>
                         <el-select :id="type+'-'+field.name" v-model="models[field.name]" class="w-100"
                                    popper-class="data-form-select"
-                                   :placeholder="`Select ${field.label}`" :multiple="!!field.multiple">
+                                   :placeholder="`${field.label} নির্বাচন করুন`" :multiple="!!field.multiple">
                             <div slot="empty" class="p-1 text-center">
                                 <i v-if="!field.loaded" class="el-icon-loading"></i>
                                 <span v-else>Empty</span>
@@ -38,7 +38,7 @@
             <div class="text-center">
                 <el-button class="login-btn" :icon="!loading? 'el-icon-s-promotion' : 'el-icon-loading'"
                            type="primary"
-                           nativeType="submit" :disabled="loading">&nbsp;&nbsp;Submit
+                           nativeType="submit" :disabled="loading">&nbsp;&nbsp;জমা দিন
                 </el-button>
             </div>
         </el-form>

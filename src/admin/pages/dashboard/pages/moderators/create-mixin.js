@@ -2,21 +2,21 @@ export default {
     data() {
 
         const trigger = 'blur';
-        const required = {required: true};
+        const required = this.$store.state.requiredRule;
 
 
         return {
             createForm: [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
                     rules: [required]
                 },
 
                 {
                     name: 'mobile',
-                    label: 'Mobile',
+                    label: 'মোবাইল নম্বর',
                     type: 'text',
                     rules: [
                         // TODO: Reuse validators, DRY
@@ -34,7 +34,7 @@ export default {
                                 }
 
 
-                                callback('Sorry, number must be at least 11 characters');
+                                callback('দুঃখিত, মোবাইল নম্বর কমপক্ষে ১১ টি অক্ষরের  হতে হবে');
                             }
                         },
                         {
@@ -48,7 +48,7 @@ export default {
                                 }).response();
 
                                 if (!!response.json()) {
-                                    return callback('Sorry, this number is already in use');
+                                    return callback('দুঃখিত, এই নম্বরটি ইতিমধ্যে ব্যবহৃত');
                                 }
 
                                 callback();
@@ -59,7 +59,7 @@ export default {
 
                 {
                     name: 'roles',
-                    label: 'Roles',
+                    label: 'ভূমিকা',
                     type: 'select',
                     source: 'dashboard/roles-all',
                     multiple: true,
@@ -67,7 +67,7 @@ export default {
                         {
                             validator: (rule, value, callback) => {
                                 if (!value || !value.length) {
-                                    return callback('Please select at least one role');
+                                    return callback('কমপক্ষে একটি ভূমিকা নির্বাচন করুন');
                                 }
 
                                 callback();
@@ -79,13 +79,13 @@ export default {
 
                 {
                     name: 'password',
-                    label: 'Password',
+                    label: 'পাসওয়ার্ড',
                     type: 'password',
                     rules: [
                         required,
                         {
                             min: 8,
-                            message: `Sorry, password must be at least 8 characters long`,
+                            message: `দুঃখিত, পাসওয়ার্ড কমপক্ষে ৮ টি অক্ষরের  হতে হবে`,
                             trigger
                         }
                     ]
@@ -93,17 +93,17 @@ export default {
 
                 {
                     name: 'rePassword',
-                    label: 'Confirm Password',
+                    label: 'পাসওয়ার্ড নিশ্চিত করুন',
                     type: 'password',
                     rules: [
-                        {required: true, message: 'Please enter your password again'},
+                        {required: true, message: 'পাসওয়ার্ডটি আবার দিন'},
                         {
                             validator: (rule, value, callback) => {
                                 if (document.getElementById('create-password').value === value) {
                                     return callback();
                                 }
 
-                                callback('Sorry, passwords didn\'t match!');
+                                callback('দুঃখিত, পাসওয়ার্ডটি মিলছে না');
                             },
                             trigger
                         }

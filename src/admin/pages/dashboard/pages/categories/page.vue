@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/categories"
-               title="Category"
+               title="শ্রেণী"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -29,20 +29,18 @@
         components: {itemsCount, dataList, dataTable},
 
         data() {
-            const required = {required: true};
-
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
-                    rules: [required]
+                    rules: [this.$store.state.requiredRule]
                 },
                 {
                     name: 'icon',
-                    label: 'Icon',
+                    label: 'আইকন',
                     type: 'text',
-                    placeholder: 'Go to https://fontawesome.com/icons to get icon'
+                    placeholder: 'https://fontawesome.com/icons এ ভিজিট করুন'
                 }
             ];
 
@@ -51,7 +49,7 @@
 
                 editForm: form,
 
-                cols: ['Name', 'Icon']
+                cols: ['নাম', 'আইকন']
             };
         },
 

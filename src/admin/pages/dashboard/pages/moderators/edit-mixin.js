@@ -4,7 +4,7 @@ export default {
             editForm: [
                 {
                     name: 'roles',
-                    label: 'Roles',
+                    label: 'ভূমিকা',
                     type: 'select',
                     source: 'dashboard/roles-all',
                     multiple: true,
@@ -12,7 +12,7 @@ export default {
                         {
                             validator: (rule, value, callback) => {
                                 if (!value || !value.length) {
-                                    return callback('Please select at least one role');
+                                    return callback('কমপক্ষে একটি ভূমিকা নির্বাচন করুন');
                                 }
 
                                 callback();

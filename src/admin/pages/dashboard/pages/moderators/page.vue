@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/moderators"
-               title="Moderator"
+               title="মডারেটর"
                :decorator="decorate"
                :before-check="preventOwnCheck"
                :create-form="createForm"
@@ -10,7 +10,7 @@
                :actions="query.show === 'enabled'?actions:[]">
 
         <template #tool-btns="{methods}">
-            <el-tooltip v-if="query.show === 'disabled'" content="Enable">
+            <el-tooltip v-if="query.show === 'disabled'" content="সক্ষম করা করে দিন">
                 <el-button icon="fa fa-check" @click="methods.remove(true)" circle></el-button>
             </el-tooltip>
         </template>
@@ -20,15 +20,15 @@
             <div class="p-1 flex align-center">
                 <div>
                     <el-button class="filter">
-                        <i class="fa fa-filter"></i> Filter
+                        <i class="fa fa-filter"></i> ফিলটার
                     </el-button>
                 </div>
                 <div class="ml-1">
                     <el-radio-button v-model="query.show" label="enabled" size="medium" @change="methods.reset">
-                        Enabled
+                        সক্ষম
                     </el-radio-button>
                     <el-radio-button v-model="query.show" label="disabled" size="medium" @change="methods.reset">
-                        Disabled
+                        অক্ষম
                     </el-radio-button>
                 </div>
             </div>
@@ -49,10 +49,11 @@
                                    @click.stop=""></el-button>
 
                         <div class="el-menu">
-                            <div class="el-menu-item" @click="methods.edit(user)"><i class="fa fa-edit"></i> Edit</div>
+                            <div class="el-menu-item" @click="methods.edit(user)"><i class="fa fa-edit"></i> এডিট করুন
+                            </div>
                             <div class="el-menu-item" @click="methods.removeItem(user)"><i
                                     :class="user.disabled?'fa fa-check-circle':'fa fa-trash'"></i>
-                                {{user.disabled?'Enable':'Disable'}}
+                                {{user.disabled?'সক্ষম করা করে দিন':'অক্ষম করা করে দিন'}}
                             </div>
                         </div>
                     </el-popover>
@@ -135,7 +136,7 @@
                 if (!notOwn) {
                     this.$notify({
                         type: 'warning',
-                        message: 'You can\'t modify your own account'
+                        message: 'আপনি নিজের অ্যাকাউন্টটি পরিবর্তন করতে পারবেন না'
                     });
                 }
 

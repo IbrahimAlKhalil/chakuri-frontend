@@ -1,12 +1,12 @@
 <template>
     <router-link :class="`el-menu-item flex align-center ${!item.seen?' unseen':''}`"
-                 to="/" @click.native="seen">
+                 :to="link" @click.native="seen">
         <div class="pic" v-if="item.pic" :style="style">
         </div>
 
         <div class="flex justify-between align-center w-100">
             <div :class="`message ${small?' small':''}`">
-                <strong>{{item.title}}</strong> {{item.message}} {{link}}
+                <strong>{{item.title}}</strong> {{item.message}}
             </div>
 
             <!--<div class="blur"></div>-->

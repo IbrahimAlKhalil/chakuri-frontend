@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/roles"
-               title="Role"
+               title="ভূমিকা"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -21,10 +21,10 @@
                                    @click.stop=""></el-button>
 
                         <div class="el-menu">
-                            <div class="el-menu-item" @click="methods.edit(item)"><i class="fa fa-edit"></i> Edit
+                            <div class="el-menu-item" @click="methods.edit(item)"><i class="fa fa-edit"></i> এডিট করুন
                             </div>
                             <div class="el-menu-item" @click="methods.removeItem(item)"><i class="fa fa-trash"></i>
-                                Delete
+                                ডিলিট করুন
                             </div>
                         </div>
                     </el-popover>
@@ -61,25 +61,25 @@
         components: {elButton, elCheckbox, elTooltip, dataList, elPopover, elDivider},
 
         data() {
-            const required = {required: true};
+            const required = this.$store.state.requiredRule;
 
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
                     rules: [required]
                 },
 
                 {
                     name: 'description',
-                    label: 'Description',
+                    label: 'বিবরণ',
                     type: 'textarea',
                 },
 
                 {
                     name: 'permissions',
-                    label: 'Permissions',
+                    label: 'অনুমতিসমূহ',
                     type: 'select',
                     source: 'dashboard/permissions',
                     multiple: true

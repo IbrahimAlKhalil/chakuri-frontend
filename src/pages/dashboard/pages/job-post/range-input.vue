@@ -9,7 +9,7 @@
 
             <div>
                 <el-radio-group v-model="type" @change="rangeTypeChange">
-                    <el-radio-button :label="1">সর্বনিম্ন</el-radio-button>
+                    <el-radio-button :label="1">নূন্যতম</el-radio-button>
                     <el-radio-button :label="2">সর্বোচ্চ</el-radio-button>
                     <el-radio-button :label="3">এত থেকে এত</el-radio-button>
                     <el-radio-button :label="4">পুরোপুরি</el-radio-button>
@@ -94,9 +94,9 @@
 
                 switch (type) {
                     case 1:
-                        return 'Minimum';
+                        return 'নূন্যতম';
                     case 2:
-                        return 'Maximum';
+                        return 'সর্বোচ্চ';
                     default:
                         return '';
                 }

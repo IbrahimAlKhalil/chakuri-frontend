@@ -3,21 +3,21 @@
         <el-form class="el-card__body" :model="model" :rules="rules" @submit.native.prevent="submit" ref="form"
                  v-loading="loading">
             <div class="mb-1" v-if="link">
-                <strong>Link: </strong>
+                <strong>লিংক: </strong>
                 <a class="link" :href="link">{{link}}</a>
             </div>
 
             <el-form-item prop="title">
-                <label for="title">Title</label>
+                <label for="title">শিরোনাম</label>
                 <el-input v-model="model.title" id="title" :maxlength="titleMax" show-word-limit></el-input>
             </el-form-item>
 
             <el-form-item prop="content">
-                <label>Content</label>
+                <label>উপাত্ত</label>
                 <ck-editor :editor="editor" v-model="model.content" :config="config"></ck-editor>
             </el-form-item>
 
-            <el-button class="mt-2 d-block" nativeType="submit" icon="fa fa-save"> Save</el-button>
+            <el-button class="mt-2 d-block" nativeType="submit" icon="fa fa-save"> সংরক্ষণ</el-button>
         </el-form>
     </div>
 </template>
@@ -124,7 +124,7 @@
 
         computed: {
             rules() {
-                const required = {required: true, message: 'This field is required'};
+                const required = this.$store.state.requiredRule;
                 const {titleMax} = this;
 
                 return {
@@ -148,8 +148,8 @@
                 } catch (e) {
                     this.$notify({
                         type: 'error',
-                        title: 'Error',
-                        message: 'Please fill all the required fields'
+                        title: 'ত্রুটি',
+                        message: 'সবগুলো ঘর পূরণ করতে হবে'
                     });
                 }
 
@@ -163,19 +163,15 @@
                 if (response.status === 200 || response.status === 204) {
                     !id && this.$router.push(`/dashboard/pages/edit/${response.json().id}`);
 
-                    return this.$notify({
-                        type: 'success',
-                        title: 'Success',
-                        message: !id ? 'Saved' : 'Updated'
-                    });
+                    if (!id) {
+                        return this.$saved();
+                    } else {
+                        return this.$updated();
+                    }
                 }
 
 
-                this.$notify({
-                    type: 'error',
-                    title: 'Error',
-                    message: 'Something went wrong, please try later'
-                });
+                this.$someWentWrong();
             },
 
             updateLink(id) {
@@ -207,8 +203,8 @@
             if (response.status === 404) {
                 this.$notify({
                     type: 'error',
-                    title: 'Error',
-                    message: 'Sorry, the page you are looking for doesn\'t exist'
+                    title: 'ত্রুটি',
+                    message: 'দুঃখিত, আপনি যে পৃষ্ঠার সন্ধান করছেন তা বিদ্যমান নেই'
                 });
 
                 return this.$router.back();

@@ -1,21 +1,20 @@
 <template>
     <data-list endpoint="dashboard/positions"
-               title="Position"
+               title="পদ"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
                :per-page="25">
 
         <template #tool-btns="{data}">
-            <el-tooltip v-if="reordered" content="Save Current Order">
+            <el-tooltip v-if="reordered" content="বর্তমান অর্ডার সংরক্ষণ করুন">
                 <el-button icon="fa fa-save" @click="updateOrder(data.items)" circle></el-button>
             </el-tooltip>
         </template>
 
         <template #tool-menu="{data}">
             <div v-if="reordered" class="el-menu-item" @click="updateOrder(data.items)"><i
-                    class="fa fa-save"></i> Save
-                Order
+                    class="fa fa-save"></i> বর্তমান অর্ডার সংরক্ষণ করুন
             </div>
         </template>
 
@@ -47,7 +46,7 @@
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
                     rules: [required]
                 }
@@ -58,7 +57,7 @@
 
                 editForm: form,
 
-                cols: ['Name'],
+                cols: ['নাম'],
                 reordered: false
             };
         },
@@ -85,11 +84,7 @@
                     }
                 }).response();
 
-                this.$notify({
-                    type: 'success',
-                    title: 'Success',
-                    message: 'Updated'
-                });
+                this.$updated();
 
                 this.unsavedOrder = false;
             }

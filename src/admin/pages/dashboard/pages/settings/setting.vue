@@ -86,8 +86,8 @@
                     this.loading = false;
                     return this.$notify({
                         type: 'error',
-                        title: 'Error',
-                        message: 'This field is required.'
+                        title: 'ত্রুটি',
+                        message: 'ঘরটি অবশ্যই পূরণ করতে হবে.'
                     });
                 }
 
@@ -104,18 +104,10 @@
                         setting.value = response.text;
                     }
 
-                    return this.$notify({
-                        type: 'success',
-                        message: 'Setting Updated',
-                        title: 'Success'
-                    });
+                    return this.$updated();
                 }
 
-                return this.$notify({
-                    type: 'error',
-                    title: 'Error',
-                    message: 'Something went wrong please try later, or check whether your input is valid'
-                });
+                return this.$someWentWrong();
             }
         },
 

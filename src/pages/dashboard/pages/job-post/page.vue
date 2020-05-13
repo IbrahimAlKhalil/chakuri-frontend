@@ -3,6 +3,12 @@
         <el-form v-if="loaded" class="el-card__body" :model="models" :rules="rules" @submit.native.prevent="submit">
             <section>
                 <!--                <h3 class="mt-2">কাজ</h3>-->
+                <el-form-item v-if="admin" prop="institute_name">
+                    <label class="d-block" for="institute-name">প্রতিষ্ঠানের নাম</label>
+                    <el-input type="text" id="institute-name" :maxlength="200" show-word-limit
+                              v-model="models.institute_name">
+                    </el-input>
+                </el-form-item>
 
 
                 <el-form-item prop="position_id">
@@ -141,6 +147,13 @@
                 </el-form-item>
             </section>
 
+            <el-form-item v-if="admin" prop="how_to_apply">
+                <label class="d-block" for="how-to-apply">আবেদনের নিয়ম</label>
+                <el-input type="textarea" id="how-to-apply" :maxlength="5000" rows="5" show-word-limit
+                          v-model="models.how_to_apply">
+                </el-input>
+            </el-form-item>
+
             <el-form-item prop="special">
                 <el-checkbox v-model="models.special">জরুরি নিয়োগ <b>(এখানে টিক দিলে
                     আপনার বিজ্ঞাপনটি জরুরী নিয়োগ বিজ্ঞপ্তি হিসেবে দেখানো হবে)</b>
@@ -196,10 +209,13 @@
         data() {
             return {
                 formLoading: false,
+                admin: location.pathname.indexOf('admin.html') !== -1,
                 models: {
                     gender: 1,
                     negotiable: false,
                     special: false,
+                    how_to_apply: '',
+                    institute_name: '',
                 },
                 district: {
                     loading: true,
@@ -256,7 +272,9 @@
                     body.append(key, models[key]);
                 }
 
-                const response = await this.$fetch(!!edit ? `jobs/${edit}` : 'jobs', {
+                const prefix = this.admin ? 'dashboard/' : '';
+
+                const response = await this.$fetch(!!edit ? `${prefix}jobs/${edit}` : `${prefix}jobs`, {
                     method: !!edit ? 'PATCH' : 'POST',
                     body,
                 }).response();
@@ -267,7 +285,7 @@
                         type: 'success',
                     });
 
-                    return this.$router.push(`/dashboard/jobs/${response.text}`);
+                    return this.$router.push(`/dashboard/jobs/${this.admin ? response.text : ''}`);
                 }
 
                 this.$notify({
@@ -340,6 +358,8 @@
                     village: [required],
                     district_id: [required],
                     thana_id: [required],
+                    how_to_apply: [required],
+                    institute_name: [required],
                 };
             },
 
@@ -369,7 +389,7 @@
             this.loadOptions('positions', this.position);
             this.loadOptions('districts', this.district);
 
-            const job = (await this.$fetch(`jobs/${this.edit}/edit`).response()).json();
+            const job = (await this.$fetch(`${this.admin ? 'dashboard/' : ''}jobs/${this.edit}/edit`).response()).json();
 
             job.deadline = new Date(job.deadline).toISOString().split('T')[0];
 

@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/institute-types"
-               title="Institute Type"
+               title="প্রতিষ্ঠানের ধরণ"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -28,14 +28,12 @@
         components: {itemsCount, dataList, dataTable},
 
         data() {
-            const required = {required: true};
-
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
-                    rules: [required]
+                    rules: [this.$store.state.requiredRule]
                 }
             ];
 
@@ -44,7 +42,7 @@
 
                 editForm: form,
 
-                cols: ['Name']
+                cols: ['নাম']
             };
         },
 

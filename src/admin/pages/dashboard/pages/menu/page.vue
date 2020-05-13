@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/menus"
-               title="Menu"
+               title="মেনু"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -36,18 +36,18 @@
         components: {itemsCount, dataList, dataTable, elSwitch},
 
         data() {
-            const required = {required: true};
+            const required = this.$store.state.requiredRule;
 
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
                     rules: [required]
                 },
                 {
                     name: 'menu_location_id',
-                    label: 'Location',
+                    label: 'অবস্থান',
                     type: 'select',
                     rules: [required],
                     source: 'dashboard/menu-locations',
@@ -59,7 +59,7 @@
 
                 editForm: form,
 
-                cols: ['Name', 'Location', 'State']
+                cols: ['নাম', 'অবস্থান', 'অবস্থা']
             };
         },
 
@@ -80,20 +80,12 @@
                 }).response()
                     .then(response => {
                         if (response.status === 200 || response.status === 204) {
-                            return this.$notify({
-                                type: 'success',
-                                message: 'Updated',
-                                title: 'Success'
-                            });
+                            return this.$updated();
                         }
 
                         item.enabled = false;
 
-                        this.$notify({
-                            type: 'error',
-                            message: 'Sorry, something went wrong. Please try later.',
-                            title: 'Error'
-                        });
+                        this.$someWentWrong();
                     });
             }
         }

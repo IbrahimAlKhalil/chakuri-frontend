@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/job-requests"
-               title="Moderator"
+               title="বিজ্ঞাপনের আবেদন"
                :per-page="6"
                socket-event="nj"
                :crud="false"
@@ -10,23 +10,24 @@
 
             <jobs :jobs="exposed.items" :show-deadline="true" :keyword="exposed.highlight.keyword">
                 <template #default="{item}">
-                    <div class="flex justify-between align-center footer">
+                    <div class="flex justify-between align-center footer mt-1">
                         <div>
                             <div v-if="item.special" class="mb-1 el-badge">
-                                <strong class="el-badge__content el-badge__content--warning">Special</strong>
+                                <strong class="el-badge__content el-badge__content--warning">জরুরি</strong>
                             </div>
 
-                            <div>
-                                {{formatDate(item.created_at)}}
+                            <div class="date">
+                                {{item.created_at | bnDate}}
                             </div>
                         </div>
 
                         <div>
                             <el-button :icon="item.approving?'el-icon-loading':''" type="success"
-                                       @click="doAction({type: 'approve', item})" :disabled="item.loading">Approve
+                                       @click="doAction({type: 'approve', item})" :disabled="item.loading">অনুমোদন করুন
                             </el-button>
                             <el-button :icon="item.rejecting?'el-icon-loading':''" type="danger"
-                                       @click="doAction({type: 'reject', item})" :disabled="item.loading">Reject
+                                       @click="doAction({type: 'reject', item})" :disabled="item.loading">প্রত্যাখ্যান
+                                করুন
                             </el-button>
                         </div>
                     </div>
@@ -79,9 +80,9 @@
 
                     try {
                         // Get moderator's message
-                        const val = await messageBox.prompt('Tell the user something helpful about this rejection', 'Are you sure you want to reject this Job?', {
-                            confirmButtonText: 'OK',
-                            cancelButtonText: 'Cancel',
+                        const val = await messageBox.prompt('ব্যবহারকারীকে এই প্রত্যাখ্যান সম্পর্কে কিছু বলুন', 'আপনি কি নিশ্চিত যে আপনি এই আবেদনটি প্রত্যাখ্যান করতে চান?', {
+                            confirmButtonText: 'হ্যাঁ',
+                            cancelButtonText: 'না',
                             inputType: 'textarea'
                         });
 
@@ -93,9 +94,9 @@
                     // Confirm approve
                     try {
                         // Get moderator's message
-                        await messageBox.confirm('Are your sure you want approve this job?', {
-                            confirmButtonText: 'Yes',
-                            cancelButtonText: 'Cancel'
+                        await messageBox.confirm('আপনি কি এই আবেদনটি অনুমোদনের বিষয়ে নিশ্চিত?', {
+                            confirmButtonText: 'হ্যাঁ',
+                            cancelButtonText: 'না'
                         });
                     } catch (e) {
                         return;
@@ -120,7 +121,7 @@
                     this.exposed.total = total - 1;
 
                     return this.$notify({
-                        title: type === 'approve' ? 'Approved' : 'Rejected',
+                        title: type === 'approve' ? 'অনুমোদন করা হয়েছে' : 'প্রত্যাখ্যাত',
                         type: 'success'
                     });
 
@@ -130,10 +131,7 @@
                 item.loading = false;
                 item[type === 'approve' ? 'approving' : 'rejecting'] = false;
 
-                this.$notify({
-                    title: 'Sorry, something went wrong',
-                    type: 'error'
-                });
+                this.$someWentWrong();
             }
         },
 
@@ -145,5 +143,9 @@
         background: #eef5ff;
         padding: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .date {
+        color: #000000;
     }
 </style>

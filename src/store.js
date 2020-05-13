@@ -15,6 +15,7 @@ export default new Vuex.Store({
         title: '',
         isMobile: window.innerWidth < 992,
         isAndroid: !!window.cordova,
+        requiredRule: {required: true, message: 'এই ঘরটি পূরণ করতে হবে'}
     },
     mutations: {
 

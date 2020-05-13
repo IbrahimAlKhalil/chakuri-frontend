@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/jobs"
-               title="Job"
+               title="বিজ্ঞাপন"
                :decorator="decorate"
                :per-page="9"
                :query="query"
@@ -49,9 +49,9 @@
                                    @click.stop.prevent=""></el-button>
 
                         <div class="el-menu">
-                            <div class="el-menu-item" @click="edit(item)"><i class="fa fa-edit"></i> Edit</div>
+                            <div class="el-menu-item" @click="edit(item)"><i class="fa fa-edit"></i> এডিট করুন</div>
                             <div class="el-menu-item" @click="methods.removeItem(item)">
-                                <i class="fa fa-trash"></i> Delete
+                                <i class="fa fa-trash"></i> ডিলিট করুন
                             </div>
                         </div>
                     </el-popover>
@@ -62,14 +62,14 @@
 
                     <div class="el-card__body">
                         <div class="mt-1">
-                            <strong>Address: </strong> <span v-highlight="data.highlight">{{item.thana}}, {{item.district}}</span>
+                            <strong>ঠিকানা: </strong> <span v-highlight="data.highlight">{{item.thana}}, {{item.district}}</span>
                         </div>
 
                         <div class="mt-1">
-                            <strong>Created At:</strong> {{item.created_at | bnDate}}
+                            <strong>প্রকাশনার তারিখ:</strong> {{item.created_at | bnDate}}
                         </div>
                         <div class="mt-1">
-                            <strong>Expiry Date:</strong> {{item.deadline | bnDate}}
+                            <strong>মেয়াদ শেষ হওয়ার তারিখ:</strong> {{item.deadline | bnDate}}
                         </div>
                     </div>
                 </a>
@@ -105,10 +105,10 @@
 
                 filters: [
                     {
-                        label: 'All',
+                        label: 'সব',
                         value: 'all',
                     }, {
-                        label: 'Only Mine',
+                        label: 'শুধু আমার',
                         value: 'mine',
                     },
                 ],

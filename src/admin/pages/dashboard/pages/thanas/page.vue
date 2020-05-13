@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/thanas"
-               title="Thana"
+               title="থানা"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -16,15 +16,15 @@
                 <div class="el-card__body">
                     <template v-if="parent">
                         <template v-if="query.parent !== 0">
-                            Showing thana of <strong>{{parent.name}}</strong> district.
+                            <strong>{{parent.name}}</strong> জেলার সবগুলো থানা দেখানো হচ্ছে.
                         </template>
                         <template v-else>
-                            Showing all thana.
+                            সব থানা দেখানো হচ্ছে.
                         </template>
 
                         <strong class="link pointer" @click="toggleShowAll(methods.reset)">
                             <template v-if="query.parent !== 0">
-                                Show All
+                                সবগুলো
                             </template>
                             <template v-else>
                                 {{parent.name}}
@@ -55,13 +55,13 @@
         components: {itemsCount, dataList, dataTable},
 
         data() {
-            const required = {required: true};
+            const required = this.$store.state.requiredRule;
             const {district} = this.$route.params;
 
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
                     rules: [required]
                 }
@@ -86,12 +86,12 @@
                         type: 'select',
                         source: 'dashboard/districts-all',
                         rules: [
-                            {required: true, message: 'Please select a district'}
+                            {required: true, message: 'দয়া করে একটি জেলা নির্বাচন করুন'}
                         ]
                     }
                 ],
 
-                cols: ['Name'],
+                cols: ['নাম'],
 
                 query: {
                     parent: district

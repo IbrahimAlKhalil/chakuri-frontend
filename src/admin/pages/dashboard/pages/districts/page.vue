@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/districts"
-               title="District"
+               title="জেলা"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -16,15 +16,15 @@
                 <div class="el-card__body">
                     <template v-if="parent">
                         <template v-if="query.parent !== 0">
-                            Showing districts of <strong>{{parent.name}}</strong> division.
+                            <strong>{{parent.name}}</strong> বিভাগের সবগুলো জেলা দেখানো হচ্ছে.
                         </template>
                         <template v-else>
-                            Showing all districts.
+                            সব জেলা দেখানো হচ্ছে.
                         </template>
 
                         <strong class="link pointer" @click="toggleShowAll(methods.reset)">
                             <template v-if="query.parent !== 0">
-                                Show All
+                                সবগুলো
                             </template>
                             <template v-else>
                                 {{parent.name}}
@@ -59,13 +59,13 @@
         components: {itemsCount, dataList, dataTable},
 
         data() {
-            const required = {required: true};
+            const required = this.$store.state.requiredRule;
             const {division} = this.$route.params;
 
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
                     rules: [required]
                 }
@@ -89,13 +89,11 @@
                         label: 'Division',
                         type: 'select',
                         source: 'dashboard/divisions-all',
-                        rules: [
-                            {required: true, message: 'Please select a division'}
-                        ]
+                        rules: [required]
                     }
                 ],
 
-                cols: ['Name'],
+                cols: ['নাম'],
 
                 query: {
                     parent: division

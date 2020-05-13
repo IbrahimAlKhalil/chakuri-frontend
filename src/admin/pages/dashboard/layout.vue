@@ -8,7 +8,7 @@
                             <router-link :to="item.link"
                                          class="el-menu-item" :key="index">
                                 <div>
-                                    <i :class="item.icon"></i> &nbsp;{{item.title}}
+                                    <i :class="item.icon"></i> &nbsp;{{item.label}}
                                 </div>
                                 <span v-if="item.badge"
                                       class="el-badge__content el-badge__content--primary">{{item.badge | enToBn}}</span>

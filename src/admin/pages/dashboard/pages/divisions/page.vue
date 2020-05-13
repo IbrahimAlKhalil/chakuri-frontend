@@ -1,6 +1,6 @@
 <template>
     <data-list endpoint="dashboard/divisions"
-               title="Division"
+               title="বিভাগ"
                :decorator="decorate"
                :create-form="createForm"
                :edit-form="editForm"
@@ -32,14 +32,12 @@
         components: {itemsCount, dataList, dataTable},
 
         data() {
-            const required = {required: true};
-
             const form = [
                 {
                     name: 'name',
-                    label: 'Name',
+                    label: 'নাম',
                     type: 'text',
-                    rules: [required]
+                    rules: [this.$store.state.requiredRule]
                 }
             ];
 
@@ -48,7 +46,7 @@
 
                 editForm: form,
 
-                cols: ['Name']
+                cols: ['নাম']
             };
         },
 

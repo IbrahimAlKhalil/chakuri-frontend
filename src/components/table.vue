@@ -19,7 +19,7 @@
                         <td>
                             <el-checkbox v-model="item.checked" @change="changed"/>
                         </td>
-                        <td>{{index+1}}</td>
+                        <td>{{index+1 | enToBn}}</td>
                         <slot v-bind:item="item"></slot>
                         <td>
                             <el-popover popper-class="popover action-menu" placement="left-start">
@@ -30,12 +30,12 @@
                                     <div v-if="actions.includes('edit')" class="el-menu-item"
                                          @click="methods.edit(item)"><i
                                             class="fa fa-edit"></i>
-                                        Edit
+                                        এডিট করুন
                                     </div>
                                     <div v-if="actions.includes('delete')" class="el-menu-item"
                                          @click="methods.removeItem(item)"><i
                                             class="fa fa-trash"></i>
-                                        Delete
+                                        িলিট করুন
                                     </div>
 
                                     <slot name="actions" v-bind:item="item"></slot>

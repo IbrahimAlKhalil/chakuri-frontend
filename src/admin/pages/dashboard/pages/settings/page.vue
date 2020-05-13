@@ -1,7 +1,7 @@
 <template>
     <div class="el-card" v-loading="!initialized">
         <div class="el-card__header text-center">
-            <h3><i class="fa fa-cogs"></i> Application Settings</h3>
+            <h3><i class="fa fa-cogs"></i> এপ্লিকেশন সেটিংস</h3>
         </div>
 
         <div class="el-card__body">

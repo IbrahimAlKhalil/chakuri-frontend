@@ -6,7 +6,7 @@
             <div class="el-card__body toolbar flex justify-between">
                 <div class="flex align-center" @keydown.enter="reset">
                     <template v-if="search">
-                        <el-input v-model="keyword" placeholder="Search"></el-input>
+                        <el-input v-model="keyword" placeholder="অনুসন্ধান করুন"></el-input>
                         <el-button icon="fa fa-search" type="primary"
                                    @click="reset"></el-button>
                     </template>

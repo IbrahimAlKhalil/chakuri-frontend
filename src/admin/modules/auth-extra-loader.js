@@ -24,93 +24,108 @@ export default async function (user) {
     const {permissions} = user;
     const items = [
         {
-            title: 'Profile',
+            label: 'প্রোফাইল',
             link: 'profile',
             icon: 'fa fa-user',
+            type: 'page'
         },
         {
-            title: 'Notifications',
+            label: 'নোটিফিকেশন',
             link: 'notifications',
             icon: 'fa fa-bell',
             badge: 0,
+            type: 'page'
         },
         {
             permission: 'roles',
-            title: 'Roles',
+            label: 'ভূমিকা এবং অনুমতি',
             link: 'roles',
             icon: 'fa fa-shield-alt',
+            type: 'page'
         },
         {
             permission: 'moderators',
-            title: 'Moderators',
+            label: 'মডারেটর',
             link: 'moderators',
             icon: 'fas fa-user-shield',
+            type: 'page'
         },
         {
             permission: 'users',
-            title: 'Users',
+            label: 'ব্যবহারকারী',
             link: 'users',
             icon: 'fa fa-users',
+            type: 'page'
         },
         {
             permission: 'post-job',
-            title: 'Post Job',
+            label: 'বিজ্ঞাপন প্রকাশনা',
             link: 'post-job',
             icon: 'fa fa-file-signature',
+            type: 'page'
         },
         {
             permission: 'post-job',
-            title: 'Jobs',
+            label: 'বিজ্ঞাপন',
             link: 'jobs',
             icon: 'fa fa-list',
+            type: 'page'
         },
         {
             permission: 'job-requests',
-            title: 'Job Requests',
+            label: 'বিজ্ঞাপনের আবেদন',
             link: 'job-requests',
             icon: 'fa fa-stream',
+            type: 'page'
         },
         {
             permission: 'positions',
-            title: 'Positions',
+            label: 'পদ',
             link: 'positions',
             icon: 'fa fa-graduation-cap',
+            type: 'page'
         },
         {
             permission: 'categories',
-            title: 'Categories',
+            label: 'শ্রেণী',
             link: 'categories',
             icon: 'fa fa-school',
+            type: 'page'
         },
         {
             permission: 'institute-types',
-            title: 'Institute Types',
+            label: 'প্রতিষ্ঠানের ধরণ',
             link: 'institute-types',
             icon: 'fa fa-clipboard-list',
+            type: 'page'
         },
         {
             permission: 'geolocation',
-            title: 'Geolocation',
+            label: 'এলাকা',
             link: 'divisions',
             icon: 'fa fa-globe-asia',
+            type: 'page'
         },
         {
             permission: 'pages',
-            title: 'Pages',
+            label: 'পেজ',
             link: 'pages',
             icon: 'fa fa-scroll',
+            type: 'page'
         },
         {
             permission: 'menu',
-            title: 'Menu',
+            label: 'মেনু',
             link: 'menu',
             icon: 'fa fa-bars',
+            type: 'page'
         },
         {
             permission: 'settings',
-            title: 'Settings',
+            label: 'সেটিংস',
             link: 'settings',
             icon: 'fa fa-cog',
+            type: 'page'
         },
     ];
     const filtered = items.filter(item => {

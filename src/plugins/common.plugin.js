@@ -78,5 +78,28 @@ export default {
             Vue.prototype['$' + key] = filters[key];
             Vue.filter(key, filters[key]);
         }
+
+        Vue.prototype.$someWentWrong = function () {
+            this.$notify({
+                title: 'কোথাও সমস্যা হচ্ছে, অনুগ্রহ করে একটু পরে আবার চেষ্টা করুন, অথবা অ্যাডমিন এর সাথে যোগাযোগ করুন।',
+                type: 'error'
+            })
+        };
+
+        Vue.prototype.$updated = function () {
+            this.$notify({
+                type: 'success',
+                title: 'সফল',
+                message: 'আপডেট করা হয়েছে'
+            });
+        }
+
+        Vue.prototype.$saved = function () {
+            this.$notify({
+                type: 'success',
+                title: 'সফল',
+                message: 'সফলভাবে সংরক্ষিত'
+            });
+        }
     }
 };

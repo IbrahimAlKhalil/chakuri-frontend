@@ -1,22 +1,21 @@
 <template>
     <div>
         <data-list endpoint="dashboard/menu-items"
-                   title="Menu Item"
+                   title="মেনুর উপাত্ত"
                    :decorator="decorate"
                    :create-form="createForm"
                    :edit-form="editForm"
                    :per-page="25"
                    :query="query">
             <template #tool-btns="{data}">
-                <el-tooltip v-if="unsavedOrder" content="Save Current Order">
+                <el-tooltip v-if="unsavedOrder" content="বর্তমান অর্ডার সংরক্ষণ করুন">
                     <el-button icon="fa fa-save" @click="updateOrder(data.items)" circle></el-button>
                 </el-tooltip>
             </template>
 
             <template #tool-menu="{data}">
                 <div v-if="unsavedOrder" class="el-menu-item" @click="updateOrder(data.items)"><i
-                        class="fa fa-save"></i> Save
-                    Order
+                        class="fa fa-save"></i> বর্তমান অর্ডার সংরক্ষণ করুন
                 </div>
             </template>
 
@@ -28,7 +27,7 @@
                     <div class="el-card__body">
                         <template v-if="parent">
                             <template>
-                                Showing items of <strong>{{parent.name}}</strong>.
+                                <strong>{{parent.name}}</strong> মেনুর উপাত্ত গুলো দেখানো হচ্ছে
                             </template>
                         </template>
                         <div v-else class="text-center">
@@ -40,7 +39,7 @@
                 <data-table :cols="cols" :data="data" :methods="methods" @dragged="unsavedOrder = true" draggable>
                     <template #default="{item}">
                         <td v-highlight="data.highlight">{{item.label}}</td>
-                        <td v-highlight="data.highlight">{{item.type === 'page'?'Page':'Custom'}}</td>
+                        <td v-highlight="data.highlight">{{item.type === 'page'?'পেজ':'কাস্টম'}}</td>
                         <td v-highlight="data.highlight">{{item.link}}</td>
                     </template>
                 </data-table>
@@ -60,21 +59,21 @@
 
         data() {
             const {id} = this.$route.params;
-            const required = {required: true};
+            const required = this.$store.state.requiredRule;
             const type = {
                 name: 'type',
-                label: 'Type',
+                label: 'ধরন',
                 type: 'select',
                 rules: [required],
                 value: 'page',
                 data: [
                     {
                         id: 'page',
-                        name: 'Page'
+                        name: 'পেজ'
                     },
                     {
                         id: 'custom',
-                        name: 'Custom'
+                        name: 'কাস্টম'
                     }
                 ]
             };
@@ -82,14 +81,14 @@
             const form = [
                 {
                     name: 'label',
-                    label: 'Label',
+                    label: 'লেবেল',
                     type: 'text',
                     rules: [required]
                 },
                 type,
                 {
                     name: 'link',
-                    label: 'Link',
+                    label: 'লিংক',
                     type: 'text',
                     rules: [required],
                     prepend: function (models) {
@@ -105,7 +104,7 @@
             ];
 
             return {
-                cols: ['Label', 'Type', 'Link'],
+                cols: ['লেবেল', 'ধরন', 'লিংক'],
 
                 createForm: form,
                 editForm: form,
@@ -143,11 +142,7 @@
                     }
                 }).response();
 
-                this.$notify({
-                    type: 'success',
-                    title: 'Success',
-                    message: 'Updated'
-                });
+                this.$updated();
 
                 this.unsavedOrder = false;
             }
