@@ -9,7 +9,7 @@ import users from './pages/dashboard/pages/users/page';
 // TODO: Add 404 page
 
 const router = new VueRouter({
-    base: '/admin.html',
+    base: process.env.NODE_ENV === 'development' ? '/admin.html' : '/',
     routes: [
         {
             path: '/',
@@ -49,6 +49,7 @@ const router = new VueRouter({
                         component: () => lazy(import('@/pages/dashboard/pages/notification/page')),
                     },
                     {
+                        name: 'post-admin-job',
                         path: 'post-job/:id?',
                         component: () => lazy(import('@/pages/dashboard/pages/job-post/page')),
                     },

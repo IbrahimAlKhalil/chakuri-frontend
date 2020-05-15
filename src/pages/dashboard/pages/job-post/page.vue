@@ -207,9 +207,11 @@
         },
 
         data() {
+            console.log();
+
             return {
                 formLoading: false,
-                admin: location.pathname.indexOf('admin.html') !== -1,
+                admin: this.$route.name === 'post-admin-job',
                 models: {
                     gender: 1,
                     negotiable: false,
