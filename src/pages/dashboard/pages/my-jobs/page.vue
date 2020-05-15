@@ -150,7 +150,7 @@
             },
 
             link(item) {
-                return `jobs/${item.id}`;
+                return `/dashboard/jobs/${item.id}`;
             },
 
             edit(item) {
