@@ -19,6 +19,8 @@ export default {
 
         socketEvent: String,
 
+        externalEvents: Array,
+
         decorator: Function
     },
 
@@ -154,20 +156,32 @@ export default {
         // Update count
         this.$emit('input', this.exposed);
 
-        const {socketEvent} = this.$props;
+        const {socketEvent, externalEvents} = this.$props;
 
         if (socketEvent) {
             this.$socket().on(socketEvent, item => {
                 this.addItem(item, true);
             });
         }
+
+        if (externalEvents) {
+            for (const event of externalEvents) {
+                this.$socket().on(event, data => this.$emit(`socket${event}`, data));
+            }
+        }
     },
 
     beforeDestroy() {
-        const {socketEvent} = this.$props;
+        const {socketEvent, externalEvents} = this.$props;
 
         if (socketEvent) {
             this.$socket().removeAllListeners(this.$props.socketEvent);
+        }
+
+        if (externalEvents) {
+            for (const event of externalEvents) {
+                this.$socket().removeAllListeners(event);
+            }
         }
     }
 };
