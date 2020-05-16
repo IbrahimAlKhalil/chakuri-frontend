@@ -4,6 +4,8 @@
                :per-page="6"
                socket-event="nj"
                :crud="false"
+               @socketja="assigned"
+               :external-events="['ja']"
                v-model="exposed">
         <template #default="{data, methods}">
             <items-count :data="data"/>
@@ -22,13 +24,21 @@
                         </div>
 
                         <div>
-                            <el-button :icon="item.approving?'el-icon-loading':''" type="success"
-                                       @click="doAction({type: 'approve', item})" :disabled="item.loading">অনুমোদন করুন
-                            </el-button>
-                            <el-button :icon="item.rejecting?'el-icon-loading':''" type="danger"
-                                       @click="doAction({type: 'reject', item})" :disabled="item.loading">প্রত্যাখ্যান
-                                করুন
-                            </el-button>
+                            <template v-if="item.assignee === $store.state.auth.user.id">
+                                <el-button :icon="item.approving?'el-icon-loading':''" type="success"
+                                           @click="doAction({type: 'approve', item})" :disabled="item.loading">অনুমোদন
+                                    করুন
+                                </el-button>
+                                <el-button :icon="item.rejecting?'el-icon-loading':''" type="danger"
+                                           @click="doAction({type: 'reject', item})" :disabled="item.loading">
+                                    প্রত্যাখ্যান
+                                    করুন
+                                </el-button>
+
+                            </template>
+                            <el-button v-else :class="!!item.assignee?'el-icon-lock':'el-icon-unlock'" type="primary"
+                                       @click="assign(item)"
+                                       :disabled="!!item.assignee"></el-button>
                         </div>
                     </div>
                 </template>
@@ -63,11 +73,39 @@
         },
 
         methods: {
+            async assign(job) {
+                const response = await this.$fetch(`dashboard/job-requests/assign/${job.id}`, {
+                    method: 'POST',
+                }).response();
 
-            formatDate(dateTime) {
-                const date = new Date(dateTime);
+                if (response.status === 200 || response.status === 204) {
+                    this.$set(job, 'assignee', this.$store.state.auth.user.id);
+                } else if (response.status === 422) {
+                    this.$notify({
+                        type: 'error',
+                        message: 'দুঃখিত, এই অনুরোধটি অন্য কাউকে দেওয়া হয়েছে।'
+                    });
+                } else {
+                    this.$someWentWrong();
+                }
+            },
 
-                return `${date.toLocaleString('en-US', this.dateOptions)}`;
+            assigned(jobId) {
+                let job;
+
+                this.exposed.items.some(item => {
+                    const ok = item.id === parseInt(jobId, 10);
+
+                    if (ok) {
+                        job = item;
+                    }
+
+                    return ok;
+                });
+
+                if (job) {
+                    job.assignee = jobId;
+                }
             },
 
             async doAction(payload) {
@@ -121,11 +159,9 @@
                     this.exposed.total = total - 1;
 
                     return this.$notify({
-                        title: type === 'approve' ? 'অনুমোদন করা হয়েছে' : 'প্রত্যাখ্যাত',
+                        title: type === 'approve' ? 'অনুমোদন করা হয়েছে' : 'প্রত্যাখ্যান করা হয়েছে',
                         type: 'success'
                     });
-
-
                 }
 
                 item.loading = false;
