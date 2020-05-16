@@ -166,7 +166,9 @@ export class Fetcher {
                 continue;
             }
 
-            formData.append(key, value);
+            if (value !== null) {
+                formData.append(key, value);
+            }
         }
 
         return formData;
