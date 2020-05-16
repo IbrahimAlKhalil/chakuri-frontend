@@ -18,7 +18,7 @@ const router = new VueRouter({
 
         {
             path: '/jobs/:id',
-            component: () => lazy(import('./pages/job/page')),
+            component: () => lazy(import('@/pages/job/page')),
         },
 
         ...group(guest, [
