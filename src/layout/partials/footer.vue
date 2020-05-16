@@ -16,6 +16,12 @@
                 <!--TODO: Make it dynamic-->
                 <h3 class="title text-center">টুলস ও মিডিয়া</h3>
                 <div class="social-icons ml-auto mr-auto">
+                    <a class="google-play-link" href='https://play.google.com/store/apps/details?id=com.khidmatbd.mobile&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+                        <img class="google-play-img"
+                            alt='Get it on Google Play'
+                            src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>
+                    </a>
+
                     <a target="_blank" href="https://www.facebook.com/Khidmat-BD-111721266951818/">
                         <i class="fab fa-facebook-square"/>
                     </a>
@@ -27,7 +33,8 @@
                     <a target="_blank" href="https://www.linkedin.com/in/khidmat-bd-92b952197/">
                         <i class="fab fa-linkedin"/>
                     </a>
-                    <a target="_blank" href="https://www.youtube.com/channel/UCO5Lv-izV4YTIKshb8ZxLcQ?view_as=subscriber">
+                    <a target="_blank"
+                       href="https://www.youtube.com/channel/UCO5Lv-izV4YTIKshb8ZxLcQ?view_as=subscriber">
                         <i class="fab fa-youtube-square"/>
                     </a>
                 </div>
@@ -111,6 +118,8 @@
         grid-auto-flow: column;
         width: 210px;
         margin-top: 45px;
+        grid-gap: 0 10px;
+        justify-content: center;
 
         a {
             font-size: 2.8rem;
@@ -132,6 +141,14 @@
                 color: #FF0000;
             }
         }
+    }
+
+    .google-play-link {
+        width: 160px;
+    }
+
+    .google-play-img {
+        width: 100%;
     }
 
     .small-footer {

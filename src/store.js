@@ -13,7 +13,7 @@ export default new Vuex.Store({
         layout: 'master',
         logo: null,
         title: '',
-        isMobile: window.innerWidth < 992,
+        isMobile: window.innerWidth < 992 || !!window.cordova,
         isAndroid: !!window.cordova,
         requiredRule: {required: true, message: 'এই ঘরটি পূরণ করতে হবে'}
     },

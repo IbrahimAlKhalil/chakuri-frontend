@@ -1,7 +1,7 @@
 <template>
     <el-header class="flex justify-between header">
         <nav-mobile/>
-        <div class="logo">
+        <div v-if="!$store.state.isMobile" class="logo">
             <router-link to="/" class="logo-url d-block">
                 <img :src="$store.state.logo | fileUrl" alt="name">
             </router-link>
@@ -31,6 +31,12 @@
                 </div>
             </el-popover>
         </div>
+        <a v-else-if="$store.state.isMobile && !$store.state.isAndroid" class="google-play-link"
+           href='https://play.google.com/store/apps/details?id=com.khidmatbd.mobile&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+            <img class="google-play-img"
+                 alt='Get it on Google Play'
+                 src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>
+        </a>
         <nav-desktop/>
     </el-header>
 </template>
@@ -103,7 +109,6 @@
     }
 
     .auth-menu {
-        margin-right: 20px;
         margin-left: auto;
     }
 
@@ -115,6 +120,21 @@
     .see-more {
         border-width: 0;
         border-top: 1px solid $--border-color-light;
+    }
+
+    .google-play-link {
+        width: 155px;
+        display: block;
+    }
+
+    .google-play-img {
+        height: 100%;
+    }
+
+    @media screen and (min-width: $--md) {
+        .auth-menu {
+            margin-right: 20px;
+        }
     }
 </style>
 
