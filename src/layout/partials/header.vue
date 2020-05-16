@@ -58,7 +58,7 @@
             },
 
             notificationItems() {
-                return this.notification.items.slice(1, 6);
+                return this.notification.items.slice(0, 6);
             }
         },
 
