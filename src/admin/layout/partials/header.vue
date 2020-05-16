@@ -16,7 +16,7 @@
                 <div>
                     <div class="items">
                         <div class="el-menu">
-                            <notification v-for="(item, index) in notificationItems.slice(0, 6)" :key="index"
+                            <notification v-for="(item, index) in notificationItems" :key="index"
                                           :item="item" small/>
                         </div>
 

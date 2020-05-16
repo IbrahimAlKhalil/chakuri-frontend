@@ -46,6 +46,9 @@ export default {
         },
 
         addNotification(state, payload) {
+            if (state.page === 0) {
+                state.page = 1;
+            }
             state.items.unshift(payload);
             state.showCount = true;
         },

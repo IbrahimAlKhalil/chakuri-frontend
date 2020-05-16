@@ -287,7 +287,7 @@
                         type: 'success',
                     });
 
-                    return this.$router.push(`/dashboard/jobs/${this.admin ? response.text : ''}`);
+                    return this.$router.push(`/dashboard/jobs/${!this.admin ? response.text : ''}`);
                 }
 
                 this.$notify({
