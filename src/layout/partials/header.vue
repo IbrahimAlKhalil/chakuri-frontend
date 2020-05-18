@@ -37,7 +37,7 @@
                  alt='Get it on Google Play'
                  src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>
         </a>
-        <div class="flex align-center" v-else>
+        <div class="flex align-center" v-else-if="$store.state.isAndroid">
             <el-button type="primary" size="medium" @click="$router.push('/sign-in')">
                 লগ-ইন
             </el-button>
