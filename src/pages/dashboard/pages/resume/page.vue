@@ -26,6 +26,7 @@
     import collapseItem from '../../../../components/collapse-item';
     import factory from './modules/factory';
     import {elTabPane, elTabs} from '../../../../el';
+    import './style.scss';
 
     export default {
         data() {
@@ -114,6 +115,12 @@
         .inputs {
             grid-column-gap: 20px;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+    }
+
+    @media all and (max-width: $--md) {
+        .el-card__body {
+            padding: 0;
         }
     }
 </style>

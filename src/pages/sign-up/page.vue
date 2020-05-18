@@ -70,9 +70,9 @@
                 <el-form-item prop="agreed" class="agreed">
                     <el-checkbox v-model="models.agreed">
                         আমি ব্যবহারের
-                        <router-link :to="termsPage" target="_blank" class="link">শর্তাবলী</router-link>&nbsp;এবং
-                        <router-link :to="privacyPage" target="_blank" class="link">গোপনীয়তা নীতির
-                        </router-link>&nbsp;সঙ্গে
+                        <ext-link :href="termsPage" target="_blank" class="link" router-link>শর্তাবলী</ext-link>&nbsp;এবং
+                        <ext-link :href="privacyPage" target="_blank" class="link" router-link>গোপনীয়তা নীতির
+                        </ext-link>&nbsp;সঙ্গে
                         একমত
                     </el-checkbox>
                 </el-form-item>

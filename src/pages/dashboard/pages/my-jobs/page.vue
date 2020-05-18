@@ -87,7 +87,7 @@
                             </span>
                         </div>
 
-                        <div v-if="item.rejected" class="msg">
+                        <div v-if="item.rejected && item.message" class="msg">
                             {{item.message}}
                         </div>
                     </div>

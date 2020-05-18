@@ -3,19 +3,27 @@
         <search :counts="counts"/>
         <div class="container">
             <aside class="sidebar-1">
+                <banners :banners="banners" place="before-left-sidebar"/>
                 <location/>
+                <banners :banners="banners" place="after-left-sidebar" margin-top/>
             </aside>
 
             <section class="contents">
                 <top-categories/>
+                <banners :banners="banners" place="before-positions" margin-top/>
                 <sub-categories/>
+                <banners :banners="banners" place="after-positions" margin-top/>
             </section>
 
             <aside class="sidebar-2">
+                <banners :banners="banners" place="before-right-sidebar"/>
                 <special-jobs :jobs="specialJobs"/>
+                <banners :banners="banners" place="after-right-sidebar" margin-top/>
             </aside>
 
             <jobs :jobs="jobs"/>
+            <div></div>
+            <banners :banners="banners" place="after-jobs" margin-top/>
         </div>
     </section>
 </template>
@@ -28,9 +36,10 @@
     import subCategories from './components/sub-categories';
     import {elCard} from '@/el';
     import jobs from '@/components/jobs';
+    import banners from '@pages/home/components/banners';
 
     export default {
-        components: {search, location, specialJobs, elCard, topCategories, subCategories, jobs},
+        components: {banners, search, location, specialJobs, elCard, topCategories, subCategories, jobs},
         data() {
             return {
                 jobs: [],
@@ -40,6 +49,7 @@
                     job: 0,
                     institute: 0,
                 },
+                banners: {}
             };
         },
         methods: {
@@ -55,15 +65,31 @@
 
                 this.specialJobs = specialJobs.length ? specialJobs : this.jobs;
             },
+            async loadCounts() {
+                const response = await this.$fetch('institute-jobs-count').response();
+
+                this.counts = response.json();
+            },
+            async loadBanners() {
+                const response = await this.$fetch('banners').response();
+
+                const {banners} = this;
+
+                response.json().forEach(banner => {
+                    if (!banners.hasOwnProperty(banner.place)) {
+                        this.$set(banners, banner.place, []);
+                    }
+
+                    banners[banner.place].push(banner);
+                });
+            }
         },
         async created() {
-            this.loadJobs();
-
-            const response = await this.$fetch('institute-jobs-count').response();
-
-            this.counts = response.json();
-
-            // TODO: Load special jobs
+            await Promise.all([
+                this.loadJobs(),
+                this.loadCounts(),
+                this.loadBanners()
+            ]);
         },
     };
 </script>

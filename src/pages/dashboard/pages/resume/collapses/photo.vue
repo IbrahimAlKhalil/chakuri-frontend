@@ -1,5 +1,5 @@
 <template>
-    <form @submit.native.prevent="" ref="form">
+    <form @submit.prevent="" ref="form">
         <cropper :photo.sync="photo" @done="save($event)" @cancel="cancel"/>
 
         <template v-if="!user.photo">
@@ -15,7 +15,7 @@
 
         <div v-else class="flex justify-center" v-loading="loading">
             <div>
-                <img class="d-block mb-1 photo" :src="user.photo">
+                <img class="d-block mb-1 photo" :src="user.photo | fileUrl">
                 <div class="flex justify-center">
                     <label class="align-center el-button el-button--primary flex is-plain justify-center is-circle">
                         <i class="el-icon-edit"></i>
@@ -46,13 +46,6 @@
 
 <style lang="scss" scoped>
     @import "../../../../../styles/var";
-
-    .no-academic {
-        font-weight: bold;
-        font-size: 1.1rem;
-        padding: 30px;
-        text-align: center;
-    }
 
     .up-box {
         width: 200px;

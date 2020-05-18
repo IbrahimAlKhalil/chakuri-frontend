@@ -2,7 +2,7 @@
     <div class="el-card" v-loading="!initialized">
         <cropper :photo.sync="photo" @done="save($event)" @cancel="cancel"/>
 
-        <div class="el-card__body">
+        <div class="el-card__body wrapper-body">
             <template v-if="!user.photo">
                 <form @submit.prevent="" class="flex justify-center" ref="photoForm" v-loading="loading">
                     <label class="flex justify-center align-center up-box">
@@ -219,13 +219,13 @@
                         label: 'ঠিকানা',
                         id: 2
                     },
-                    email: {
-                        type: 'email',
-                        label: 'ই-মেইল',
-                        pass: true,
-                        verify: true,
-                        msg: 'আপনার নতুন ইমেইল ঠিকানায় ভেরিফিকেশন এর লিংক পাঠানো হয়েছে সেটাতে ক্লিক করে আপনার নতুন ইমেইলটি ভেরিফাই করুন। ১ ঘন্টা পর লিংকটির মেয়াদউত্তীর্ণ হয়ে যাবে।'
-                    },
+                    // email: {
+                    //     type: 'email',
+                    //     label: 'ই-মেইল',
+                    //     pass: true,
+                    //     verify: true,
+                    //     msg: 'আপনার নতুন ইমেইল ঠিকানায় ভেরিফিকেশন এর লিংক পাঠানো হয়েছে সেটাতে ক্লিক করে আপনার নতুন ইমেইলটি ভেরিফাই করুন। ১ ঘন্টা পর লিংকটির মেয়াদউত্তীর্ণ হয়ে যাবে।'
+                    // },
                     mobile: {
                         type: 'text',
                         label: 'মোবাইল নম্বর',
@@ -493,7 +493,7 @@
             // Info: Current email and mobile
             let {pending, info} = data;
 
-            (['email', 'mobile']).forEach(function (name) {
+            ([/*'email',*/ 'mobile']).forEach(function (name) {
                 const row = rows[name];
 
                 // Pending mobile and email
@@ -586,7 +586,7 @@
     @import "../../../../styles/var";
 
     .row {
-        padding: 12px 10px;
+        padding: 8px 0;
 
         &:hover {
             .actions {
@@ -608,7 +608,6 @@
     }
 
     .actions {
-        opacity: 0;
         transition: 150ms ease-in-out;
         will-change: opacity;
 
@@ -665,14 +664,27 @@
         width: 340px;
     }
 
-    @media all and (max-width: $--md) {
+    @media all and (min-width: $--md) {
+        .row {
+            padding: 15px 10px;
+        }
 
         .actions {
-            opacity: 1;
+            opacity: 0;
+        }
+    }
+
+    @media all and (max-width: $--md) {
+        .dialog {
+            width: 80%;
         }
 
         .dialog {
             width: 80%;
+        }
+
+        .wrapper-body {
+            padding: 20px 10px;
         }
     }
 </style>

@@ -1,20 +1,19 @@
 <template>
     <main v-loading="!initialized" id="app"
-          class="flex direction-column w-100">
+          :class="`flex direction-column w-100${$store.state.isAndroid?' android':''}`">
         <template v-if="initialized">
-            <small-header/>
+            <small-header v-if="!$store.state.isAndroid"/>
             <partial-header/>
             <router-view/>
-            <partial-footer/>
+            <partial-footer v-if="!$store.state.isAndroid"/>
+            <android-footer v-else/>
 
             <transition name="el-fade-in">
                 <div v-if="user && confirm.show" class="confirm-pass flex justify-center align-center">
                     <div class="el-card is-always-shadow">
                         <div class="el-card__header text-center">
                             <div>
-                                <div class="pic ml-auto mr-auto">
-                                    <img :src="user.photo?$fileUrl(user.photo):$auth.altPhoto" :alt="user.name">
-                                </div>
+                                <el-avatar class="pic" icon="el-icon-user" :src="user.photo | fileUrl" :size="60"></el-avatar>
 
                                 <p class="text-center">{{user.name}}</p>
                             </div>
@@ -49,17 +48,40 @@
                 </div>
             </transition>
         </template>
+
+        <div v-else-if="$store.state.isAndroid" class="loader flex justify-center align-center">
+            <div>
+                <img class="logo" :src="logo">
+            </div>
+        </div>
     </main>
 </template>
 
 <script>
     import partialHeader from '@/layout/partials/header';
     import partialFooter from '@/layout/partials/footer';
+    import androidFooter from '@/layout/partials/android-footer';
     import smallHeader from '@/layout/partials/small-header';
-    import {elFormItem, elForm, elButtonGroup, elButton, elInput} from '@/el';
+    import {elFormItem, elForm, elButtonGroup, elButton, elInput, elAvatar} from '@/el';
+    import logo from '@assets/images/nodpi.png';
 
     export default {
-        components: {partialHeader, partialFooter, smallHeader, elFormItem, elForm, elButtonGroup, elButton, elInput},
+        components: {
+            partialHeader,
+            androidFooter,
+            partialFooter,
+            smallHeader,
+            elFormItem,
+            elForm,
+            elButtonGroup,
+            elButton,
+            elInput,
+            elAvatar
+        },
+
+        data() {
+            return {logo};
+        },
 
         computed: {
             confirm() {
@@ -121,15 +143,31 @@
         }
 
         .pic {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
             box-shadow: 0 1px 3px rgba(0, 0, 0, .4);
         }
 
         .btn-group {
             margin-top: 20px;
         }
+    }
+</style>
+
+<style lang="scss" scoped>
+    @import "src/styles/var";
+
+    .android {
+        margin-bottom: 50px;
+    }
+
+    .loader {
+        position: absolute;
+        z-index: 5000;
+        width: 100%;
+        height: 100vh;
+        background: $--color-primary;
+    }
+
+    .logo {
+        width: 130px;
     }
 </style>

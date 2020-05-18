@@ -117,8 +117,8 @@ export class Fetcher {
 
             let body = this.options.body;
 
-            if (body && Object.getPrototypeOf(body) === Object.prototype) {
-                body = Fetcher.objectToFormData(body);
+            if (body && body.constructor === Object) {
+                body = Fetcher.convertToFormData(body);
             }
 
             if (delay) {
@@ -154,22 +154,59 @@ export class Fetcher {
         Fetcher.afterEachHandlers.unshift(handler);
     }
 
-    static objectToFormData(obj) {
-        const formData = new FormData;
+    static arrayToFormData(arr, formData, parent) {
+        arr.forEach((item, index) => {
+            if (Array.isArray(item)) {
+                return this.arrayToFormData(item, formData, `${parent}[${index}]`);
+            }
 
+            if (typeof item === 'object') {
+                return this.objectToFormData(item, formData, `${parent}[${index}]`);
+            }
+
+            if (item === null) {
+                return;
+            }
+
+            formData.append(`${parent}[${index}]`, item);
+        });
+    }
+
+    static objectToFormData(obj, formData, parent) {
         for (let key in obj) {
             const value = obj[key];
 
             if (Array.isArray(value)) {
-                value.forEach((item, index) => formData.append(`${key}[${index}]`, item));
-
+                this.arrayToFormData(value, formData, !parent ? key : `${parent}[${key}]`);
                 continue;
             }
 
-            if (value !== null) {
-                formData.append(key, value);
+            if (typeof value === 'object' && !((value instanceof File) || (value instanceof Blob))) {
+                this.objectToFormData(value, formData, !parent ? key : `${parent}[${key}]`);
+                continue;
             }
+
+            if (value === null) {
+                continue;
+            }
+
+            if (!parent) {
+                formData.append(key, value);
+                continue;
+            }
+
+            formData.append(`${parent}[${key}]`, value);
         }
+    }
+
+    static convertToFormData(data) {
+        const formData = new FormData;
+
+        if (Array.isArray(data)) {
+            throw new Error('Data must be an object');
+        }
+
+        this.objectToFormData(data, formData, '');
 
         return formData;
     }

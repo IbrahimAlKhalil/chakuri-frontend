@@ -62,6 +62,10 @@ const router = new VueRouter({
                         component: () => lazy(import('./pages/dashboard/pages/job-requests/page')),
                     },
                     {
+                        path: 'banners',
+                        component: () => lazy(import('./pages/dashboard/pages/banners/page.vue')),
+                    },
+                    {
                         path: 'profile',
                         component: () => lazy(import('@/pages/dashboard/pages/profile/page')),
                     },

@@ -35,7 +35,7 @@
                                     <div v-if="actions.includes('delete')" class="el-menu-item"
                                          @click="methods.removeItem(item)"><i
                                             class="fa fa-trash"></i>
-                                        িলিট করুন
+                                        ডিলিট করুন
                                     </div>
 
                                     <slot name="actions" v-bind:item="item"></slot>

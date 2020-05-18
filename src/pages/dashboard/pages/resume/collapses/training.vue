@@ -304,34 +304,3 @@
         }
     };
 </script>
-
-<style lang="scss" scoped>
-    @import "../../../../../styles/var";
-
-    .inputs {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    @media screen and (min-width: $--md) {
-        .inputs {
-            grid-column-gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        }
-    }
-
-    .no-academic {
-        font-weight: bold;
-        font-size: 1.1rem;
-        padding: 30px;
-        text-align: center;
-    }
-
-    .sl {
-        display: block !important;
-    }
-
-    .group-label {
-        color: $--color-primary;
-    }
-</style>

@@ -12,6 +12,7 @@ import App from './layout/app';
 
 // Styles
 import '@/styles/styles.scss';
+import './styles/el.scss';
 
 import store from '@/store';
 import router from './router';

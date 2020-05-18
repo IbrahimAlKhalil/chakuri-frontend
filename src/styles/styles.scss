@@ -31,7 +31,6 @@ body {
   display: flex;
   overflow-x: hidden;
   overflow-y: auto;
-  background: $bg;
 }
 
 html, body {
@@ -66,6 +65,10 @@ button, input {
     background: #c9c9c9;
     border-radius: 15px;
     border: 4px solid rgba(0, 0, 0, 0);
+  }
+
+  body {
+    background: $bg;
   }
 }
 

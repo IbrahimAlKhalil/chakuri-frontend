@@ -41,7 +41,6 @@
     @import "~cropperjs/dist/cropper.min.css";
 
     .dashboard-user {
-        padding: 10px;
         display: grid;
         grid-gap: 25px;
     }

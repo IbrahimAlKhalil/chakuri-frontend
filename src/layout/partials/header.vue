@@ -37,6 +37,16 @@
                  alt='Get it on Google Play'
                  src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/>
         </a>
+        <div class="flex align-center" v-else>
+            <el-button type="primary" size="medium" @click="$router.push('/sign-in')">
+                লগ-ইন
+            </el-button>
+
+            <el-button type="plain" size="medium" @click="$router.push('/sign-up')">
+                একাউন্ট তৈরি করুন
+            </el-button>
+        </div>
+
         <nav-desktop/>
     </el-header>
 </template>

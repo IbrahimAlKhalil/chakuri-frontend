@@ -1,6 +1,7 @@
 <template>
     <div class="el-card" v-loading="!loaded">
-        <el-form v-if="loaded" class="el-card__body" :model="models" :rules="rules" @submit.native.prevent="submit">
+        <el-form ref="form" v-if="loaded" class="el-card__body" :model="models" :rules="rules"
+                 @submit.native.prevent="submit">
             <section>
                 <!--                <h3 class="mt-2">কাজ</h3>-->
                 <el-form-item v-if="admin" prop="institute_name">
@@ -155,7 +156,7 @@
             </el-form-item>
 
             <el-form-item prop="special">
-                <el-checkbox v-model="models.special">জরুরি নিয়োগ <b>(এখানে টিক দিলে
+                <el-checkbox v-model="models.special" id="special-job-check">জরুরি নিয়োগ <b>(এখানে টিক দিলে
                     আপনার বিজ্ঞাপনটি জরুরী নিয়োগ বিজ্ঞপ্তি হিসেবে দেখানো হবে)</b>
                     &nbsp;<router-link class="link" :to="specialInfoLink">জরুরী নিয়োগ সম্পর্কে বিস্তারিত জানুন
                     </router-link>
@@ -207,8 +208,6 @@
         },
 
         data() {
-            console.log();
-
             return {
                 formLoading: false,
                 admin: this.$route.name === 'post-admin-job',
@@ -257,9 +256,28 @@
             },
 
             async submit(evt) {
+                const {form} = this.$refs;
+
                 try {
-                    await evt.target.__vue__.validate();
+                    await form.validate();
                 } catch (e) {
+                    const fields = Array.from(form.fields);
+
+                    let elm;
+
+                    fields.some(field => {
+                        const error = field.validateState === 'error' && field.hasOwnProperty('$el');
+
+                        if (error) {
+                            elm = field.$el;
+                        }
+
+                        return error;
+                    });
+
+                    window.scrollTo(0, elm.getBoundingClientRect().top + window.scrollY - 55);
+
+                    return;
                 }
 
                 const {models, edit} = this;
@@ -375,6 +393,19 @@
         },
 
         async created() {
+            if (!this.edit) {
+                const response = await this.$fetch('jobs/can-store').response();
+
+                if (!response.json().canStore) {
+                    messageBox.alert('অনুগ্রহ করে আগে আপনার মোবাইল নম্বরটি ভেরিফাই করুন', 'সতর্কবার্তা', {
+                        confirmButtonText: 'ভেরিফিকেশন',
+                        callback: () => {
+                            this.$router.push('/dashboard/profile#profile-mobile')
+                        }
+                    });
+                }
+            }
+
             try {
                 this.specialInfoLink = await this.$setting('special-job-info-page-link');
             } catch (e) {
@@ -407,6 +438,7 @@
 </script>
 
 <style lang="scss" scoped>
+    @import "src/styles/var";
 
     .group {
         display: grid;
@@ -421,5 +453,21 @@
     .date-field {
         width: 100%;
         display: block;
+    }
+
+    @media all and (max-width: $--md) {
+        .login-btn {
+            width: 100%;
+        }
+
+        .el-card__body {
+            padding: 20px 10px;
+        }
+    }
+</style>
+
+<style>
+    #special-job-check .el-checkbox__label {
+        white-space: normal;
     }
 </style>

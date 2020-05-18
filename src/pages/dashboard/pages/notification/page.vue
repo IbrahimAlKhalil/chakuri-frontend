@@ -49,11 +49,13 @@
 <style lang="scss" scoped>
     @import "../../../../styles/var";
 
-    .wrapper {
-        box-shadow: $--box-shadow-light;
-    }
-
     .el-menu-item {
         height: auto;
+    }
+
+    @media all and (min-width: $--md) {
+        .wrapper {
+            box-shadow: $--box-shadow-light;
+        }
     }
 </style>

@@ -86,7 +86,7 @@
 
                 this.$updated();
 
-                this.unsavedOrder = false;
+                this.reordered = false;
             }
         }
     };

@@ -79,6 +79,13 @@ export default async function (user) {
             type: 'page'
         },
         {
+            permission: 'banner',
+            label: 'ব্যানার',
+            link: 'banners',
+            icon: 'el-icon-data-line',
+            type: 'page'
+        },
+        {
             permission: 'positions',
             label: 'পদ',
             link: 'positions',

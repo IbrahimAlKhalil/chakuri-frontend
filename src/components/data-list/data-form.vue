@@ -22,6 +22,15 @@
                     </el-form-item>
                 </template>
 
+                <template v-else-if="field.type === 'image'">
+                    <el-form-item :prop="field.name" :rules="field.rules">
+                        <label :for="type+'-'+field.name" class="d-block">{{field.label}}</label>
+                        <input accept="image/gif,image/jpeg,image/png" :id="type+'-'+field.name" type="file"
+                               :placeholder="field.placeholder"
+                               @change="processFile($event, field)">
+                    </el-form-item>
+                </template>
+
                 <template v-else-if="field.type !== 'hidden'">
                     <el-form-item :prop="field.name" :rules="field.rules">
                         <label :for="type+'-'+field.name" class="d-block">{{field.label}}</label>
@@ -126,15 +135,16 @@
                 });
             },
 
-            updated() {
+            async updated() {
                 const {models} = this;
                 const {item, fields} = this.$props;
 
+
                 const old = {};
 
-                fields.forEach(function (field) {
+                for (const field of fields) {
                     if (!item.hasOwnProperty(field.name)) {
-                        return;
+                        continue;
                     }
 
                     const valueKey = field.map ? field.map.id : 'id';
@@ -146,21 +156,38 @@
 
                     if (select && field.multiple) {
                         item[name] = field.data.filter(op => model.includes(op[valueKey]));
-                        return;
+                        continue;
                     }
 
                     if (select) {
                         item[name] = field.data.filter(op => model === op[valueKey])[0];
-                        return;
+                        continue;
                     }
 
+                    if (field.type === 'image' && models[name] instanceof File) {
+                        item[`${name}-base64`] = await this.toBase64(models[name]);
+                        continue;
+                    }
                     item[name] = model;
-                });
+                }
 
 
                 this.$emit('submitted', {
                     old,
                     item
+                });
+            },
+
+            processFile(evt, field) {
+                this.models[field.name] = evt.target.files[0];
+            },
+
+            toBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = error => reject(error);
                 });
             }
         },

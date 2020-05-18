@@ -2,6 +2,7 @@ import Vue from 'vue';
 
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
+import ExternalLink from '@components/ext-link';
 
 // Directives
 import Loading from 'element-ui/packages/loading/src/directive';
@@ -25,6 +26,7 @@ import locale from 'element-ui/lib/locale'
 // configure language
 locale.use(lang);
 
+Vue.component('ext-link', ExternalLink)
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Loading);
