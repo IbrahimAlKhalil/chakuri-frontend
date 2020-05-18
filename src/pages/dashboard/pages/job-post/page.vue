@@ -275,6 +275,10 @@
                         return error;
                     });
 
+                    if (!elm) {
+                        return;
+                    }
+
                     window.scrollTo(0, elm.getBoundingClientRect().top + window.scrollY - 55);
 
                     return;
