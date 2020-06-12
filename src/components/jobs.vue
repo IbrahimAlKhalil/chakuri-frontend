@@ -111,7 +111,7 @@
 
     .wrapper {
         display: grid;
-        grid-template-columns: repeat(1, minmax(300px, 1fr));
+        grid-template-columns: repeat(1, minmax(calc(100% - 10px), 1fr));
         grid-gap: 15px;
         grid-area: jobs;
     }

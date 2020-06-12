@@ -48,6 +48,9 @@
 
 <style lang="scss" scoped>
     @import "../../../../styles/var";
+    .el-menu {
+        border-right: 0;
+    }
 
     .el-menu-item {
         height: auto;

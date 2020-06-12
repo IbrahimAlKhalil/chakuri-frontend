@@ -11,15 +11,15 @@
             <div v-if="initialized" v-show="edit">
                 <el-form v-for="(group, index) in groups" :model="group.fields" :key="index"
                          @submit.native.prevent="submit(group)">
-                    <div class="flex justify-between align-center">
+                    <div class="flex justify-between align-center flex-wrap">
                         <h2>{{group.label}}</h2>
                         <div>
                             <el-button-group>
-                                <el-button size="medium" type="danger" icon="el-icon-delete" @click="removeGroup(group)"
+                                <el-button size="small" type="danger" icon="el-icon-delete" @click="removeGroup(group)"
                                            round plain>মুছে ফেলুন
                                 </el-button>
 
-                                <el-button size="medium" type="success" icon="el-icon-check" @click="submit(group)"
+                                <el-button size="small" type="success" icon="el-icon-check" @click="submit(group)"
                                            round plain>{{group.id?'আপডেট':'সংরক্ষণ'}} করুন
                                 </el-button>
                             </el-button-group>

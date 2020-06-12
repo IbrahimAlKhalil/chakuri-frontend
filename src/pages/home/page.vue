@@ -108,17 +108,12 @@
         align-items: flex-start;
     }
 
-    aside {
-        min-width: 250px;
-    }
-
     .sidebar-1 {
         grid-area: sidebar-1;
     }
 
     .sidebar-2 {
         grid-area: sidebar-2;
-        min-width: 350px;
     }
 
     .contents {
@@ -133,9 +128,14 @@
 
         aside {
             position: sticky;
-            top: 70px;
-            /*bottom: 10px;*/
-            /*align-self: end;*/
+            /*top: 70px;*/
+            bottom: 10px;
+            align-self: end;
+            min-width: 250px;
+        }
+
+        .sidebar-2 {
+            min-width: 350px;
         }
     }
 </style>

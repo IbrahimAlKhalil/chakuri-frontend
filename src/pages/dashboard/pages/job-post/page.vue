@@ -397,7 +397,7 @@
         },
 
         async created() {
-            if (!this.edit) {
+            if (!this.edit && !this.admin) {
                 const response = await this.$fetch('jobs/can-store').response();
 
                 if (!response.json().canStore) {

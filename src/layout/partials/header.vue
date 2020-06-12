@@ -141,6 +141,10 @@
         height: 100%;
     }
 
+    .el-menu {
+        border-right: 0;
+    }
+
     @media screen and (min-width: $--md) {
         .auth-menu {
             margin-right: 20px;

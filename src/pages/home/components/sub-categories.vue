@@ -51,20 +51,20 @@
         }
     }
 
-    $line-height: 45px;
     .el-menu-item {
-        display: block;
+        display: flex;
+        align-items: center;
         text-decoration: none;
-        height: $line-height;
-        line-height: $line-height;
+        min-height: 45px;
+        line-height: normal;
         font-size: .9rem;
         color: $--link-color;
         border-bottom: 1px solid $--border-color-lighter;
         order: -1;
+        white-space: normal;
 
         &:before {
             margin-right: 15px;
-            line-height: $line-height;
             float: left;
         }
     }

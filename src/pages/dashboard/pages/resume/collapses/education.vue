@@ -11,7 +11,7 @@
             <div v-if="initialized" v-show="edit">
                 <el-form v-for="(group, index) in groups" :model="group.fields" :key="index"
                          @submit.native.prevent="submit(group)">
-                    <div class="flex justify-between align-center">
+                    <div class="flex justify-between align-center flex-wrap">
                         <h2>{{group.label}}</h2>
                         <div>
                             <el-button-group>

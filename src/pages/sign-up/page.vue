@@ -33,8 +33,8 @@
 
             <el-divider/>
 
-            <el-form :model="models" :rules="rules" ref="form" action="#"
-                     @submit.native.prevent="submit" status-icon>
+            <el-form :model="models" :rules="rules" ref="form"
+                     @submit.native.prevent="submit" :validate-on-rule-change="false" status-icon>
                 <el-form-item prop="name">
                     <label for="name" class="d-block">{{type==='employee'?'নাম':'প্রতিষ্ঠানের নাম'}}</label>
                     <el-input id="name" v-model="models.name">
@@ -224,6 +224,7 @@
                 const min = {
                     min: parseInt(passwordLength),
                     message: `দুঃখিত, পাসওয়ার্ডট কমপক্ষে ${$enToBn(passwordLength)} অক্ষরের দৈর্ঘ্যের হতে হবে।`,
+                    trigger: 'blur'
                 };
                 const {rePassword, agreed, mobileLength, userExists} = this;
 
@@ -240,7 +241,10 @@
 
                     password: [this.requiredRule('পাসওয়ার্ড লিখুন'), min],
 
-                    rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {validator: rePassword}],
+                    rePassword: [this.requiredRule('পাসওয়ার্ডটি পুনরায় লিখুন'), {
+                        validator: rePassword,
+                        trigger: 'blur'
+                    }],
 
                     agreed: [{validator: agreed}],
                 };

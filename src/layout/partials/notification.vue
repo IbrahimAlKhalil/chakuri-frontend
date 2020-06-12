@@ -5,7 +5,7 @@
         </div>
 
         <div class="flex justify-between align-center w-100">
-            <div :class="`message ${small?' small':''}`">
+            <div :class="`message${small?' small':''}`">
                 <strong>{{item.title}}</strong> {{item.message}}
             </div>
 
@@ -21,7 +21,10 @@
 <script>
 
     export default {
-        props: ['item', 'small'],
+        props: {
+            item: null,
+            small: Boolean
+        },
 
         computed: {
             iconClass() {
@@ -88,12 +91,15 @@
         overflow: hidden;
         color: #000;
         min-height: 35px;
-        text-overflow: ellipsis;
+        max-width: 300px;
         position: relative;
+        line-height: 2em;
+        white-space: normal;
 
         &.small {
-            line-height: $line-height;
-            max-height: $line-height * $max-line;
+            text-overflow: ellipsis;
+            max-width: unset;
+            white-space: nowrap;
         }
     }
 
@@ -123,5 +129,11 @@
         border-radius: 50%;
         box-shadow: 0 0 1px rgba(0, 0, 0, .6);
         border: 2px solid white;
+    }
+
+    @media all and (max-width: $--md) {
+        .el-menu-item {
+            padding: 0;
+        }
     }
 </style>

@@ -14,8 +14,11 @@
                             <div slot="header" class="header">
                                 <template v-if="$auth.user">
                                     <div class="flex flex-wrap justify-center">
-                                        <img :src="$auth.user.photo?$fileUrl($auth.user.photo):$auth.user.altPhoto"
-                                             :alt="$auth.user.name">
+                                        <el-avatar
+                                                shape="square"
+                                                :size="80"
+                                                :src="$auth.user.photo?$fileUrl($auth.user.photo):$auth.user.altPhoto"
+                                                :alt="$auth.user.name"/>
                                     </div>
 
                                     <el-divider/>
@@ -47,12 +50,12 @@
 </template>
 
 <script>
-    import {elCard, elButton, elButtonGroup, elDivider} from '@/el';
+    import {elCard, elButton, elButtonGroup, elDivider, elAvatar} from '@/el';
     import menuItem from '@/layout/partials/menu-item';
     import {mapState} from 'vuex';
 
     export default {
-        components: {menuItem, elButtonGroup, elButton, elCard, elDivider},
+        components: {menuItem, elButtonGroup, elButton, elCard, elDivider, elAvatar},
 
         computed: {
             ...mapState({

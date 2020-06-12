@@ -34,10 +34,11 @@
     import fillData from '../modules/fill-data'
     import {loadLazySelect} from '../modules/load-lazy-select-data'
     import {makeGroupsFlat} from '../modules/make-groups-flat'
+    import {elCheckbox} from '@/el';
 
     export default {
         name: 'col-address',
-        components: {wrapper, formItem, preview, lazySelect},
+        components: {wrapper, formItem, preview, lazySelect, elCheckbox},
         data() {
             return {
                 edit: false,

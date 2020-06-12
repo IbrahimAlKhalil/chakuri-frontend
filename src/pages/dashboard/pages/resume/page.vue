@@ -121,6 +121,7 @@
     @media all and (max-width: $--md) {
         .el-card__body {
             padding: 0;
+            width: 100vw;
         }
     }
 </style>
